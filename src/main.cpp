@@ -1,6 +1,3 @@
-// Copyright 2023 bejker123
-#include <iostream>
+#include "game.h"
 
-using namespace std;
-
-auto main(int argc, char **argv) -> int { cout << "TEST" << endl; }
+int main(int argc, char **argv) { initGS(argc, argv); }
