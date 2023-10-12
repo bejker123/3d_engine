@@ -3,9 +3,23 @@
 #include "buffers.hpp"
 #include <stdbool.h>
 
-struct VertexArray {
-  // IndexBuffer* ib;
+class VertexArray {
+public:
+  void init();
 
+  void addVertexBuffer(VertexBuffer *vb);
+
+  void setIndexBuffer(IndexBuffer *ib);
+
+  void bind();
+
+  void unbind();
+
+  GLuint getID();
+  uint32_t getElements();
+
+  // IndexBuffer* ib;
+private:
   GLuint id;
 
   uint32_t vbi; // vertex buffer index
@@ -16,17 +30,5 @@ struct VertexArray {
 
   // VertexBuffer* vbs;
 };
-
-typedef struct VertexArray VertexArray;
-
-void addVertexBuffer(VertexArray *va, VertexBuffer *vb);
-
-void setIndexBuffer(VertexArray *va, IndexBuffer *ib);
-
-VertexArray initVertexArray();
-
-void bindVertexArray(VertexArray *va);
-
-void unbindVertexArray();
 
 #endif

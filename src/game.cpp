@@ -2,8 +2,6 @@
 #include <GLFW/glfw3.h>
 #include <cglm/cglm.h>
 
-_GS GS;
-
 float vertices[] = {
     0.5f,  0.5f,  0.0f, // top right
     0.5f,  -0.5f, 0.0f, // bottom right
@@ -47,16 +45,16 @@ IndexBuffer ib;
 VertexArray va;
 
 // Init Game State, run the main loop
-int initGS(int argc, char *argv[]) {
+int Game::initGS(int argc, char *argv[]) {
   LOG("INITIALISATION STARTED\n");
 
   // First set the game state to uninitialised
-  GS.inited = false;
-  GS.window = NULL;
-  GS.monitor = NULL;
+  this->inited = false;
+  this->window = NULL;
+  this->monitor = NULL;
 
   // Run initialisation functions
-  initCommandLineArgs(argc, argv);
+  this->initCommandLineArgs(argc, argv);
 
   if (!initOpenGL())
     return EXIT_FAILURE;
@@ -69,79 +67,79 @@ int initGS(int argc, char *argv[]) {
   LOG_VAR("%d", shader.id);
   LOG_VAR("%d", shader.success);
 
-  va = initVertexArray();
+  va.init();
 
-  initVertexBuffer(&vb, vertices, sizeof(vertices), 3 * sizeof(float));
+  vb.init(vertices, sizeof(vertices), 3 * sizeof(float));
 
-  initVertexBuffer(&vb1, colors, sizeof(colors), 4 * sizeof(float));
+  vb1.init(colors, sizeof(colors), 4 * sizeof(float));
 
-  initIndexBuffer(&ib, indices, sizeof(indices));
+  ib.init(indices, sizeof(indices));
 
-  addVertexBuffer(&va, &vb);
-  addVertexBuffer(&va, &vb1);
-  setIndexBuffer(&va, &ib);
+  va.addVertexBuffer(&vb);
+  va.addVertexBuffer(&vb1);
+  va.setIndexBuffer(&ib);
 
   LOG_VAR("%d", vb.id);
   LOG_VAR("%d", vb.count);
   LOG_VAR("%d", ib.elements);
   LOG_VAR("%d", ib.id);
-  LOG_VAR("%d", va.id);
+  // LOG_VAR("%d", va.getID());
   // LOG_VAR("%p",va.ib);
 
   // If all initialisation functions run succesfully
   // set game state to inited
-  GS.inited = true;
+  this->inited = true;
 
   // Run the main loop
   return runGame();
 }
 
 // Parse and init cmd line args
-void initCommandLineArgs(int argc, char *argv[]) {
+void Game::initCommandLineArgs(int argc, char *argv[]) {
   LOG("INITIALISING Command Line Arguments\n");
-  GS.options.window_title = (char *)"test";
-  GS.options.window_width = 800;
-  GS.options.window_height = 600;
-  GS.options.window_resizable = false;
-  GS.options.window_fullscreen = false;
-  GS.monitor = NULL;
+  this->options.window_title = (char *)"test";
+  this->options.window_width = 800;
+  this->options.window_height = 600;
+  this->options.window_resizable = false;
+  this->options.window_fullscreen = false;
+  this->monitor = NULL;
 }
 
 // Initialise OpenGL, return true if successful
-bool initOpenGL() {
+bool Game::initOpenGL() {
   LOG("INITIALISING OPENGL\n");
   LOG("INITIALISING GLFW\n");
   if (!glfwInit()) {
     LOG("FAILED TO INIT GLFW\n");
-    terminateOpenGL();
+    this->terminateOpenGL();
     return false;
   }
 
   LOG("INITIALISING WINDOW\n");
 
-  printf("%p\n", GS.monitor);
-  if (GS.options.window_fullscreen) {
-    GS.monitor = glfwGetPrimaryMonitor();
-    glfwGetMonitorWorkarea(GS.monitor, 0, 0, &GS.options.window_width,
-                           &GS.options.window_height);
+  printf("%p\n", this->monitor);
+  if (this->options.window_fullscreen) {
+    this->monitor = glfwGetPrimaryMonitor();
+    glfwGetMonitorWorkarea(this->monitor, 0, 0, &this->options.window_width,
+                           &this->options.window_height);
   }
 
   // set opengl version to 3.3
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_VER_MAJ);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VER_MIN);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  glfwWindowHint(GLFW_RESIZABLE, GS.options.window_resizable);
+  glfwWindowHint(GLFW_RESIZABLE, this->options.window_resizable);
   // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 #ifdef __APPLE__
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-  GS.window =
-      glfwCreateWindow(GS.options.window_width, GS.options.window_height,
-                       GS.options.window_title, GS.monitor, NULL);
+  this->window =
+      glfwCreateWindow(this->options.window_width, this->options.window_height,
+                       this->options.window_title, this->monitor, NULL);
 
-  if (GS.window == NULL) {
+  if (this->window == NULL) {
     LOG("FAILED TO INIT WINDOW\n");
     const char **x = (const char **)malloc(4);
     x[0] = (const char *)malloc(1024);
@@ -155,20 +153,20 @@ bool initOpenGL() {
   /*int frameBufferWidth = 0;
         int frameBufferHeight = 0;
 
- glfwGetFramebufferSize(GS.window, &frameBufferWidth, &frameBufferHeight);
+ glfwGetFramebufferSize(this->window, &frameBufferWidth, &frameBufferHeight);
         glViewport(0, 0, frameBufferWidth, frameBufferHeight);
 
-        glfwSetFramebufferSizeCallback(GS.window,
+        glfwSetFramebufferSizeCallback(this->window,
  (GLFWframebuffersizefun)framebuffer_resize_callback);
 */
 
   LOG("INITIALISING GLEW\n");
 
-  glfwMakeContextCurrent(GS.window);
+  glfwMakeContextCurrent(this->window);
 
   glewExperimental = GL_TRUE;
 
-  if (glfwGetCurrentContext() != GS.window) {
+  if (glfwGetCurrentContext() != this->window) {
     LOG("FAIELD TO INIT WINDOW\n");
     terminateOpenGL();
   }
@@ -204,7 +202,7 @@ bool initOpenGL() {
   return true;
 }
 
-void terminateGS() {
+void Game::terminateGS() {
   LOG("TERMINATION STARTED\n");
 
   terminateOpenGL();
@@ -212,15 +210,15 @@ void terminateGS() {
   LOG("TERMINATION COMPELTE\n");
 }
 
-void terminateOpenGL() {
+void Game::terminateOpenGL() {
   LOG("TERMINATING OPENGL\n");
-  glfwDestroyWindow(GS.window);
+  glfwDestroyWindow(this->window);
   glfwTerminate();
 }
 
 // Main game loop
-int runGame() {
-  while (!glfwWindowShouldClose(GS.window)) {
+int Game::runGame() {
+  while (!glfwWindowShouldClose(this->window)) {
     if (!updateGame())
       return EXIT_SUCCESS;
 
@@ -236,7 +234,7 @@ int runGame() {
 // Update loop running every frame,
 // before render function,
 // handles user input, updates phisics, logic, etc.
-int updateGame() {
+int Game::updateGame() {
   glfwPollEvents();
 
   if (!handleKeyboard())
@@ -247,31 +245,30 @@ int updateGame() {
 
 // Handles keyboard user input
 // runs every frame
-int handleKeyboard() {
-  if (glfwGetKey(GS.window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    glfwSetWindowShouldClose(GS.window, true);
+int Game::handleKeyboard() {
+  if (glfwGetKey(this->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    glfwSetWindowShouldClose(this->window, true);
 
   return 1;
 }
 
 // Rendering function running every frame, after update
-int renderGame() {
+int Game::renderGame() {
   glClearColor(1.f, 1.f, 1.f, 1.f);
   glClear(GL_COLOR_BUFFER_BIT);
 
   // TODO: Possibly don't use pointers to bind in the future?
   bindShader(&shader);
-  bindVertexArray(&va);
-
+  va.bind();
   //  glDrawArrays(GL_TRIANGLES,0,va.elements);
 
   //  printf("%p - %p = %i\n",&ib,va.ib,&ib-va.ib);
 
-  glDrawElements(GL_TRIANGLES, va.elements, GL_UNSIGNED_INT, 0);
+  glDrawElements(GL_TRIANGLES, va.getElements(), GL_UNSIGNED_INT, 0);
 
   unbindShader();
-  unbindVertexArray();
+  va.unbind();
 
-  glfwSwapBuffers(GS.window);
+  glfwSwapBuffers(this->window);
   return 1;
 }

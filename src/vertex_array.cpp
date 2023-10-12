@@ -1,61 +1,64 @@
 #include "vertex_array.hpp"
 #include "logger.hpp"
+#include <cstdio>
 
-VertexArray initVertexArray() {
-  VertexArray ret;
-  glGenVertexArrays(1, &ret.id);
-  glBindVertexArray(ret.id);
-  ret.elements = 0;
-  ret.count = 0;
-  ret.vbi = 0;
-  ret.inited = true;
-  return ret;
+void VertexArray::init() {
+  glGenVertexArrays(1, &this->id);
+  glBindVertexArray(this->id);
+  this->elements = 0;
+  this->count = 0;
+  this->vbi = 0;
+  this->inited = true;
+  printf("DBG VA ID: %d", this->id);
 }
 
-void addVertexBuffer(VertexArray *va, VertexBuffer *vb) {
-  assert(va->inited == true);
+void VertexArray::addVertexBuffer(VertexBuffer *vb) {
+  assert(this->inited == true);
 
-  bindVertexArray(va);
-  bindVertexBuffer(vb);
+  this->bind();
+  vb->bind();
 
   // set the vertex attributes pointers
   // pos
-  glVertexAttribPointer(va->vbi, vb->count, GL_FLOAT, GL_FALSE,
+  glVertexAttribPointer(this->vbi, vb->count, GL_FLOAT, GL_FALSE,
                         sizeof(float) * vb->count, (void *)0);
-  glEnableVertexAttribArray(va->vbi);
-  va->vbi++;
+  glEnableVertexAttribArray(this->vbi);
+  this->vbi++;
 
   // color
-  // glVertexAttribPointer(va->vbi, sizeof(Vertex::color) / sizeof(float),
+  // glVertexAttribPointer(this->vbi, sizeof(Vertex::color) / sizeof(float),
   // GL_FLOAT, normalised, sizeof(Vertex), (void*)offsetof(Vertex, color));
-  // glEnableVertexAttribArray(va->vbi);
-  // va->vbi++;
+  // glEnableVertexAttribArray(this->vbi);
+  // this->vbi++;
 
   // texture coords
-  /*glVertexAttribPointer(va->vbi, sizeof(Vertex::tex_coord) / sizeof(float),
+  /*glVertexAttribPointer(this->vbi, sizeof(Vertex::tex_coord) / sizeof(float),
   GL_FLOAT, normalised, sizeof(Vertex), (void*)offsetof(Vertex, tex_coord));
-  glEnableVertexAttribArray(va->vbi);
-  va->vbi++;
+  glEnableVertexAttribArray(this->vbi);
+  this->vbi++;
 */
 
-  unbindVertexArray();
-  unbindVertexBuffer();
+  this->unbind();
+  vb->unbind();
 
-  va->count += vb->count;
+  this->count += vb->count;
 }
 
-void setIndexBuffer(VertexArray *va, IndexBuffer *ib) {
-  assert(va->inited == true);
-  bindVertexArray(va);
-  bindIndexBuffer(ib);
-  unbindIndexBuffer();
-  unbindVertexArray();
-  // LOG_VAR("%d",ib->elements);
-  va->elements = ib->elements;
-  // printf("va->ib == ib ? %d\n",(va->ib->id == ib->id)&&(va->ib->elements ==
-  // ib->elements));
+void VertexArray::setIndexBuffer(IndexBuffer *ib) {
+  assert(this->inited == true);
+  this->bind();
+  ib->bind();
+  ib->unbind();
+  this->unbind();
+  // LOG_thisR("%d",ib->elements);
+  this->elements = ib->elements;
+  // printf("this->ib == ib ? %d\n",(this->ib->id ==
+  // ib->id)&&(this->ib->elements == ib->elements));
 }
 
-void bindVertexArray(VertexArray *va) { glBindVertexArray(va->id); }
+void VertexArray::bind() { glBindVertexArray(this->id); }
 
-void unbindVertexArray() { glBindVertexArray(0); }
+void VertexArray::unbind() { glBindVertexArray(0); }
+
+GLuint VertexArray::getID() { return this->id; }
+uint32_t VertexArray::getElements() { return this->elements; }
