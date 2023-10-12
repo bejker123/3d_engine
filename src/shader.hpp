@@ -9,18 +9,18 @@
 
 enum ShaderState { NOT_INITED = -1, ERROR = 0, INITED = 1 };
 
-struct Shader {
+class Shader {
+public:
+  void init(const char *vertex_source, const char *fragment_source,
+            const char *geometry_source);
+
+  void bind();
+  void unbind();
+
+private:
+  GLuint compileShader(const char *source, const GLuint shader_type);
   GLuint id;
   int success;
 };
-
-typedef struct Shader Shader;
-
-void initShader(Shader *shader, const char *vertex_source,
-                const char *fragment_source, const char *geometry_source);
-GLuint compileShader(const char *source, const GLuint shader_type);
-
-void bindShader(Shader *shader);
-void unbindShader();
 
 #endif //__SHADER_H

@@ -59,13 +59,13 @@ int Game::initGS(int argc, char *argv[]) {
   if (!initOpenGL())
     return EXIT_FAILURE;
 
-  LOG_VAR("%d", shader.id);
-  LOG_VAR("%d", shader.success);
+  // LOG_VAR("%d", shader.id);
+  // LOG_VAR("%d", shader.success);
 
-  initShader(&shader, basic_vertex_shader, basic_fragment_shader, "");
+  shader.init(basic_vertex_shader, basic_fragment_shader, "");
 
-  LOG_VAR("%d", shader.id);
-  LOG_VAR("%d", shader.success);
+  // LOG_VAR("%d", shader.id);
+  // LOG_VAR("%d", shader.success);
 
   va.init();
 
@@ -258,7 +258,7 @@ int Game::renderGame() {
   glClear(GL_COLOR_BUFFER_BIT);
 
   // TODO: Possibly don't use pointers to bind in the future?
-  bindShader(&shader);
+  shader.bind();
   va.bind();
   //  glDrawArrays(GL_TRIANGLES,0,va.elements);
 
@@ -266,7 +266,7 @@ int Game::renderGame() {
 
   glDrawElements(GL_TRIANGLES, va.getElements(), GL_UNSIGNED_INT, 0);
 
-  unbindShader();
+  shader.unbind();
   va.unbind();
 
   glfwSwapBuffers(this->window);
