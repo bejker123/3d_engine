@@ -1,7 +1,7 @@
 #ifndef __GAME_H
 #define __GAME_H
-#include "shader.h"
-#include "vertex_array.h"
+#include "shader.hpp"
+#include "vertex_array.hpp"
 #include <cglm/cglm.h>
 
 //#define PRINT_VAR(X)\
