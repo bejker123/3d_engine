@@ -18,21 +18,18 @@ void VertexBuffer::init(std::vector<Vertex> vertices) {
   glGenBuffers(1, &this->id);
 
   this->bind();
-  // TODO: Add more draw options (ex. GL_DYNAMIC_DRAW)
   glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex),
                vertices.data(), GL_STATIC_DRAW);
-  //    unbindVertexBuffer();
   this->count = vertices.size();
 }
+
 void VertexBuffer::init(std::vector<VertexPC> vertices) {
   this->type = VertexType::POSx3F_COLORx4F;
   glGenBuffers(1, &this->id);
 
   this->bind();
-  // TODO: Add more draw options (ex. GL_DYNAMIC_DRAW)
-  glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex),
+  glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(VertexPC),
                vertices.data(), GL_STATIC_DRAW);
-  //    unbindVertexBuffer();
   this->count = vertices.size();
 }
 
