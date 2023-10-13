@@ -22,6 +22,19 @@ public:
     return std::make_tuple(frameBufferWidth, frameBufferHeight);
   }
 
+  std::tuple<double, double> getMousePos() {
+    double x, y;
+    glfwGetCursorPos(this->window, &x, &y);
+    return std::make_tuple(x, y);
+  }
+
+  void hideCursor() const {
+    glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  }
+  void showCursor() const {
+    glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+  }
+
 private:
   GLFWwindow *window;
 };

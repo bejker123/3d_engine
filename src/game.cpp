@@ -83,6 +83,8 @@ VertexArray va;
 Camera cam;
 Model model;
 
+float last_mouse_x = 0, last_mouse_y = 0;
+
 // Init Game State, run the main loop
 int Game::initGS(int argc, char *argv[]) {
   LOG("INITIALISATION STARTED\n");
@@ -170,6 +172,7 @@ bool Game::initOpenGL() {
           this->options.window_title, this->options.window_fullscreen)) {
     this->terminateOpenGL();
   }
+  window.hideCursor();
 
   /*int frameBufferWidth = 0;
         int frameBufferHeight = 0;
@@ -253,6 +256,14 @@ int Game::updateGame() {
 
   if (!handleKeyboard())
     return 0;
+
+  auto [mouse_x, mouse_y] = this->window.getMousePos();
+
+  cam.updateMosueInput(1, mouse_x - last_mouse_x, last_mouse_y - mouse_y);
+
+  last_mouse_x = mouse_x;
+  last_mouse_y = mouse_y;
+
   model.update();
   // PRINT_VAR(x);
   return 1;
@@ -263,7 +274,15 @@ int Game::updateGame() {
 int Game::handleKeyboard() {
   if (this->window.getKey(GLFW_KEY_ESCAPE) == GLFW_PRESS)
     this->window.setShouldClose(true);
+  if (this->window.getKey(GLFW_KEY_W) == GLFW_PRESS)
+    cam.addPos(glm::vec3(0.01) * cam.getFront());
+  if (this->window.getKey(GLFW_KEY_S) == GLFW_PRESS)
+    cam.addPos(glm::vec3(0.01) * -cam.getFront());
 
+  if (this->window.getKey(GLFW_KEY_A) == GLFW_PRESS)
+    cam.addPos(glm::vec3(0.01) * -cam.getRight());
+  if (this->window.getKey(GLFW_KEY_D) == GLFW_PRESS)
+    cam.addPos(glm::vec3(0.01) * cam.getRight());
   return 1;
 }
 

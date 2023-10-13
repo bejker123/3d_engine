@@ -18,12 +18,12 @@ void Camera::CalculateProjMatrix(int fbw, int fbh) {
 
 void Camera::CalculateViewMatrix() {
   // this->updateCameraVectors();
-
-  this->view_matrix = glm::lookAt(this->pos, this->pos + glm::vec3(1, 0, 0),
-                                  glm::vec3(0, 1, 0));
+  this->view_matrix = glm::lookAt(this->pos, this->pos + this->front, this->up);
 }
 
 void Camera::UploadToShader(Shader *shader, Window *win) {
+
+  this->updateVectors();
 
   this->CalculateViewMatrix();
 
