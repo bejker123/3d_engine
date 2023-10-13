@@ -119,6 +119,7 @@ int Game::initGS(int argc, char *argv[]) {
   va.addVertexBuffer(&vb);
   va.addVertexBuffer(&vb1);
   va.setIndexBuffer(&ib);
+
   Mesh mesh;
   mesh.init(std::make_shared<VertexArray>(va));
   Material mat;
@@ -163,7 +164,7 @@ bool Game::initOpenGL() {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_VER_MAJ);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VER_MIN);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  glfwWindowHint(GLFW_RESIZABLE, this->options.window_resizable);
+  glfwWindowHint(GLFW_SAMPLES, 4);
   // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 #ifdef __APPLE__
@@ -172,7 +173,8 @@ bool Game::initOpenGL() {
 
   if (!this->window.init(
           this->options.window_width, this->options.window_height,
-          this->options.window_title, this->options.window_fullscreen)) {
+          this->options.window_title, this->options.window_resizable,
+          this->options.window_fullscreen)) {
     this->terminateOpenGL();
   }
   window.hideCursor();

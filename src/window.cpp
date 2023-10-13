@@ -4,7 +4,9 @@
 #include <cstdlib>
 #include <cstring>
 
-bool Window::init(int width, int height, char *title, bool fullscreen) {
+bool Window::init(int width, int height, char *title, bool resizable,
+                  bool fullscreen) {
+  glfwWindowHint(GLFW_RESIZABLE, resizable);
   GLFWmonitor *monitor = nullptr;
   if (fullscreen) {
     monitor = glfwGetPrimaryMonitor();

@@ -5,7 +5,8 @@
 #include <tuple>
 class Window {
 public:
-  bool init(int width, int height, char *title, bool fullscreen);
+  bool init(int width, int height, char *title, bool resizable,
+            bool fullscreen);
 
   void terminate() { glfwDestroyWindow(this->window); }
   bool shouldClose() const { return glfwWindowShouldClose(this->window); }
