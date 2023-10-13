@@ -1,13 +1,19 @@
 #include "game.hpp"
 #include "camera.hpp"
+#include "material.hpp"
+#include "mesh.hpp"
+#include "model.hpp"
+#include "vertex_array.hpp"
 #include <GLFW/glfw3.h>
 #include <cglm/cglm.h>
+#include <memory>
+#include <vector>
 
 float vertices[] = {
-    0.5f * 10,  0.5f * 10,  0.0f, // top right
-    0.5f * 10,  -0.5f * 10, 0.0f, // bottom right
-    -0.5f * 10, -0.5f * 10, 0.0f, // bottom left
-    -0.5f * 10, 0.5f * 10,  0.0f  // top left
+    0.5f,  0.5f,  0.0f, // top right
+    0.5f,  -0.5f, 0.0f, // bottom right
+    -0.5f, -0.5f, 0.0f, // bottom left
+    -0.5f, 0.5,   0.0f  // top left
 };
 unsigned int indices[] = {
     // note that we start from 0!
@@ -42,20 +48,20 @@ out vec4 frag_color;
 // out vec2 vs_texcoord;
 // out vec3 vs_normal;
 
-// uniform mat4 ModelMatrix;
+uniform mat4 ModelMatrix;
 uniform mat4 ViewMatrix;
 uniform mat4 ProjectionMatrix;
 
 void main() {
-  // vs_position = vec4(ModelMatrix * vec4(vertex_position, 1.f)).xyz;
-  vs_position = vertex_position;
+  vs_position = vec4(ModelMatrix * vec4(vertex_position, 1.f)).xyz;
+  // vs_position = vertex_position;
   frag_color = vertex_color;
   // vs_texcoord = vec2(vertex_texcoord.x, vertex_texcoord.y * -1.f);
   // vs_normal = mat3(ModelMatrix) * vertex_normal;
 
   gl_Position =
-      // ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(vertex_position, 1.f);
-      ProjectionMatrix * ViewMatrix * vec4(vertex_position, 1.f);
+      ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(vertex_position, 1.f);
+      // ProjectionMatrix * ViewMatrix * vec4(vertex_position, 1.f);
 }
 )";
 
@@ -74,6 +80,7 @@ VertexBuffer vb1;
 IndexBuffer ib;
 VertexArray va;
 Camera cam;
+Model model;
 
 // Init Game State, run the main loop
 int Game::initGS(int argc, char *argv[]) {
@@ -110,6 +117,11 @@ int Game::initGS(int argc, char *argv[]) {
   va.addVertexBuffer(&vb);
   va.addVertexBuffer(&vb1);
   va.setIndexBuffer(&ib);
+  Mesh mesh;
+  mesh.init(std::make_shared<VertexArray>(va));
+  Material mat;
+  mat.init(std::make_shared<Shader>(shader));
+  model.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
 
   LOG_VAR("%d", vb.id);
   LOG_VAR("%d", vb.count);
@@ -271,6 +283,7 @@ int Game::updateGame() {
 
   if (!handleKeyboard())
     return 0;
+  model.update();
   // PRINT_VAR(x);
   return 1;
 }
@@ -291,16 +304,7 @@ int Game::renderGame() {
 
   // TODO: Possibly don't use pointers to bind in the future?
   cam.UploadToShader(&shader, window);
-  shader.bind();
-  va.bind();
-  //  glDrawArrays(GL_TRIANGLES,0,va.elements);
-
-  //  printf("%p - %p = %i\n",&ib,va.ib,&ib-va.ib);
-
-  glDrawElements(GL_TRIANGLES, va.getElements(), GL_UNSIGNED_INT, 0);
-
-  shader.unbind();
-  va.unbind();
+  model.render();
 
   glfwSwapBuffers(this->window);
   return 1;
