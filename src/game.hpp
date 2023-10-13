@@ -1,7 +1,6 @@
 #ifndef __GAME_H
 #define __GAME_H
-#include "shader.hpp"
-#include "vertex_array.hpp"
+#include "rendering/shader.hpp"
 
 //#define PRINT_VAR(X)\
 //        printf(#X" = %d@ %p\n",X,&X)

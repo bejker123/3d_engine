@@ -1,5 +1,5 @@
 #include "buffers.hpp"
-#include "logger.hpp"
+#include "../logger.hpp"
 
 void VertexBuffer::init(void *vertices, uint32_t size, uint32_t elements) {
   glGenBuffers(1, &this->id);

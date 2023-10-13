@@ -1,9 +1,9 @@
 #include "game.hpp"
-#include "camera.hpp"
-#include "material.hpp"
-#include "mesh.hpp"
-#include "model.hpp"
-#include "vertex_array.hpp"
+#include "rendering/camera.hpp"
+#include "rendering/material.hpp"
+#include "rendering/mesh.hpp"
+#include "rendering/model.hpp"
+#include "rendering/vertex_array.hpp"
 #include <GLFW/glfw3.h>
 #include <cglm/cglm.h>
 #include <memory>

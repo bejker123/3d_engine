@@ -1,5 +1,5 @@
 #include "vertex_array.hpp"
-#include "logger.hpp"
+#include "../logger.hpp"
 #include <cstdio>
 
 void VertexArray::init() {

@@ -1,6 +1,6 @@
 #ifndef __SHADER_H
 #define __SHADER_H
-#include "logger.hpp"
+#include "../logger.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
