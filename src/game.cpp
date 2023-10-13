@@ -1,12 +1,13 @@
 #include "game.hpp"
+#include "camera.hpp"
 #include <GLFW/glfw3.h>
 #include <cglm/cglm.h>
 
 float vertices[] = {
-    0.5f,  0.5f,  0.0f, // top right
-    0.5f,  -0.5f, 0.0f, // bottom right
-    -0.5f, -0.5f, 0.0f, // bottom left
-    -0.5f, 0.5f,  0.0f  // top left
+    0.5f * 10,  0.5f * 10,  0.0f, // top right
+    0.5f * 10,  -0.5f * 10, 0.0f, // bottom right
+    -0.5f * 10, -0.5f * 10, 0.0f, // bottom left
+    -0.5f * 10, 0.5f * 10,  0.0f  // top left
 };
 unsigned int indices[] = {
     // note that we start from 0!
@@ -15,8 +16,8 @@ unsigned int indices[] = {
 };
 
 float colors[] = {
-    0.3f, 1.f, 0.5f, 1.f, 0.3f, 1.f, 0.5f, 1.f,
-    0.3f, 1.f, 0.5f, 1.f, 0.3f, 1.f, 0.5f, 1.f,
+    0.3f, 1.f, 1.f,  1.f, 1.f,  1.f, 0.5f, 1.f,
+    0.3f, 0.f, 0.5f, 1.f, 0.3f, 1.f, 0.5f, 1.f,
 };
 
 const char *basic_vertex_shader =
@@ -28,6 +29,35 @@ const char *basic_vertex_shader =
     "frag_color = vert_color;"
     "gl_Position = vec4(vert_pos.x,vert_pos.y,vert_pos.z,1.f);\n"
     "}\0";
+
+const char *camera_vs =
+    R"(#version 330
+layout(location = 0) in vec3 vertex_position;
+layout(location = 1) in vec4 vertex_color;
+// layout(location = 2) in vec2 vertex_texcoord;
+// layout(location = 3) in vec3 vertex_normal;
+
+out vec3 vs_position;
+out vec4 frag_color;
+// out vec2 vs_texcoord;
+// out vec3 vs_normal;
+
+// uniform mat4 ModelMatrix;
+uniform mat4 ViewMatrix;
+uniform mat4 ProjectionMatrix;
+
+void main() {
+  // vs_position = vec4(ModelMatrix * vec4(vertex_position, 1.f)).xyz;
+  vs_position = vertex_position;
+  frag_color = vertex_color;
+  // vs_texcoord = vec2(vertex_texcoord.x, vertex_texcoord.y * -1.f);
+  // vs_normal = mat3(ModelMatrix) * vertex_normal;
+
+  gl_Position =
+      // ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(vertex_position, 1.f);
+      ProjectionMatrix * ViewMatrix * vec4(vertex_position, 1.f);
+}
+)";
 
 const char *basic_fragment_shader = "#version 330 core\n"
                                     "in vec4 frag_color;\n"
@@ -43,6 +73,7 @@ VertexBuffer vb;
 VertexBuffer vb1;
 IndexBuffer ib;
 VertexArray va;
+Camera cam;
 
 // Init Game State, run the main loop
 int Game::initGS(int argc, char *argv[]) {
@@ -62,7 +93,8 @@ int Game::initGS(int argc, char *argv[]) {
   // LOG_VAR("%d", shader.id);
   // LOG_VAR("%d", shader.success);
 
-  shader.init(basic_vertex_shader, basic_fragment_shader, "");
+  cam.init(60, 0.0001, 100000, glm::vec3(1, 0, 1));
+  shader.init(camera_vs, basic_fragment_shader, "");
 
   // LOG_VAR("%d", shader.id);
   // LOG_VAR("%d", shader.success);
@@ -258,6 +290,7 @@ int Game::renderGame() {
   glClear(GL_COLOR_BUFFER_BIT);
 
   // TODO: Possibly don't use pointers to bind in the future?
+  cam.UploadToShader(&shader, window);
   shader.bind();
   va.bind();
   //  glDrawArrays(GL_TRIANGLES,0,va.elements);

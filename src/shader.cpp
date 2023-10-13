@@ -123,3 +123,51 @@ void Shader::bind() {
 }
 
 void Shader::unbind() { glUseProgram(0); }
+
+GLuint Shader::getAttribLocation(char *attrib) {
+  return glGetAttribLocation(this->id, attrib);
+}
+
+void Shader::set1i(GLint value, const GLchar *name) {
+  this->bind();
+  glUniform1i(glGetUniformLocation(this->id, name), value);
+  this->unbind();
+}
+
+void Shader::set1f(GLfloat value, const GLchar *name) {
+  this->bind();
+  glUniform1f(glGetUniformLocation(this->id, name), value);
+  this->unbind();
+}
+
+void Shader::setVec2f(glm::fvec2 value, const GLchar *name) {
+  this->bind();
+  glUniform2fv(glGetUniformLocation(this->id, name), 1, glm::value_ptr(value));
+  this->unbind();
+}
+
+void Shader::setVec3f(glm::fvec3 value, const GLchar *name) {
+  this->bind();
+  glUniform3fv(glGetUniformLocation(this->id, name), 1, glm::value_ptr(value));
+  this->unbind();
+}
+
+void Shader::setVec4f(glm::fvec4 value, const GLchar *name) {
+  this->bind();
+  glUniform4fv(glGetUniformLocation(this->id, name), 1, glm::value_ptr(value));
+  this->unbind();
+}
+
+void Shader::setMat3fv(glm::mat3 value, const GLchar *name, bool transpose) {
+  this->bind();
+  glUniformMatrix3fv(glGetUniformLocation(this->id, name), 1, transpose,
+                     glm::value_ptr(value));
+  this->unbind();
+}
+
+void Shader::setMat4fv(glm::mat4 value, const GLchar *name, bool transpose) {
+  this->bind();
+  glUniformMatrix4fv(glGetUniformLocation(this->id, name), 1, transpose,
+                     glm::value_ptr(value));
+  this->unbind();
+}

@@ -2,7 +2,6 @@
 #define __GAME_H
 #include "shader.hpp"
 #include "vertex_array.hpp"
-#include <cglm/cglm.h>
 
 //#define PRINT_VAR(X)\
 //        printf(#X" = %d@ %p\n",X,&X)
