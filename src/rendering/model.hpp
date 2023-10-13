@@ -13,13 +13,15 @@ public:
   void render();
   void render_batch();
 
+  void load(std::string path);
+
   void setPos(glm::vec3 pos) { this->pos = pos; }
   void setRot(glm::vec3 rot) { this->rot = rot; }
 
 private:
   glm::mat4 mmatrix;
   std::shared_ptr<Material> mat;
-  std::shared_ptr<Mesh> mesh;
+  std::vector<std::shared_ptr<Mesh>> meshes;
 
   glm::vec3 pos, origin, rot, scale;
 };

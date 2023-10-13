@@ -1,5 +1,6 @@
 #include "vertex_array.hpp"
 #include "../logger.hpp"
+#include "buffers.hpp"
 #include <cstdio>
 
 void VertexArray::init() {
@@ -18,11 +19,52 @@ void VertexArray::addVertexBuffer(VertexBuffer *vb) {
   vb->bind();
 
   // set the vertex attributes pointers
+  //
+
+  auto vb_type = vb->getType();
+
+  if (vb_type == VertexType::POSx3F_COLORx4F) {
+    // position
+    glVertexAttribPointer(this->vbi, sizeof(VertexPC::pos) / sizeof(float),
+                          GL_FLOAT, GL_FALSE, sizeof(VertexPC),
+                          (void *)offsetof(VertexPC, pos));
+    glEnableVertexAttribArray(this->vbi);
+    this->vbi++;
+
+    // color
+    glVertexAttribPointer(this->vbi, sizeof(VertexPC::color) / sizeof(float),
+                          GL_FLOAT, false, sizeof(VertexPC),
+                          (void *)offsetof(VertexPC, color));
+    glEnableVertexAttribArray(this->vbi);
+    this->vbi++;
+  } else if (vb_type == POSx3F_NORMx3F_TEXx2F) {
+    // position
+    glVertexAttribPointer(this->vbi, sizeof(Vertex::pos) / sizeof(float),
+                          GL_FLOAT, GL_FALSE, sizeof(Vertex),
+                          (void *)offsetof(Vertex, pos));
+    glEnableVertexAttribArray(this->vbi);
+    this->vbi++;
+
+    // normal
+    glVertexAttribPointer(this->vbi, sizeof(Vertex::normal) / sizeof(float),
+                          GL_FLOAT, false, sizeof(Vertex),
+                          (void *)offsetof(Vertex, normal));
+    glEnableVertexAttribArray(this->vbi);
+    this->vbi++;
+
+    // tex coord
+    glVertexAttribPointer(this->vbi, sizeof(Vertex::tex_coord) / sizeof(float),
+                          GL_FLOAT, false, sizeof(Vertex),
+                          (void *)offsetof(Vertex, tex_coord));
+    glEnableVertexAttribArray(this->vbi);
+    this->vbi++;
+  }
+
   // pos
-  glVertexAttribPointer(this->vbi, vb->count, GL_FLOAT, GL_FALSE,
-                        sizeof(float) * vb->count, (void *)0);
-  glEnableVertexAttribArray(this->vbi);
-  this->vbi++;
+  // glVertexAttribPointer(this->vbi, vb->count, GL_FLOAT, GL_FALSE,
+  //                       sizeof(float) * vb->count, (void *)0);
+  // glEnableVertexAttribArray(this->vbi);
+  // this->vbi++;
 
   // color
   // glVertexAttribPointer(this->vbi, sizeof(Vertex::color) / sizeof(float),

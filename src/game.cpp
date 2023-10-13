@@ -1,30 +1,37 @@
 #include "game.hpp"
+#include "rendering/buffers.hpp"
 #include "rendering/camera.hpp"
 #include "rendering/material.hpp"
 #include "rendering/mesh.hpp"
 #include "rendering/model.hpp"
 #include "rendering/vertex_array.hpp"
 #include <GLFW/glfw3.h>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
 #include <cglm/cglm.h>
 #include <cstring>
+#include <iostream>
 #include <memory>
 #include <vector>
 
-float vertices[] = {
-    0.5f,  0.5f,  0.0f, // top right
-    0.5f,  -0.5f, 0.0f, // bottom right
-    -0.5f, -0.5f, 0.0f, // bottom left
-    -0.5f, 0.5,   0.0f  // top left
+std::vector<VertexPC> vertices = {
+    VertexPC(glm::vec3(0.5f, 0.5f, 0.0f),
+             glm::vec4(0.3f, 1.f, 1.f, 1.f)), // top right
+                                              //
+    VertexPC(glm::vec3(0.5f, -0.5f, 0.0f),
+             glm::vec4(1.f, 1.f, 0.5f, 1.f)), // bottom right
+                                              //
+    VertexPC(glm::vec3(-0.5f, -0.5f, 0.0f),
+             glm::vec4(0.3f, 0.f, 0.5f, 1.f)), // bottom left
+                                               //
+    VertexPC(glm::vec3(-0.5f, 0.5, 0.0f),
+             glm::vec4(0.3f, 1.f, 0.5f, 1.f)) // top left
 };
 unsigned int indices[] = {
     // note that we start from 0!
     0, 1, 3, // first Triangle
     1, 2, 3  // second Triangle
-};
-
-float colors[] = {
-    0.3f, 1.f, 1.f,  1.f, 1.f,  1.f, 0.5f, 1.f,
-    0.3f, 0.f, 0.5f, 1.f, 0.3f, 1.f, 0.5f, 1.f,
 };
 
 const char *basic_vertex_shader =
@@ -110,18 +117,18 @@ int Game::initGS(int argc, char *argv[]) {
 
   va.init();
 
-  vb.init(vertices, sizeof(vertices), 3 * sizeof(float));
-
-  vb1.init(colors, sizeof(colors), 4 * sizeof(float));
+  vb.init(vertices);
 
   ib.init(indices, sizeof(indices));
 
   va.addVertexBuffer(&vb);
-  va.addVertexBuffer(&vb1);
+  // va.addVertexBuffer(&vb1);
   va.setIndexBuffer(&ib);
 
   Mesh mesh;
   mesh.init(std::make_shared<VertexArray>(va));
+  // mesh.load(
+  //     "/home/bejker/Downloads/Survival_BackPack_2/Survival_BackPack_2.fbx");
   Material mat;
   mat.init(std::make_shared<Shader>(shader));
   model.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
