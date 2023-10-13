@@ -8,15 +8,11 @@ void Camera::init(float fov, float znear, float zfar, glm::vec3 pos) {
   this->pos = pos;
 }
 
-void Camera::CalculateProjMatrix(GLFWwindow *window) {
-  int frameBufferWidth, frameBufferHeight;
-
-  glfwGetFramebufferSize(window, &frameBufferWidth, &frameBufferHeight);
+void Camera::CalculateProjMatrix(int fbw, int fbh) {
 
   this->proj_matrix = glm::mat4(1.f);
   this->proj_matrix =
-      glm::perspective(glm::radians(this->fov),
-                       static_cast<float>(frameBufferWidth) / frameBufferHeight,
+      glm::perspective(glm::radians(this->fov), static_cast<float>(fbw) / fbh,
                        this->znear, this->zfar);
 }
 
@@ -27,11 +23,13 @@ void Camera::CalculateViewMatrix() {
                                   glm::vec3(0, 1, 0));
 }
 
-void Camera::UploadToShader(Shader *shader, GLFWwindow *window) {
+void Camera::UploadToShader(Shader *shader, Window *win) {
 
   this->CalculateViewMatrix();
 
-  this->CalculateProjMatrix(window);
+  auto [fbw, fbh] = win->getDimensions();
+
+  this->CalculateProjMatrix(fbw, fbh);
 
   shader->setMat4fv(this->view_matrix, "ViewMatrix");
   shader->setMat4fv(this->proj_matrix, "ProjectionMatrix");

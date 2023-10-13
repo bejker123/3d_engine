@@ -1,6 +1,7 @@
 #ifndef __GAME_H
 #define __GAME_H
 #include "rendering/shader.hpp"
+#include "window.hpp"
 
 //#define PRINT_VAR(X)\
 //        printf(#X" = %d@ %p\n",X,&X)
@@ -42,7 +43,7 @@ public:
   // render functions
 private:
   GameOptions options;
-  GLFWwindow *window;
+  Window window;
   GLFWmonitor *monitor;
   bool inited;
 };

@@ -89,7 +89,6 @@ int Game::initGS(int argc, char *argv[]) {
 
   // First set the game state to uninitialised
   this->inited = false;
-  this->window = NULL;
   this->monitor = NULL;
 
   // Run initialisation functions
@@ -155,12 +154,6 @@ bool Game::initOpenGL() {
 
   LOG("INITIALISING WINDOW\n");
 
-  if (this->options.window_fullscreen) {
-    this->monitor = glfwGetPrimaryMonitor();
-    glfwGetMonitorWorkarea(this->monitor, 0, 0, &this->options.window_width,
-                           &this->options.window_height);
-  }
-
   // set opengl version to 3.3
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_VER_MAJ);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VER_MIN);
@@ -172,19 +165,10 @@ bool Game::initOpenGL() {
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-  this->window =
-      glfwCreateWindow(this->options.window_width, this->options.window_height,
-                       this->options.window_title, this->monitor, NULL);
-
-  if (this->window == NULL) {
-    LOG("FAILED TO INIT WINDOW\n");
-    const char *x = (const char *)malloc(1024);
-    memset((void *)x, '0', 1024);
-    glfwGetError(&x);
-    LOG(x);
-    printf("\n");
-    terminateOpenGL();
-    return false;
+  if (!this->window.init(
+          this->options.window_width, this->options.window_height,
+          this->options.window_title, this->options.window_fullscreen)) {
+    this->terminateOpenGL();
   }
 
   /*int frameBufferWidth = 0;
@@ -199,14 +183,7 @@ bool Game::initOpenGL() {
 
   LOG("INITIALISING GLEW\n");
 
-  glfwMakeContextCurrent(this->window);
-
   glewExperimental = GL_TRUE;
-
-  if (glfwGetCurrentContext() != this->window) {
-    LOG("FAIELD TO INIT WINDOW\n");
-    terminateOpenGL();
-  }
 
   if (glewInit() != GLEW_OK) {
     LOG("FAILED TO INIT GLEW\n");
@@ -249,13 +226,13 @@ void Game::terminateGS() {
 
 void Game::terminateOpenGL() {
   LOG("TERMINATING OPENGL\n");
-  glfwDestroyWindow(this->window);
+  this->window.~Window();
   glfwTerminate();
 }
 
 // Main game loop
 int Game::runGame() {
-  while (!glfwWindowShouldClose(this->window)) {
+  while (!this->window.shouldClose()) {
     if (!updateGame())
       return EXIT_SUCCESS;
 
@@ -284,8 +261,8 @@ int Game::updateGame() {
 // Handles keyboard user input
 // runs every frame
 int Game::handleKeyboard() {
-  if (glfwGetKey(this->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    glfwSetWindowShouldClose(this->window, true);
+  if (this->window.getKey(GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    this->window.setShouldClose(true);
 
   return 1;
 }
@@ -296,9 +273,9 @@ int Game::renderGame() {
   glClear(GL_COLOR_BUFFER_BIT);
 
   // TODO: Possibly don't use pointers to bind in the future?
-  cam.UploadToShader(&shader, window);
+  cam.UploadToShader(&shader, &window);
   model.render();
 
-  glfwSwapBuffers(this->window);
+  this->window.swapBuffers();
   return 1;
 }

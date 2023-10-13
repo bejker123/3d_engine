@@ -8,7 +8,7 @@ void Model::init(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> mat) {
 
   this->origin = glm::vec3(0);
   this->pos = glm::vec3(0);
-  this->rot = glm::vec3(0);
+  this->rot = glm::vec3(0, 0, 0);
   this->scale = glm::vec3(10);
 
   this->mmatrix = glm::mat4(1.f);

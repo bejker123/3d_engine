@@ -6,8 +6,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <memory.h>
-#include <stdbool.h>
-#include <stdlib.h>
 
 enum ShaderState { NOT_INITED = -1, ERROR = 0, INITED = 1 };
 
