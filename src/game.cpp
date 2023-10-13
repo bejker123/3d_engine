@@ -6,6 +6,7 @@
 #include "rendering/vertex_array.hpp"
 #include <GLFW/glfw3.h>
 #include <cglm/cglm.h>
+#include <cstring>
 #include <memory>
 #include <vector>
 
@@ -123,13 +124,6 @@ int Game::initGS(int argc, char *argv[]) {
   mat.init(std::make_shared<Shader>(shader));
   model.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
 
-  LOG_VAR("%d", vb.id);
-  LOG_VAR("%d", vb.count);
-  LOG_VAR("%d", ib.elements);
-  LOG_VAR("%d", ib.id);
-  // LOG_VAR("%d", va.getID());
-  // LOG_VAR("%p",va.ib);
-
   // If all initialisation functions run succesfully
   // set game state to inited
   this->inited = true;
@@ -161,7 +155,6 @@ bool Game::initOpenGL() {
 
   LOG("INITIALISING WINDOW\n");
 
-  printf("%p\n", this->monitor);
   if (this->options.window_fullscreen) {
     this->monitor = glfwGetPrimaryMonitor();
     glfwGetMonitorWorkarea(this->monitor, 0, 0, &this->options.window_width,
@@ -185,10 +178,10 @@ bool Game::initOpenGL() {
 
   if (this->window == NULL) {
     LOG("FAILED TO INIT WINDOW\n");
-    const char **x = (const char **)malloc(4);
-    x[0] = (const char *)malloc(1024);
-    glfwGetError(x);
-    LOG(x[0]);
+    const char *x = (const char *)malloc(1024);
+    memset((void *)x, '0', 1024);
+    glfwGetError(&x);
+    LOG(x);
     printf("\n");
     terminateOpenGL();
     return false;

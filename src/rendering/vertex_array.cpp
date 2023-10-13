@@ -9,7 +9,6 @@ void VertexArray::init() {
   this->count = 0;
   this->vbi = 0;
   this->inited = true;
-  printf("DBG VA ID: %d", this->id);
 }
 
 void VertexArray::addVertexBuffer(VertexBuffer *vb) {
