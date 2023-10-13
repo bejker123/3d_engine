@@ -11,6 +11,7 @@ public:
 
 private:
   bool cull_backfaces;
+  int polygon_mode; // GL_POINT; GL_LINE; GL_FILL
 };
 
 class Material {

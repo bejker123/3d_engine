@@ -46,6 +46,10 @@ private:
   Window window;
   GLFWmonitor *monitor;
   bool inited;
+
+  float dt;
+  float curTime;
+  float lastTime;
 };
 
 #endif //__GAME_H

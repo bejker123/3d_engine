@@ -10,7 +10,9 @@ void Model::init(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> mat) {
   this->pos = glm::vec3(0);
   this->rot = glm::vec3(0, 0, 0);
   this->scale = glm::vec3(10);
+}
 
+void Model::update() {
   this->mmatrix = glm::mat4(1.f);
   this->mmatrix = glm::translate(this->mmatrix, this->origin);
   this->mmatrix = glm::rotate(this->mmatrix, glm::radians(this->rot.x),
@@ -21,13 +23,11 @@ void Model::init(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> mat) {
                               glm::vec3(0.f, 0.f, 1.f));
   this->mmatrix = glm::translate(this->mmatrix, this->pos - this->origin);
   this->mmatrix = glm::scale(this->mmatrix, this->scale);
-}
-
-void Model::update() {
   this->mat->getShader()->setMat4fv(this->mmatrix, "ModelMatrix");
 }
 
 void Model::render() {
+  this->update();
   this->mat->bind();
   this->mesh->render();
   this->mat->unbind();

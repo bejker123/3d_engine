@@ -81,7 +81,7 @@ VertexBuffer vb1;
 IndexBuffer ib;
 VertexArray va;
 Camera cam;
-Model model;
+Model model, model1;
 
 float last_mouse_x = 0, last_mouse_y = 0;
 
@@ -124,6 +124,9 @@ int Game::initGS(int argc, char *argv[]) {
   Material mat;
   mat.init(std::make_shared<Shader>(shader));
   model.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
+  model1.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
+  // model1.setPos(glm::vec3(1, 0, 1));
+  model1.setRot(glm::vec3(90, 0, 0));
 
   // If all initialisation functions run succesfully
   // set game state to inited
@@ -140,7 +143,7 @@ void Game::initCommandLineArgs(int argc, char *argv[]) {
   this->options.window_width = 800;
   this->options.window_height = 600;
   this->options.window_resizable = false;
-  this->options.window_fullscreen = false;
+  this->options.window_fullscreen = true;
   this->monitor = NULL;
 }
 
@@ -252,6 +255,9 @@ int Game::runGame() {
 // before render function,
 // handles user input, updates phisics, logic, etc.
 int Game::updateGame() {
+  this->curTime = static_cast<float>(glfwGetTime());
+  this->dt = this->curTime - this->lastTime;
+  this->lastTime = this->curTime;
   glfwPollEvents();
 
   if (!handleKeyboard())
@@ -265,6 +271,7 @@ int Game::updateGame() {
   last_mouse_y = mouse_y;
 
   model.update();
+  model1.update();
   // PRINT_VAR(x);
   return 1;
 }
@@ -274,26 +281,30 @@ int Game::updateGame() {
 int Game::handleKeyboard() {
   if (this->window.getKey(GLFW_KEY_ESCAPE) == GLFW_PRESS)
     this->window.setShouldClose(true);
+
+  float cam_speed = 3;
+
   if (this->window.getKey(GLFW_KEY_W) == GLFW_PRESS)
-    cam.addPos(glm::vec3(0.01) * cam.getFront());
+    cam.addPos(glm::vec3(cam_speed * this->dt) * cam.getFront());
   if (this->window.getKey(GLFW_KEY_S) == GLFW_PRESS)
-    cam.addPos(glm::vec3(0.01) * -cam.getFront());
+    cam.addPos(glm::vec3(cam_speed * this->dt) * -cam.getFront());
 
   if (this->window.getKey(GLFW_KEY_A) == GLFW_PRESS)
-    cam.addPos(glm::vec3(0.01) * -cam.getRight());
+    cam.addPos(glm::vec3(cam_speed * this->dt) * -cam.getRight());
   if (this->window.getKey(GLFW_KEY_D) == GLFW_PRESS)
-    cam.addPos(glm::vec3(0.01) * cam.getRight());
+    cam.addPos(glm::vec3(cam_speed * this->dt) * cam.getRight());
   return 1;
 }
 
 // Rendering function running every frame, after update
 int Game::renderGame() {
   glClearColor(1.f, 1.f, 1.f, 1.f);
-  glClear(GL_COLOR_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
   // TODO: Possibly don't use pointers to bind in the future?
   cam.UploadToShader(&shader, &window);
   model.render();
+  model1.render();
 
   this->window.swapBuffers();
   return 1;

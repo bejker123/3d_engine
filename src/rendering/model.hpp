@@ -13,6 +13,9 @@ public:
   void render();
   void render_batch();
 
+  void setPos(glm::vec3 pos) { this->pos = pos; }
+  void setRot(glm::vec3 rot) { this->rot = rot; }
+
 private:
   glm::mat4 mmatrix;
   std::shared_ptr<Material> mat;
