@@ -44,6 +44,7 @@ public:
   glm::vec3 getFront() const { return this->front; }
   glm::vec3 getRight() const { return this->right; }
   glm::vec3 getUp() const { return this->up; }
+  glm::vec3 getWorldUp() const { return this->world_up; }
 
 private:
   void CalculateViewMatrix();

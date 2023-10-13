@@ -302,6 +302,11 @@ int Game::handleKeyboard() {
     cam.addPos(glm::vec3(cam_speed * this->dt) * -cam.getRight());
   if (this->window.getKey(GLFW_KEY_D) == GLFW_PRESS)
     cam.addPos(glm::vec3(cam_speed * this->dt) * cam.getRight());
+
+  if (this->window.getKey(GLFW_KEY_SPACE) == GLFW_PRESS)
+    cam.addPos(glm::vec3(cam_speed * this->dt) * cam.getUp());
+  if (this->window.getKey(GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+    cam.addPos(glm::vec3(cam_speed * this->dt) * -cam.getWorldUp());
   return 1;
 }
 
