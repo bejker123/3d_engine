@@ -17,5 +17,7 @@ private:
   glm::mat4 mmatrix;
   std::shared_ptr<Material> mat;
   std::shared_ptr<Mesh> mesh;
+
+  glm::vec3 pos, origin, rot, scale;
 };
 #endif // !MODEL_HPP
