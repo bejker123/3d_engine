@@ -41,10 +41,12 @@ public:
     // cout << "Yaw:" << this->yaw << " Pitch:" << this->pitch << endl;
   }
 
-  glm::vec3 getFront() const { return this->front; }
-  glm::vec3 getRight() const { return this->right; }
-  glm::vec3 getUp() const { return this->up; }
-  glm::vec3 getWorldUp() const { return this->world_up; }
+  const glm::vec3 getFront() const { return this->front; }
+  const glm::vec3 getRight() const { return this->right; }
+  const glm::vec3 getUp() const { return this->up; }
+  const glm::vec3 getWorldUp() const { return this->world_up; }
+  glm::vec3 *getPos() { return &this->pos; };
+  float *getFov() { return &this->fov; };
 
 private:
   void CalculateViewMatrix();

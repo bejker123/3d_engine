@@ -70,10 +70,14 @@ void Material::init(std::shared_ptr<Shader> shader) {
 void Material::bind() {
   this->options.bind();
   this->shader->bind();
-  // this->texture->bind();
+  this->texture->bind(0);
 }
 void Material::unbind() {
   this->options.unbind();
   this->shader->unbind();
-  // this->texture->unbind();
+  this->texture->unbind();
+}
+
+void Material::set_texture(std::shared_ptr<Texture> texture) {
+  this->texture = texture;
 }

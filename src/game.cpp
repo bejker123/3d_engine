@@ -1,10 +1,14 @@
 #include "game.hpp"
+#include "../imgui/backends/imgui_impl_glfw.h"
+#include "../imgui/backends/imgui_impl_opengl3.h"
+#include "../imgui/imgui.h"
 #include "rendering/buffers.hpp"
 #include "rendering/camera.hpp"
 #include "rendering/material.hpp"
 #include "rendering/mesh.hpp"
 #include "rendering/model.hpp"
 #include "rendering/vertex_array.hpp"
+#include "stb/stb_image.h"
 #include <GLFW/glfw3.h>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
@@ -13,25 +17,85 @@
 #include <cstring>
 #include <iostream>
 #include <memory>
+#include <string>
 #include <vector>
 
-std::vector<VertexPC> vertices = {
-    VertexPC(glm::vec3(0.5f, 0.5f, 0.0f),
-             glm::vec4(0.3f, 1.f, 1.f, 1.f)), // top right
-                                              //
-    VertexPC(glm::vec3(0.5f, -0.5f, 0.0f),
-             glm::vec4(1.f, 1.f, 0.5f, 1.f)), // bottom right
-                                              //
-    VertexPC(glm::vec3(-0.5f, -0.5f, 0.0f),
-             glm::vec4(0.3f, 0.f, 0.5f, 1.f)), // bottom left
-                                               //
-    VertexPC(glm::vec3(-0.5f, 0.5, 0.0f),
-             glm::vec4(0.3f, 1.f, 0.5f, 1.f)) // top left
-};
+// std::vector<VertexPC> vertices = {
+//     VertexPC(glm::vec3(0.5f, 0.5f, 0.0f),
+//              glm::vec4(0.3f, 1.f, 1.f, 1.f)), // top right
+//                                               //
+//     VertexPC(glm::vec3(0.5f, -0.5f, 0.0f),
+//              glm::vec4(1.f, 1.f, 0.5f, 1.f)), // bottom right
+//                                               //
+//     VertexPC(glm::vec3(-0.5f, -0.5f, 0.0f),
+//              glm::vec4(0.3f, 0.f, 0.5f, 1.f)), // bottom left
+//                                                //
+//     VertexPC(glm::vec3(-0.5f, 0.5, 0.0f),
+//              glm::vec4(0.3f, 1.f, 0.5f, 1.f)) // top left
+// };
+// unsigned int indices[] = {
+//     // note that we start from 0!
+//     0, 1, 3, // first Triangle
+//     1, 2, 3  // second Triangle
+// };
+
 unsigned int indices[] = {
-    // note that we start from 0!
-    0, 1, 3, // first Triangle
-    1, 2, 3  // second Triangle
+    // front and back
+    0, 3, 2, 2, 1, 0, 4, 5, 6, 6, 7, 4,
+    // left and right
+    11, 8, 9, 9, 10, 11, 12, 13, 14, 14, 15, 12,
+    // bottom and top
+    16, 17, 18, 18, 19, 16, 20, 21, 22, 22, 23, 20
+    // // Top
+    // 2, 6, 7, 2, 3, 7,
+    //
+    // // Bottom
+    // 0, 4, 5, 0, 1, 5,
+    //
+    // // Left
+    // 0, 2, 6, 0, 4, 6,
+    //
+    // // Right
+    // 1, 3, 7, 1, 5, 7,
+    //
+    // // Front
+    // 0, 2, 3, 0, 1, 3,
+    //
+    // // Back
+    // 4, 6, 7, 4, 5, 7
+};
+
+std::vector<VertexPC> vertices{
+    // VertexPC(-1, -1, 1, 1, 0, 1, 1),  VertexPC(1, -1, 1, 0, 1, 0, 1),
+    // VertexPC(-1, 1, 1, 1, 0, 0, 1),   VertexPC(1, 1, 1, 0, 1, 0, 1),
+    // VertexPC(-1, -1, -1, 0, 0, 0, 1), VertexPC(1, -1, -1, 0, 1, 1, 1),
+    // VertexPC(-1, 1, -1, 0, 1, 0, 1),  VertexPC(1, 1, -1, 0, 1, 0, 1),
+    VertexPC(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec4(0.0f, 0.0f, 0, 1)),
+    VertexPC(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 0.0f, 0, 1)),
+    VertexPC(glm::vec3(0.5f, 0.5f, -0.5f), glm::vec4(1.0f, 1.0f, 0, 1)),
+    VertexPC(glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec4(0.0f, 1.0, 0, 1)),
+    VertexPC(glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec4(0.0f, 0.0, 0, 1)),
+    VertexPC(glm::vec3(0.5f, -0.5f, 0.5f), glm::vec4(1.0f, 0.0f, 0, 1)),
+    VertexPC(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec4(1.0f, 1.0f, 0, 1)),
+    VertexPC(glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec4(0.0f, 1.0, 0, 1)),
+
+    VertexPC(glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec4(0.0f, 0.0, 0, 1)),
+    VertexPC(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 0.0, 0, 1)),
+    VertexPC(glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec4(1.0f, 1.0, 0, 1)),
+    VertexPC(glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec4(0.0f, 1.0, 0, 1)),
+    VertexPC(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec4(0.0f, 0.0f, 0, 1)),
+    VertexPC(glm::vec3(0.5f, 0.5f, -0.5f), glm::vec4(1.0f, 0.0f, 0, 1)),
+    VertexPC(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec4(1.0f, 1.0f, 0, 1)),
+    VertexPC(glm::vec3(0.5f, -0.5f, 0.5f), glm::vec4(0.0f, 1.0f, 0, 1)),
+
+    VertexPC(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec4(0.0f, 0.0, 0, 1)),
+    VertexPC(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 0.0f, 0, 1)),
+    VertexPC(glm::vec3(0.5f, -0.5f, 0.5f), glm::vec4(1.0f, 1.0f, 0, 1)),
+    VertexPC(glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec4(0.0f, 1.0, 0, 1)),
+    VertexPC(glm::vec3(0.5f, 0.5f, -0.5f), glm::vec4(0.0f, 0.0, 0, 1)),
+    VertexPC(glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec4(1.0f, 0.0, 0, 1)),
+    VertexPC(glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec4(1.0f, 1.0, 0, 1)),
+    VertexPC(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec4(0.0f, 1.0, 0, 1)),
 };
 
 const char *basic_vertex_shader =
@@ -73,13 +137,16 @@ void main() {
 }
 )";
 
-const char *basic_fragment_shader = "#version 330 core\n"
-                                    "in vec4 frag_color;\n"
-                                    "out vec4 FragColor;\n"
-                                    "void main(){\n"
-                                    // "FragColor = vec4(0.3f,1.f,0.5f,1.f);\n"
-                                    "FragColor = frag_color;\n"
-                                    "}\0";
+const char *basic_fragment_shader =
+    "#version 330 core\n"
+    "in vec4 frag_color;\n"
+    "out vec4 FragColor;\n"
+    "uniform sampler2D tex0;"
+    "void main(){\n"
+    // "FragColor = vec4(0.3f,1.f,0.5f,1.f);\n"
+    "FragColor = texture(tex0,vec2(frag_color.xy));\n"
+    // "FragColor = frag_color;\n"
+    "}\0";
 
 Shader shader;
 
@@ -88,7 +155,7 @@ VertexBuffer vb1;
 IndexBuffer ib;
 VertexArray va;
 Camera cam;
-Model model, model1;
+std::vector<Model> models;
 
 float last_mouse_x = 0, last_mouse_y = 0;
 
@@ -131,14 +198,41 @@ int Game::initGS(int argc, char *argv[]) {
   //     "/home/bejker/Downloads/Survival_BackPack_2/Survival_BackPack_2.fbx");
   Material mat;
   mat.init(std::make_shared<Shader>(shader));
-  model.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
-  model1.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
-  // model1.setPos(glm::vec3(1, 0, 1));
-  model1.setRot(glm::vec3(90, 0, 0));
+  Texture tex("/run/media/bejker/DATA/C++ OpenGL Game Engine/C++ OpenGL Game "
+              "Engine/Images/container.png");
+  mat.set_texture(std::make_shared<Texture>(tex));
+  // model.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
+  // model1.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
+  // // model1.setPos(glm::vec3(1, 0, 1));
+  // model1.setRot(glm::vec3(90, 0, 0));
+  for (int i = 0; i < 10; i++) {
+    Model m;
+    m.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
+    m.setOrigin(glm::vec3(i * 21, 0, 0));
+    models.push_back(m);
+  }
 
   // If all initialisation functions run succesfully
   // set game state to inited
   this->inited = true;
+
+  // Setup Dear ImGui context
+  IMGUI_CHECKVERSION();
+  ImGui::CreateContext();
+  ImGuiIO &io = ImGui::GetIO();
+  io.ConfigFlags |=
+      ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+  io.ConfigFlags |=
+      ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
+  // io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // IF using Docking
+  // Branch
+
+  // Setup Platform/Renderer backends
+  ImGui_ImplGlfw_InitForOpenGL(
+      this->window.raw(),
+      true); // Second param install_callback=true will install
+             // GLFW callbacks and chain to existing ones.
+  ImGui_ImplOpenGL3_Init();
 
   // Run the main loop
   return runGame();
@@ -206,6 +300,8 @@ bool Game::initOpenGL() {
     return false;
   }
 
+  glDepthFunc(GL_LESS);
+  glEnable(GL_LINE_SMOOTH);
   LOG("OPENGL INITIALISED\n");
   /*
       glEnable(GL_DEPTH_TEST);
@@ -235,6 +331,9 @@ void Game::terminateGS() {
   LOG("TERMINATION STARTED\n");
 
   terminateOpenGL();
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui_ImplGlfw_Shutdown();
+  ImGui::DestroyContext();
 
   LOG("TERMINATION COMPELTE\n");
 }
@@ -274,16 +373,22 @@ int Game::updateGame() {
 
   auto [mouse_x, mouse_y] = this->window.getMousePos();
 
-  cam.updateMosueInput(1, mouse_x - last_mouse_x, last_mouse_y - mouse_y);
+  if (!paused)
+    cam.updateMosueInput(1, mouse_x - last_mouse_x, last_mouse_y - mouse_y);
 
   last_mouse_x = mouse_x;
   last_mouse_y = mouse_y;
 
-  model.update();
-  model1.update();
+  // model.update();
+  // model1.update();
+  for (auto &m : models) {
+    m.update();
+  }
   // PRINT_VAR(x);
   return 1;
 }
+
+int last_tab_pressed = 0;
 
 // Handles keyboard user input
 // runs every frame
@@ -291,7 +396,10 @@ int Game::handleKeyboard() {
   if (this->window.getKey(GLFW_KEY_ESCAPE) == GLFW_PRESS)
     this->window.setShouldClose(true);
 
-  float cam_speed = 3;
+  float cam_speed = 10;
+
+  if (this->window.getKey(GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+    cam_speed = 3;
 
   if (this->window.getKey(GLFW_KEY_W) == GLFW_PRESS)
     cam.addPos(glm::vec3(cam_speed * this->dt) * cam.getFront());
@@ -307,6 +415,18 @@ int Game::handleKeyboard() {
     cam.addPos(glm::vec3(cam_speed * this->dt) * cam.getUp());
   if (this->window.getKey(GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
     cam.addPos(glm::vec3(cam_speed * this->dt) * -cam.getWorldUp());
+  if ((this->window.getKey(GLFW_KEY_TAB) == GLFW_PRESS) &&
+      last_tab_pressed == 0) {
+    this->paused = !paused;
+    if (this->paused)
+      this->window.showCursor();
+    else
+      this->window.hideCursor();
+    last_tab_pressed = 5;
+  } else {
+    if (last_tab_pressed > 0)
+      last_tab_pressed--;
+  }
   return 1;
 }
 
@@ -315,11 +435,66 @@ int Game::renderGame() {
   glClearColor(1.f, 1.f, 1.f, 1.f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
+  // Start the Dear ImGui frame
+  ImGui_ImplOpenGL3_NewFrame();
+  ImGui_ImplGlfw_NewFrame();
+  ImGui::NewFrame();
+  // ImGui::ShowDemoWindow(); // Show demo window! :)
+
+  if (ImGui::CollapsingHeader("Camera")) {
+    ImGui::BeginGroup();
+    ImGui::SliderFloat("Camera X", &cam.getPos()->x, -10.0f, 10.0f);
+    ImGui::SliderFloat("Camera Y", &cam.getPos()->y, -10.0f, 10.0f);
+    ImGui::SliderFloat("Camera Z", &cam.getPos()->z, -10.0f, 10.0f);
+    ImGui::SliderFloat("Camera FOV", cam.getFov(), 0, 180);
+    ImGui::EndGroup();
+  }
+
+  for (int i = 0; i < models.size(); i++) {
+    if (ImGui::CollapsingHeader(("models[" + std::to_string(i) + "]").data())) {
+      ImGui::BeginGroup();
+      if (ImGui::Button("Teleport")) {
+        *cam.getPos() = *models[i].getPos();
+      }
+      ImGui::Checkbox("Cull Backfaces",
+                      &models[i].getMaterial()->getOptions()->cull_backfaces);
+      ImGui::RadioButton("Lines",
+                         &models[i].getMaterial()->getOptions()->polygon_mode,
+                         GL_LINE);
+      ImGui::RadioButton("Fill",
+                         &models[i].getMaterial()->getOptions()->polygon_mode,
+                         GL_FILL);
+      ImGui::RadioButton("Point",
+                         &models[i].getMaterial()->getOptions()->polygon_mode,
+                         GL_POINT);
+
+      ImGui::SliderFloat("Pos X", &models[i].getPos()->x, -180, 180);
+      ImGui::SliderFloat("Pos Y", &models[i].getPos()->y, -180, 180);
+      ImGui::SliderFloat("Pos Z", &models[i].getPos()->z, -180, 180);
+
+      ImGui::SliderFloat("Rotation X", &models[i].getRot()->x, -180, 180);
+      ImGui::SliderFloat("Rotation Y", &models[i].getRot()->y, -180, 180);
+      ImGui::SliderFloat("Rotation Z", &models[i].getRot()->z, -180, 180);
+
+      ImGui::EndGroup();
+    }
+  }
+
+  // ImGui::SliderFloat("Camera Y", &y, -10.0f, 10.0f);
+  // ImGui::SliderFloat("Camera Z", &z, -10.0f, 10.0f);
   // TODO: Possibly don't use pointers to bind in the future?
   cam.UploadToShader(&shader, &window);
-  model.render();
-  model1.render();
+  // model.render();
+  // model1.render();
+  for (auto &m : models) {
+    m.render();
+  }
 
+  // Rendering
+  // (Your code clears your framebuffer, renders your other stuff etc.)
+  ImGui::Render();
+  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+  // (Your code calls glfwSwapBuffers() etc.)
   this->window.swapBuffers();
   return 1;
 }

@@ -8,6 +8,8 @@
 struct VertexPC {
 public:
   VertexPC(glm::vec3 pos, glm::vec4 color) : pos(pos), color(color) {}
+  VertexPC(float x, float y, float z, float r, float g, float b, float a)
+      : pos(glm::vec3(x, y, z)), color(glm::vec4(r, g, b, a)) {}
 
   glm::vec3 pos;
   glm::vec4 color;

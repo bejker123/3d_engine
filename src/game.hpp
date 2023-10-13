@@ -50,6 +50,7 @@ private:
   float dt;
   float curTime;
   float lastTime;
+  bool paused;
 };
 
 #endif //__GAME_H

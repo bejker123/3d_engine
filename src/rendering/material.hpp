@@ -21,7 +21,7 @@ public:
 
   void setCullBackfaces(bool cull) { this->cull_backfaces = cull; }
 
-private:
+  // private:
   bool cull_backfaces;
   int polygon_mode; // GL_POINT; GL_LINE; GL_FILL
   bool depth;
@@ -36,6 +36,7 @@ public:
   void bind();
   void unbind();
 
+  void set_texture(std::shared_ptr<Texture> texture);
   std::shared_ptr<Shader> getShader() const { return this->shader; }
   MaterialOptions *getOptions() { return &this->options; }
 
