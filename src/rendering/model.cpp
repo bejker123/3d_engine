@@ -80,3 +80,15 @@ Mesh processMesh(aiMesh *mesh, const aiScene *scene) {
 
   return Mesh(vertices, indices);
 }
+
+void Model::set_pos(glm::vec3 pos) { this->pos = pos; }
+void Model::set_origin(glm::vec3 origin) {
+  this->origin = origin;
+  this->pos = origin;
+}
+void Model::set_rot(glm::vec3 rot) { this->rot = rot; }
+glm::vec3 *Model::get_rot() { return &this->rot; }
+glm::vec3 *Model::get_pos() { return &this->pos; }
+glm::vec3 *Model::get_origin() { return &this->origin; }
+glm::vec3 *Model::get_scale() { return &this->scale; }
+std::shared_ptr<Material> Model::get_material() { return this->mat; }

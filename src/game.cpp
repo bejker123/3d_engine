@@ -209,7 +209,7 @@ int Game::init(int argc, char *argv[]) {
   for (int i = 0; i < 10; i++) {
     Model m;
     m.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
-    m.setOrigin(glm::vec3(i * 21, 0, 0));
+    m.set_origin(glm::vec3(i * 21, 0, 0));
     models.push_back(m);
   }
 
@@ -455,27 +455,27 @@ int Game::render() {
     if (ImGui::CollapsingHeader(("models[" + std::to_string(i) + "]").data())) {
       ImGui::BeginGroup();
       if (ImGui::Button("Teleport")) {
-        *cam.get_pos() = *models[i].getPos();
+        *cam.get_pos() = *models[i].get_pos();
       }
       ImGui::Checkbox("Cull Backfaces",
-                      &models[i].getMaterial()->get_options()->cull_backfaces);
+                      &models[i].get_material()->get_options()->cull_backfaces);
       ImGui::RadioButton("Lines",
-                         &models[i].getMaterial()->get_options()->polygon_mode,
+                         &models[i].get_material()->get_options()->polygon_mode,
                          GL_LINE);
       ImGui::RadioButton("Fill",
-                         &models[i].getMaterial()->get_options()->polygon_mode,
+                         &models[i].get_material()->get_options()->polygon_mode,
                          GL_FILL);
       ImGui::RadioButton("Point",
-                         &models[i].getMaterial()->get_options()->polygon_mode,
+                         &models[i].get_material()->get_options()->polygon_mode,
                          GL_POINT);
 
-      ImGui::SliderFloat("Pos X", &models[i].getPos()->x, -180, 180);
-      ImGui::SliderFloat("Pos Y", &models[i].getPos()->y, -180, 180);
-      ImGui::SliderFloat("Pos Z", &models[i].getPos()->z, -180, 180);
+      ImGui::SliderFloat("Pos X", &models[i].get_pos()->x, -180, 180);
+      ImGui::SliderFloat("Pos Y", &models[i].get_pos()->y, -180, 180);
+      ImGui::SliderFloat("Pos Z", &models[i].get_pos()->z, -180, 180);
 
-      ImGui::SliderFloat("Rotation X", &models[i].getRot()->x, -180, 180);
-      ImGui::SliderFloat("Rotation Y", &models[i].getRot()->y, -180, 180);
-      ImGui::SliderFloat("Rotation Z", &models[i].getRot()->z, -180, 180);
+      ImGui::SliderFloat("Rotation X", &models[i].get_rot()->x, -180, 180);
+      ImGui::SliderFloat("Rotation Y", &models[i].get_rot()->y, -180, 180);
+      ImGui::SliderFloat("Rotation Z", &models[i].get_rot()->z, -180, 180);
 
       ImGui::EndGroup();
     }
