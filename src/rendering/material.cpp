@@ -11,6 +11,18 @@ MaterialOptions::MaterialOptions() {
   this->stencil = true;
 }
 
+bool MaterialOptions::set_polygon_mode(int mode) {
+  if (mode == GL_POINT || mode == GL_LINE || mode == GL_FILL)
+    this->polygon_mode = mode;
+  else
+    return false;
+  return true;
+}
+
+void MaterialOptions::set_cull_backfaces(bool cull) {
+  this->cull_backfaces = cull;
+}
+
 void MaterialOptions::bind() {
 
   // Set Front Face
@@ -81,3 +93,5 @@ void Material::unbind() {
 void Material::set_texture(std::shared_ptr<Texture> texture) {
   this->texture = texture;
 }
+std::shared_ptr<Shader> Material::get_shader() const { return this->shader; }
+MaterialOptions *Material::get_options() { return &this->options; }

@@ -11,15 +11,9 @@ public:
 
   // Valid modes: GL_POINT GL_LINE GL_FILL
   // Return true if set succesfully
-  bool setPolygonMode(int mode) {
-    if (mode == GL_POINT || mode == GL_LINE || mode == GL_FILL)
-      this->polygon_mode = mode;
-    else
-      return false;
-    return true;
-  }
+  bool set_polygon_mode(int mode);
 
-  void setCullBackfaces(bool cull) { this->cull_backfaces = cull; }
+  void set_cull_backfaces(bool cull);
 
   // private:
   bool cull_backfaces;
@@ -37,8 +31,8 @@ public:
   void unbind();
 
   void set_texture(std::shared_ptr<Texture> texture);
-  std::shared_ptr<Shader> getShader() const { return this->shader; }
-  MaterialOptions *getOptions() { return &this->options; }
+  std::shared_ptr<Shader> get_shader() const;
+  MaterialOptions *get_options();
 
 private:
   std::shared_ptr<Shader> shader;

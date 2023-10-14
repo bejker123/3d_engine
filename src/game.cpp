@@ -458,15 +458,15 @@ int Game::render() {
         *cam.get_pos() = *models[i].getPos();
       }
       ImGui::Checkbox("Cull Backfaces",
-                      &models[i].getMaterial()->getOptions()->cull_backfaces);
+                      &models[i].getMaterial()->get_options()->cull_backfaces);
       ImGui::RadioButton("Lines",
-                         &models[i].getMaterial()->getOptions()->polygon_mode,
+                         &models[i].getMaterial()->get_options()->polygon_mode,
                          GL_LINE);
       ImGui::RadioButton("Fill",
-                         &models[i].getMaterial()->getOptions()->polygon_mode,
+                         &models[i].getMaterial()->get_options()->polygon_mode,
                          GL_FILL);
       ImGui::RadioButton("Point",
-                         &models[i].getMaterial()->getOptions()->polygon_mode,
+                         &models[i].getMaterial()->get_options()->polygon_mode,
                          GL_POINT);
 
       ImGui::SliderFloat("Pos X", &models[i].getPos()->x, -180, 180);
