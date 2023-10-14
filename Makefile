@@ -1,24 +1,53 @@
-SHELL=/bin/bash
-CC = g++
-project_name = linux_game
-build_path = build/
-src_path = src/stb/stb_image.h imgui/backends/imgui_impl_opengl3.cpp imgui/backends/imgui_impl_opengl3.h imgui/backends/imgui_impl_glfw.cpp imgui/backends/imgui_impl_glfw.h imgui/*.cpp imgui/*.h src/game.cpp src/game.hpp src/logger.hpp src/main.cpp src/rendering/batch.cpp src/rendering/batch.hpp src/rendering/buffers.cpp src/rendering/buffers.hpp src/rendering/camera.cpp src/rendering/camera.hpp src/rendering/material.cpp src/rendering/material.hpp src/rendering/mesh.cpp src/rendering/mesh.hpp src/rendering/model.cpp src/rendering/model.hpp src/rendering/shader.cpp src/rendering/shader.hpp src/rendering/texture.cpp src/rendering/texture.hpp src/rendering/vertex_array.cpp src/rendering/vertex_array.hpp src/window.cpp src/window.hpp
-executable_path = ${build_path}${project_name}.o
-build_path = build/
-compiler_args = -lassimp -lcglm -lglfw -lGLEW -lGL -lm -lX11 -lpthread -lXrandr -ldl# -O3 -fvisibility=hidden -s -static
+# install:
+# 	@sh ./install.sh
+	# Thanks to Job Vranish (https://spin.atomicobject.com/2016/08/26/makefile-c-projects/)
+TARGET_EXEC := 3d_engine
 
-.PHONY : build run clean install
+BUILD_DIR := ./build
+SRC_DIRS := ./src imgui
 
-run: build
-	@echo Running..
-	@clear
-	@${executable_path}
-build:
-	@echo Building..
-	@#${CC} main.cpp -o ${executable_path}
-	${CC} ./${src_path} ${compiler_args} -o ${executable_path} 
+# Find all the C and C++ files we want to compile
+# Note the single quotes around the * expressions. The shell will incorrectly expand these otherwise, but we want to send the * directly to the find command.
+SRCS := $(shell find $(SRC_DIRS) -name '*.cpp' -or -name '*.c' -or -name '*.s')
+
+# Prepends BUILD_DIR and appends .o to every src file
+# As an example, ./your_dir/hello.cpp turns into ./build/./your_dir/hello.cpp.o
+OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
+
+# String substitution (suffix version without %).
+# As an example, ./build/hello.cpp.o turns into ./build/hello.cpp.d
+DEPS := $(OBJS:.o=.d)
+
+# Every folder in ./src will need to be passed to GCC so that it can find header files
+INC_DIRS := $(shell find $(SRC_DIRS) -type d)
+# Add a prefix to INC_DIRS. So moduleA would become -ImoduleA. GCC understands this -I flag
+INC_FLAGS := $(addprefix -I ,$(INC_DIRS))
+
+# The -MMD and -MP flags together generate Makefiles for us!
+# These files will have .d instead of .o as the output.
+CPPFLAGS := -MMD -MP 
+LDFLAGS := -lassimp -lcglm -lglfw -lGLEW -lGL -lm -lX11 -lpthread -lXrandr -ldl $(INC_FLAGS)# -O3 -fvisibility=hidden -s -static
+
+# The final build step.
+$(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
+	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
+
+# Build step for C source
+$(BUILD_DIR)/%.c.o: %.c
+	mkdir -p $(dir $@)
+	$(CXX) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+# Build step for C++ source
+$(BUILD_DIR)/%.cpp.o: %.cpp
+	mkdir -p $(dir $@)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+
+
+.PHONY: run clean
 clean:
-	@echo Cleaning..
-	@rm -rfv ${build_path}*.o
-install:
-	@sh ./install.sh
+	rm -r $(BUILD_DIR)
+run: $(BUILD_DIR)/$(TARGET_EXEC)
+	$(BUILD_DIR)/$(TARGET_EXEC)
+# Include the .d makefiles. The - at the front suppresses the errors of missing
+# Makefiles. Initially, all the .d files will be missing, and we don't want those
+# errors to show up
