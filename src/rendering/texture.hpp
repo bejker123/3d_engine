@@ -13,7 +13,7 @@ public:
 
   ~Texture();
 
-  inline GLuint getID() const;
+  inline GLuint get_id() const;
 
   void bind(const GLuint texture_unit);
 
@@ -24,7 +24,7 @@ private:
   int width, height;
   unsigned int type;
 
-  void loadFromFile(char *fileName);
+  void load_from_file(char *fileName);
 };
 
 #endif // !TEXTURE_HPP

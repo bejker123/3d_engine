@@ -5,12 +5,12 @@
 
 Texture::Texture(const char *fileName, GLenum type) {
   this->type = type;
-  this->loadFromFile((char *)fileName);
+  this->load_from_file((char *)fileName);
 }
 
 Texture::~Texture() { glDeleteTextures(1, &this->id); }
 
-inline GLuint Texture::getID() const { return this->id; }
+inline GLuint Texture::get_id() const { return this->id; }
 
 void Texture::bind(const GLuint texture_unit) {
   glActiveTexture(GL_TEXTURE0 + texture_unit);
@@ -22,7 +22,7 @@ void Texture::unbind() {
   glBindTexture(this->type, 0);
 }
 
-void Texture::loadFromFile(char *fileName) {
+void Texture::load_from_file(char *fileName) {
   if (this->id) {
     glDeleteTextures(1, &this->id);
   }
