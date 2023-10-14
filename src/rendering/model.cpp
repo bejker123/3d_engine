@@ -28,7 +28,7 @@ void Model::update() {
                               glm::vec3(0.f, 0.f, 1.f));
   this->mmatrix = glm::translate(this->mmatrix, this->pos - this->origin);
   this->mmatrix = glm::scale(this->mmatrix, this->scale);
-  this->mat->get_shader()->setMat4fv(this->mmatrix, "ModelMatrix");
+  this->mat->get_shader()->set_mat4fv(this->mmatrix, "ModelMatrix");
 }
 
 void Model::render() {

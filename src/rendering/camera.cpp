@@ -31,9 +31,9 @@ void Camera::upload_to_shader(Shader *shader, Window *win) {
 
   this->calculate_proj_matrix(fbw, fbh);
 
-  shader->setMat4fv(this->view_matrix, "ViewMatrix");
-  shader->setMat4fv(this->proj_matrix, "ProjectionMatrix");
-  shader->setVec3f(this->pos, "cameraPos");
+  shader->set_mat4fv(this->view_matrix, "ViewMatrix");
+  shader->set_mat4fv(this->proj_matrix, "ProjectionMatrix");
+  shader->set_vec3f(this->pos, "cameraPos");
 }
 void Camera::add_pos(glm::vec3 pos) { this->pos += pos; }
 

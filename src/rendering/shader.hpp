@@ -17,21 +17,21 @@ public:
   void bind();
   void unbind();
 
-  GLuint getAttribLocation(char *attrib);
+  GLuint get_attrib_loc(char *attrib);
 
   void set1i(GLint value, const GLchar *name);
   void set1f(GLfloat value, const GLchar *name);
-  void setVec2f(glm::fvec2 value, const GLchar *name);
-  void setVec3f(glm::fvec3 value, const GLchar *name);
-  void setVec4f(glm::fvec4 value, const GLchar *name);
+  void set_vec2f(glm::fvec2 value, const GLchar *name);
+  void set_vec3f(glm::fvec3 value, const GLchar *name);
+  void set_vec4f(glm::fvec4 value, const GLchar *name);
 
-  void setMat3fv(glm::mat3 value, const GLchar *name,
-                 bool transpose = GL_FALSE);
-  void setMat4fv(glm::mat4 value, const GLchar *name,
-                 bool transpose = GL_FALSE);
+  void set_mat3fv(glm::mat3 value, const GLchar *name,
+                  bool transpose = GL_FALSE);
+  void set_mat4fv(glm::mat4 value, const GLchar *name,
+                  bool transpose = GL_FALSE);
 
 private:
-  GLuint compileShader(const char *source, const GLuint shader_type);
+  GLuint compile_shader(const char *source, const GLuint shader_type);
   GLuint id;
   int success;
 };

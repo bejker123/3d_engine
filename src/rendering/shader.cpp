@@ -26,18 +26,18 @@ void Shader::init(const char *vertex_source, const char *fragment_source,
 
   GLuint vertex = 0, fragment = 0, geometry = 0;
 
-  if (!(vertex = compileShader(vertex_source, GL_VERTEX_SHADER))) {
+  if (!(vertex = compile_shader(vertex_source, GL_VERTEX_SHADER))) {
     this->success = 0;
     LOG_END();
   }
 
-  if (!(fragment = compileShader(fragment_source, GL_FRAGMENT_SHADER))) {
+  if (!(fragment = compile_shader(fragment_source, GL_FRAGMENT_SHADER))) {
     this->success = 0;
     LOG_END();
   }
 
   if (strlen(geometry_source)) {
-    if (!(geometry = compileShader(geometry_source, GL_GEOMETRY_SHADER))) {
+    if (!(geometry = compile_shader(geometry_source, GL_GEOMETRY_SHADER))) {
       this->success = 0;
       LOG_END();
     }
@@ -84,7 +84,7 @@ void Shader::init(const char *vertex_source, const char *fragment_source,
   LOG_END();
 }
 
-GLuint Shader::compileShader(const char *source, const GLuint shader_type) {
+GLuint Shader::compile_shader(const char *source, const GLuint shader_type) {
 
   GLuint id = glCreateShader(shader_type);
 
@@ -124,7 +124,7 @@ void Shader::bind() {
 
 void Shader::unbind() { glUseProgram(0); }
 
-GLuint Shader::getAttribLocation(char *attrib) {
+GLuint Shader::get_attrib_loc(char *attrib) {
   return glGetAttribLocation(this->id, attrib);
 }
 
@@ -140,32 +140,32 @@ void Shader::set1f(GLfloat value, const GLchar *name) {
   this->unbind();
 }
 
-void Shader::setVec2f(glm::fvec2 value, const GLchar *name) {
+void Shader::set_vec2f(glm::fvec2 value, const GLchar *name) {
   this->bind();
   glUniform2fv(glGetUniformLocation(this->id, name), 1, glm::value_ptr(value));
   this->unbind();
 }
 
-void Shader::setVec3f(glm::fvec3 value, const GLchar *name) {
+void Shader::set_vec3f(glm::fvec3 value, const GLchar *name) {
   this->bind();
   glUniform3fv(glGetUniformLocation(this->id, name), 1, glm::value_ptr(value));
   this->unbind();
 }
 
-void Shader::setVec4f(glm::fvec4 value, const GLchar *name) {
+void Shader::set_vec4f(glm::fvec4 value, const GLchar *name) {
   this->bind();
   glUniform4fv(glGetUniformLocation(this->id, name), 1, glm::value_ptr(value));
   this->unbind();
 }
 
-void Shader::setMat3fv(glm::mat3 value, const GLchar *name, bool transpose) {
+void Shader::set_mat3fv(glm::mat3 value, const GLchar *name, bool transpose) {
   this->bind();
   glUniformMatrix3fv(glGetUniformLocation(this->id, name), 1, transpose,
                      glm::value_ptr(value));
   this->unbind();
 }
 
-void Shader::setMat4fv(glm::mat4 value, const GLchar *name, bool transpose) {
+void Shader::set_mat4fv(glm::mat4 value, const GLchar *name, bool transpose) {
   this->bind();
   glUniformMatrix4fv(glGetUniformLocation(this->id, name), 1, transpose,
                      glm::value_ptr(value));
