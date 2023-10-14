@@ -375,7 +375,7 @@ int Game::update() {
   auto [mouse_x, mouse_y] = this->window.get_mouse_pos();
 
   if (!paused)
-    cam.updateMosueInput(1, mouse_x - last_mouse_x, last_mouse_y - mouse_y);
+    cam.update_mosue_input(1, mouse_x - last_mouse_x, last_mouse_y - mouse_y);
 
   last_mouse_x = mouse_x;
   last_mouse_y = mouse_y;
@@ -403,19 +403,19 @@ int Game::handle_keyboard() {
     cam_speed = 3;
 
   if (this->window.get_key(GLFW_KEY_W) == GLFW_PRESS)
-    cam.addPos(glm::vec3(cam_speed * this->dt) * cam.getFront());
+    cam.add_pos(glm::vec3(cam_speed * this->dt) * cam.get_front());
   if (this->window.get_key(GLFW_KEY_S) == GLFW_PRESS)
-    cam.addPos(glm::vec3(cam_speed * this->dt) * -cam.getFront());
+    cam.add_pos(glm::vec3(cam_speed * this->dt) * -cam.get_front());
 
   if (this->window.get_key(GLFW_KEY_A) == GLFW_PRESS)
-    cam.addPos(glm::vec3(cam_speed * this->dt) * -cam.getRight());
+    cam.add_pos(glm::vec3(cam_speed * this->dt) * -cam.get_right());
   if (this->window.get_key(GLFW_KEY_D) == GLFW_PRESS)
-    cam.addPos(glm::vec3(cam_speed * this->dt) * cam.getRight());
+    cam.add_pos(glm::vec3(cam_speed * this->dt) * cam.get_right());
 
   if (this->window.get_key(GLFW_KEY_SPACE) == GLFW_PRESS)
-    cam.addPos(glm::vec3(cam_speed * this->dt) * cam.getUp());
+    cam.add_pos(glm::vec3(cam_speed * this->dt) * cam.get_up());
   if (this->window.get_key(GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-    cam.addPos(glm::vec3(cam_speed * this->dt) * -cam.getWorldUp());
+    cam.add_pos(glm::vec3(cam_speed * this->dt) * -cam.get_world_up());
   if ((this->window.get_key(GLFW_KEY_TAB) == GLFW_PRESS) &&
       last_tab_pressed == 0) {
     this->paused = !paused;
@@ -444,10 +444,10 @@ int Game::render() {
 
   if (ImGui::CollapsingHeader("Camera")) {
     ImGui::BeginGroup();
-    ImGui::SliderFloat("Camera X", &cam.getPos()->x, -10.0f, 10.0f);
-    ImGui::SliderFloat("Camera Y", &cam.getPos()->y, -10.0f, 10.0f);
-    ImGui::SliderFloat("Camera Z", &cam.getPos()->z, -10.0f, 10.0f);
-    ImGui::SliderFloat("Camera FOV", cam.getFov(), 0, 180);
+    ImGui::SliderFloat("Camera X", &cam.get_pos()->x, -10.0f, 10.0f);
+    ImGui::SliderFloat("Camera Y", &cam.get_pos()->y, -10.0f, 10.0f);
+    ImGui::SliderFloat("Camera Z", &cam.get_pos()->z, -10.0f, 10.0f);
+    ImGui::SliderFloat("Camera FOV", cam.get_fov(), 0, 180);
     ImGui::EndGroup();
   }
 
@@ -455,7 +455,7 @@ int Game::render() {
     if (ImGui::CollapsingHeader(("models[" + std::to_string(i) + "]").data())) {
       ImGui::BeginGroup();
       if (ImGui::Button("Teleport")) {
-        *cam.getPos() = *models[i].getPos();
+        *cam.get_pos() = *models[i].getPos();
       }
       ImGui::Checkbox("Cull Backfaces",
                       &models[i].getMaterial()->getOptions()->cull_backfaces);
@@ -484,7 +484,7 @@ int Game::render() {
   // ImGui::SliderFloat("Camera Y", &y, -10.0f, 10.0f);
   // ImGui::SliderFloat("Camera Z", &z, -10.0f, 10.0f);
   // TODO: Possibly don't use pointers to bind in the future?
-  cam.UploadToShader(&shader, &window);
+  cam.upload_to_shader(&shader, &window);
   // model.render();
   // model1.render();
   for (auto &m : models) {

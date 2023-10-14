@@ -6,7 +6,6 @@
 class Camera {
 public:
   Camera() {
-
     this->world_up = glm::vec3(0, 1, 0);
     this->right = glm::vec3(0.f);
     this->up = world_up;
@@ -15,56 +14,31 @@ public:
     this->yaw = -90.f;
     this->roll = 0.f;
 
-    this->updateVectors();
+    this->update_vectors();
   }
+
   void init(float fov, float znear, float zfar, glm::vec3 pos);
 
-  void UploadToShader(Shader *shader, Window *win);
+  void upload_to_shader(Shader *shader, Window *win);
 
-  void addPos(glm::vec3 pos) { this->pos += pos; }
+  void add_pos(glm::vec3 pos);
 
-  void updateMosueInput(const float &dt, const double &offsetX,
-                        const double &offsetY) {
-    // Update pitch yaw and roll
-    this->pitch += static_cast<float>(offsetY) * this->sensitivity * dt; // Y
-    this->yaw += static_cast<float>(offsetX) * this->sensitivity * dt;   // X
+  void update_mosue_input(const float &dt, const double &offsetX,
+                          const double &offsetY);
 
-    if (this->pitch > this->MAX_PITCH && this->pitch > 0.f)
-      this->pitch = this->MAX_PITCH;
-    else if (this->pitch < -this->MAX_PITCH && this->pitch < 0.f)
-      this->pitch = -this->MAX_PITCH;
-
-    if (this->yaw > this->MAX_YAW || this->yaw < -this->MAX_YAW)
-      this->yaw = 0.f;
-
-    // DEBUG
-    // cout << "Yaw:" << this->yaw << " Pitch:" << this->pitch << endl;
-  }
-
-  const glm::vec3 getFront() const { return this->front; }
-  const glm::vec3 getRight() const { return this->right; }
-  const glm::vec3 getUp() const { return this->up; }
-  const glm::vec3 getWorldUp() const { return this->world_up; }
-  glm::vec3 *getPos() { return &this->pos; };
-  float *getFov() { return &this->fov; };
+  const glm::vec3 get_front() const;
+  const glm::vec3 get_right() const;
+  const glm::vec3 get_up() const;
+  const glm::vec3 get_world_up() const;
+  glm::vec3 *get_pos();
+  float *get_fov();
 
 private:
-  void CalculateViewMatrix();
-  void CalculateProjMatrix(int fbw, int fbh);
+  void calculate_view_matrix();
+  void calculate_proj_matrix(int fbw, int fbh);
   // void updateUniforms(Shader *shader, Window *win);
 
-  void updateVectors() {
-    this->front.x =
-        cos(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
-    this->front.y = sin(glm::radians(this->pitch));
-    this->front.z =
-        sin(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
-
-    this->front = glm::normalize(this->front);
-    this->right = glm::normalize(glm::cross(this->front, this->world_up));
-    this->up =
-        glm::normalize(glm::cross(this->right, this->front)); // = this->worldUp
-  }
+  void update_vectors();
 
   GLfloat sensitivity = 0.1;
 
