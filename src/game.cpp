@@ -160,7 +160,7 @@ std::vector<Model> models;
 float last_mouse_x = 0, last_mouse_y = 0;
 
 // Init Game State, run the main loop
-int Game::initGS(int argc, char *argv[]) {
+int Game::init(int argc, char *argv[]) {
   LOG("INITIALISATION STARTED\n");
 
   // First set the game state to uninitialised
@@ -168,9 +168,9 @@ int Game::initGS(int argc, char *argv[]) {
   this->monitor = NULL;
 
   // Run initialisation functions
-  this->initCommandLineArgs(argc, argv);
+  this->init_command_line_args(argc, argv);
 
-  if (!initOpenGL())
+  if (!init_opengl())
     return EXIT_FAILURE;
 
   // LOG_VAR("%d", shader.id);
@@ -236,11 +236,11 @@ int Game::initGS(int argc, char *argv[]) {
   ImGui_ImplOpenGL3_Init();
 
   // Run the main loop
-  return runGame();
+  return run();
 }
 
 // Parse and init cmd line args
-void Game::initCommandLineArgs(int argc, char *argv[]) {
+void Game::init_command_line_args(int argc, char *argv[]) {
   LOG("INITIALISING Command Line Arguments\n");
   this->options.window_title = (char *)"test";
   this->options.window_width = 800;
@@ -251,12 +251,12 @@ void Game::initCommandLineArgs(int argc, char *argv[]) {
 }
 
 // Initialise OpenGL, return true if successful
-bool Game::initOpenGL() {
+bool Game::init_opengl() {
   LOG("INITIALISING OPENGL\n");
   LOG("INITIALISING GLFW\n");
   if (!glfwInit()) {
     LOG("FAILED TO INIT GLFW\n");
-    this->terminateOpenGL();
+    this->terminate_opengl();
     return false;
   }
 
@@ -277,7 +277,7 @@ bool Game::initOpenGL() {
           this->options.window_width, this->options.window_height,
           this->options.window_title, this->options.window_resizable,
           this->options.window_fullscreen)) {
-    this->terminateOpenGL();
+    this->terminate_opengl();
   }
   window.hide_cursor();
 
@@ -297,7 +297,7 @@ bool Game::initOpenGL() {
 
   if (glewInit() != GLEW_OK) {
     LOG("FAILED TO INIT GLEW\n");
-    terminateOpenGL();
+    terminate_opengl();
     return false;
   }
 
@@ -328,10 +328,10 @@ bool Game::initOpenGL() {
   return true;
 }
 
-void Game::terminateGS() {
+void Game::terminate() {
   LOG("TERMINATION STARTED\n");
 
-  terminateOpenGL();
+  terminate_opengl();
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
@@ -339,23 +339,23 @@ void Game::terminateGS() {
   LOG("TERMINATION COMPELTE\n");
 }
 
-void Game::terminateOpenGL() {
+void Game::terminate_opengl() {
   LOG("TERMINATING OPENGL\n");
   this->window.~Window();
   glfwTerminate();
 }
 
 // Main game loop
-int Game::runGame() {
+int Game::run() {
   while (!this->window.should_close()) {
-    if (!updateGame())
+    if (!update())
       return EXIT_SUCCESS;
 
-    if (!renderGame())
+    if (!render())
       return EXIT_SUCCESS;
   }
 
-  terminateGS();
+  terminate();
 
   return EXIT_SUCCESS;
 }
@@ -363,13 +363,13 @@ int Game::runGame() {
 // Update loop running every frame,
 // before render function,
 // handles user input, updates phisics, logic, etc.
-int Game::updateGame() {
+int Game::update() {
   this->curTime = static_cast<float>(glfwGetTime());
   this->dt = this->curTime - this->lastTime;
   this->lastTime = this->curTime;
   glfwPollEvents();
 
-  if (!handleKeyboard())
+  if (!handle_keyboard())
     return 0;
 
   auto [mouse_x, mouse_y] = this->window.get_mouse_pos();
@@ -393,7 +393,7 @@ int last_tab_pressed = 0;
 
 // Handles keyboard user input
 // runs every frame
-int Game::handleKeyboard() {
+int Game::handle_keyboard() {
   if (this->window.get_key(GLFW_KEY_ESCAPE) == GLFW_PRESS)
     this->window.set_should_close(true);
 
@@ -432,7 +432,7 @@ int Game::handleKeyboard() {
 }
 
 // Rendering function running every frame, after update
-int Game::renderGame() {
+int Game::render() {
   glClearColor(1.f, 1.f, 1.f, 1.f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 

@@ -1,17 +1,10 @@
 #ifndef __GAME_H
 #define __GAME_H
-#include "rendering/shader.hpp"
 #include "window.hpp"
-
-//#define PRINT_VAR(X)\
-//        printf(#X" = %d@ %p\n",X,&X)
 
 #define OPENGL_VER_MAJ 3
 #define OPENGL_VER_MIN 3
 
-// STRUCTS
-
-// Struct storing game options
 class GameOptions {
 public:
   int window_width, window_height;
@@ -23,22 +16,22 @@ class Game {
 public:
   // FUNCTIONS
   // init functions
-  int initGS(int argc, char *argv[]);
-  void initCommandLineArgs(int argc, char *argv[]);
-  bool initOpenGL();
+  int init(int argc, char *argv[]);
+  void init_command_line_args(int argc, char *argv[]);
+  bool init_opengl();
 
   // terminate functions
-  void terminateGS();
-  void terminateOpenGL();
+  void terminate();
+  void terminate_opengl();
 
   // main functions
 
-  int runGame();
-  int updateGame();
-  int renderGame();
+  int run();
+  int update();
+  int render();
 
   // update functions
-  int handleKeyboard();
+  int handle_keyboard();
 
   // render functions
 private:

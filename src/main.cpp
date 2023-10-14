@@ -2,5 +2,5 @@
 
 int main(int argc, char **argv) {
   Game game;
-  game.initGS(argc, argv);
+  game.init(argc, argv);
 }
