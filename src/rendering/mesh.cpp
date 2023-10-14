@@ -17,3 +17,4 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices) {
   vb.init(vertices);
   va.addVertexBuffer(&vb);
 }
+void Mesh::init(std::shared_ptr<VertexArray> va) { this->vas.push_back(va); };
