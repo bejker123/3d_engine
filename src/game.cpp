@@ -198,6 +198,7 @@ int Game::initGS(int argc, char *argv[]) {
   //     "/home/bejker/Downloads/Survival_BackPack_2/Survival_BackPack_2.fbx");
   Material mat;
   mat.init(std::make_shared<Shader>(shader));
+  // TODO: Change this texture
   Texture tex("/run/media/bejker/DATA/C++ OpenGL Game Engine/C++ OpenGL Game "
               "Engine/Images/container.png");
   mat.set_texture(std::make_shared<Texture>(tex));
@@ -278,7 +279,7 @@ bool Game::initOpenGL() {
           this->options.window_fullscreen)) {
     this->terminateOpenGL();
   }
-  window.hideCursor();
+  window.hide_cursor();
 
   /*int frameBufferWidth = 0;
         int frameBufferHeight = 0;
@@ -346,7 +347,7 @@ void Game::terminateOpenGL() {
 
 // Main game loop
 int Game::runGame() {
-  while (!this->window.shouldClose()) {
+  while (!this->window.should_close()) {
     if (!updateGame())
       return EXIT_SUCCESS;
 
@@ -371,7 +372,7 @@ int Game::updateGame() {
   if (!handleKeyboard())
     return 0;
 
-  auto [mouse_x, mouse_y] = this->window.getMousePos();
+  auto [mouse_x, mouse_y] = this->window.get_mouse_pos();
 
   if (!paused)
     cam.updateMosueInput(1, mouse_x - last_mouse_x, last_mouse_y - mouse_y);
@@ -393,35 +394,35 @@ int last_tab_pressed = 0;
 // Handles keyboard user input
 // runs every frame
 int Game::handleKeyboard() {
-  if (this->window.getKey(GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    this->window.setShouldClose(true);
+  if (this->window.get_key(GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    this->window.set_should_close(true);
 
   float cam_speed = 10;
 
-  if (this->window.getKey(GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+  if (this->window.get_key(GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
     cam_speed = 3;
 
-  if (this->window.getKey(GLFW_KEY_W) == GLFW_PRESS)
+  if (this->window.get_key(GLFW_KEY_W) == GLFW_PRESS)
     cam.addPos(glm::vec3(cam_speed * this->dt) * cam.getFront());
-  if (this->window.getKey(GLFW_KEY_S) == GLFW_PRESS)
+  if (this->window.get_key(GLFW_KEY_S) == GLFW_PRESS)
     cam.addPos(glm::vec3(cam_speed * this->dt) * -cam.getFront());
 
-  if (this->window.getKey(GLFW_KEY_A) == GLFW_PRESS)
+  if (this->window.get_key(GLFW_KEY_A) == GLFW_PRESS)
     cam.addPos(glm::vec3(cam_speed * this->dt) * -cam.getRight());
-  if (this->window.getKey(GLFW_KEY_D) == GLFW_PRESS)
+  if (this->window.get_key(GLFW_KEY_D) == GLFW_PRESS)
     cam.addPos(glm::vec3(cam_speed * this->dt) * cam.getRight());
 
-  if (this->window.getKey(GLFW_KEY_SPACE) == GLFW_PRESS)
+  if (this->window.get_key(GLFW_KEY_SPACE) == GLFW_PRESS)
     cam.addPos(glm::vec3(cam_speed * this->dt) * cam.getUp());
-  if (this->window.getKey(GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+  if (this->window.get_key(GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
     cam.addPos(glm::vec3(cam_speed * this->dt) * -cam.getWorldUp());
-  if ((this->window.getKey(GLFW_KEY_TAB) == GLFW_PRESS) &&
+  if ((this->window.get_key(GLFW_KEY_TAB) == GLFW_PRESS) &&
       last_tab_pressed == 0) {
     this->paused = !paused;
     if (this->paused)
-      this->window.showCursor();
+      this->window.show_cursor();
     else
-      this->window.hideCursor();
+      this->window.hide_cursor();
     last_tab_pressed = 5;
   } else {
     if (last_tab_pressed > 0)
@@ -495,6 +496,6 @@ int Game::renderGame() {
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
   // (Your code calls glfwSwapBuffers() etc.)
-  this->window.swapBuffers();
+  this->window.swap_buffers();
   return 1;
 }

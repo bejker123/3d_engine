@@ -32,3 +32,39 @@ bool Window::init(int width, int height, char *title, bool resizable,
 
   return true;
 }
+
+void Window::terminate() { glfwDestroyWindow(this->window); }
+
+bool Window::should_close() const {
+  return glfwWindowShouldClose(this->window);
+}
+void Window::set_should_close(bool val) {
+  glfwSetWindowShouldClose(this->window, val);
+}
+
+void Window::swap_buffers() const { glfwSwapBuffers(this->window); };
+
+GLFWwindow *Window::raw() const { return this->window; };
+
+int Window::get_key(int key) const { return glfwGetKey(this->window, key); }
+
+std::tuple<int, int> Window::get_dimensions() {
+  int frameBufferWidth, frameBufferHeight;
+
+  glfwGetFramebufferSize(window, &frameBufferWidth, &frameBufferHeight);
+  return std::make_tuple(frameBufferWidth, frameBufferHeight);
+}
+
+std::tuple<double, double> Window::get_mouse_pos() {
+  double x, y;
+  glfwGetCursorPos(this->window, &x, &y);
+  return std::make_tuple(x, y);
+}
+
+void Window::hide_cursor() const {
+  glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+
+void Window::show_cursor() const {
+  glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}

@@ -8,33 +8,25 @@ public:
   bool init(int width, int height, char *title, bool resizable,
             bool fullscreen);
 
-  void terminate() { glfwDestroyWindow(this->window); }
-  bool shouldClose() const { return glfwWindowShouldClose(this->window); }
-  void setShouldClose(bool val) { glfwSetWindowShouldClose(this->window, val); }
-  void swapBuffers() const { glfwSwapBuffers(this->window); };
-  GLFWwindow *raw() const { return this->window; };
+  void terminate();
 
-  int getKey(int key) const { return glfwGetKey(this->window, key); }
+  bool should_close() const;
 
-  std::tuple<int, int> getDimensions() {
-    int frameBufferWidth, frameBufferHeight;
+  void set_should_close(bool val);
 
-    glfwGetFramebufferSize(window, &frameBufferWidth, &frameBufferHeight);
-    return std::make_tuple(frameBufferWidth, frameBufferHeight);
-  }
+  void swap_buffers() const;
 
-  std::tuple<double, double> getMousePos() {
-    double x, y;
-    glfwGetCursorPos(this->window, &x, &y);
-    return std::make_tuple(x, y);
-  }
+  GLFWwindow *raw() const;
 
-  void hideCursor() const {
-    glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-  }
-  void showCursor() const {
-    glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-  }
+  int get_key(int key) const;
+
+  std::tuple<int, int> get_dimensions();
+
+  std::tuple<double, double> get_mouse_pos();
+
+  void hide_cursor() const;
+
+  void show_cursor() const;
 
 private:
   GLFWwindow *window;
