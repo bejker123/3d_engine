@@ -21,7 +21,7 @@ void VertexArray::addVertexBuffer(VertexBuffer *vb) {
   // set the vertex attributes pointers
   //
 
-  auto vb_type = vb->getType();
+  auto vb_type = vb->get_type();
 
   if (vb_type == VertexType::POSx3F_COLORx4F) {
     // position

@@ -38,7 +38,7 @@ void VertexBuffer::unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
 void VertexBuffer::terminate() { glDeleteBuffers(1, &this->id); }
 
-const VertexType VertexBuffer::getType() const { return this->type; }
+const VertexType VertexBuffer::get_type() const { return this->type; }
 
 void IndexBuffer::init(uint32_t *indices, uint32_t size) {
   glCreateBuffers(1, &this->id);

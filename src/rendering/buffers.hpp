@@ -40,7 +40,7 @@ public:
 
   void terminate();
 
-  const VertexType getType() const;
+  const VertexType get_type() const;
 
 public:
   VertexType type;
