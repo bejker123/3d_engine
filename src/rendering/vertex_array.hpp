@@ -7,16 +7,16 @@ class VertexArray {
 public:
   void init();
 
-  void addVertexBuffer(VertexBuffer *vb);
+  void add_vertex_buffer(VertexBuffer *vb);
 
-  void setIndexBuffer(IndexBuffer *ib);
+  void set_index_buffer(IndexBuffer *ib);
 
   void bind();
 
   void unbind();
 
-  GLuint getID();
-  uint32_t getElements();
+  GLuint get_id() const;
+  uint32_t get_elements() const;
 
   // IndexBuffer* ib;
 private:

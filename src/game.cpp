@@ -188,9 +188,9 @@ int Game::init(int argc, char *argv[]) {
 
   ib.init(indices, sizeof(indices));
 
-  va.addVertexBuffer(&vb);
+  va.add_vertex_buffer(&vb);
   // va.addVertexBuffer(&vb1);
-  va.setIndexBuffer(&ib);
+  va.set_index_buffer(&ib);
 
   Mesh mesh;
   mesh.init(std::make_shared<VertexArray>(va));

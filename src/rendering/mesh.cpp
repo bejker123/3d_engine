@@ -5,7 +5,7 @@
 void Mesh::render() {
   for (auto i : this->vas) {
     i->bind();
-    glDrawElements(GL_TRIANGLES, i->getElements(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, i->get_elements(), GL_UNSIGNED_INT, 0);
     i->unbind();
   }
 }
@@ -15,6 +15,6 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices) {
   va.init();
   VertexBuffer vb;
   vb.init(vertices);
-  va.addVertexBuffer(&vb);
+  va.add_vertex_buffer(&vb);
 }
 void Mesh::init(std::shared_ptr<VertexArray> va) { this->vas.push_back(va); };

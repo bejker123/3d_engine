@@ -12,7 +12,7 @@ void VertexArray::init() {
   this->inited = true;
 }
 
-void VertexArray::addVertexBuffer(VertexBuffer *vb) {
+void VertexArray::add_vertex_buffer(VertexBuffer *vb) {
   assert(this->inited == true);
 
   this->bind();
@@ -85,7 +85,7 @@ void VertexArray::addVertexBuffer(VertexBuffer *vb) {
   this->count += vb->count;
 }
 
-void VertexArray::setIndexBuffer(IndexBuffer *ib) {
+void VertexArray::set_index_buffer(IndexBuffer *ib) {
   assert(this->inited == true);
   this->bind();
   ib->bind();
@@ -101,5 +101,5 @@ void VertexArray::bind() { glBindVertexArray(this->id); }
 
 void VertexArray::unbind() { glBindVertexArray(0); }
 
-GLuint VertexArray::getID() { return this->id; }
-uint32_t VertexArray::getElements() { return this->elements; }
+GLuint VertexArray::get_id() const { return this->id; }
+uint32_t VertexArray::get_elements() const { return this->elements; }
