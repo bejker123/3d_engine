@@ -27,7 +27,7 @@ void Camera::UploadToShader(Shader *shader, Window *win) {
 
   this->CalculateViewMatrix();
 
-  auto [fbw, fbh] = win->getDimensions();
+  auto [fbw, fbh] = win->get_dimensions();
 
   this->CalculateProjMatrix(fbw, fbh);
 
