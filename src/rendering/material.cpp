@@ -25,6 +25,7 @@ void MaterialOptions::set_cull_backfaces(bool cull) {
 
 void MaterialOptions::bind() {
 
+  glEnable(GL_TEXTURE_2D);
   // Set Front Face
   glFrontFace(GL_CCW);
 
@@ -81,8 +82,9 @@ void Material::init(std::shared_ptr<Shader> shader) {
 }
 void Material::bind() {
   this->options.bind();
-  this->shader->bind();
   this->texture->bind(0);
+  this->shader->set1i(0, "tex");
+  this->shader->bind();
 }
 void Material::unbind() {
   this->options.unbind();

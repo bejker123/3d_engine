@@ -2,8 +2,8 @@
 #define __GAME_H
 #include "window.hpp"
 
-#define OPENGL_VER_MAJ 3
-#define OPENGL_VER_MIN 3
+#define OPENGL_VER_MAJ 4
+#define OPENGL_VER_MIN 6
 
 class GameOptions {
 public:

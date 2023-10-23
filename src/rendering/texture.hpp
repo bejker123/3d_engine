@@ -13,7 +13,7 @@ public:
 
   ~Texture();
 
-  inline GLuint get_id() const;
+  GLuint get_id() const;
 
   void bind(const GLuint texture_unit);
 

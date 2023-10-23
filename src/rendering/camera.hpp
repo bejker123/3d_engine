@@ -32,6 +32,9 @@ public:
   const glm::vec3 get_world_up() const;
   glm::vec3 *get_pos();
   float *get_fov();
+  float *get_yaw();
+  float *get_pitch();
+  float *get_roll();
 
 private:
   void calculate_view_matrix();

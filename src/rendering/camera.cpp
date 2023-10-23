@@ -61,6 +61,9 @@ const glm::vec3 Camera::get_up() const { return this->up; }
 const glm::vec3 Camera::get_world_up() const { return this->world_up; }
 glm::vec3 *Camera::get_pos() { return &this->pos; };
 float *Camera::get_fov() { return &this->fov; };
+float *Camera::get_pitch() { return &this->pitch; };
+float *Camera::get_yaw() { return &this->yaw; };
+float *Camera::get_roll() { return &this->roll; };
 
 void Camera::update_vectors() {
   this->front.x = cos(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));

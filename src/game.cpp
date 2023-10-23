@@ -41,65 +41,68 @@
 
 unsigned int indices[] = {
     // front and back
-    0, 3, 2, 2, 1, 0, 4, 5, 6, 6, 7, 4,
-    // left and right
-    11, 8, 9, 9, 10, 11, 12, 13, 14, 14, 15, 12,
-    // bottom and top
-    16, 17, 18, 18, 19, 16, 20, 21, 22, 22, 23, 20
-    // // Top
-    // 2, 6, 7, 2, 3, 7,
-    //
-    // // Bottom
-    // 0, 4, 5, 0, 1, 5,
-    //
-    // // Left
-    // 0, 2, 6, 0, 4, 6,
-    //
-    // // Right
-    // 1, 3, 7, 1, 5, 7,
-    //
-    // // Front
-    // 0, 2, 3, 0, 1, 3,
-    //
-    // // Back
-    // 4, 6, 7, 4, 5, 7
+    0, 3, 2, 2, 1, 0, // // Top
+                      // 2, 6, 7, 2, 3, 7,
+                      //
+                      // // Bottom
+                      // 0, 4, 5, 0, 1, 5,
+                      //
+                      // // Left
+                      // 0, 2, 6, 0, 4, 6,
+                      //
+                      // // Right
+                      // 1, 3, 7, 1, 5, 7,
+                      //
+                      // // Front
+                      // 0, 2, 3, 0, 1, 3,
+                      //
+                      // // Back
+                      // 4, 6, 7, 4, 5, 7
 };
 
-std::vector<VertexPC> vertices{
-    // VertexPC(-1, -1, 1, 1, 0, 1, 1),  VertexPC(1, -1, 1, 0, 1, 0, 1),
-    // VertexPC(-1, 1, 1, 1, 0, 0, 1),   VertexPC(1, 1, 1, 0, 1, 0, 1),
-    // VertexPC(-1, -1, -1, 0, 0, 0, 1), VertexPC(1, -1, -1, 0, 1, 1, 1),
-    // VertexPC(-1, 1, -1, 0, 1, 0, 1),  VertexPC(1, 1, -1, 0, 1, 0, 1),
-    VertexPC(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec4(0.0f, 0.0f, 0, 1)),
-    VertexPC(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 0.0f, 0, 1)),
-    VertexPC(glm::vec3(0.5f, 0.5f, -0.5f), glm::vec4(1.0f, 1.0f, 0, 1)),
-    VertexPC(glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec4(0.0f, 1.0, 0, 1)),
-    VertexPC(glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec4(0.0f, 0.0, 0, 1)),
-    VertexPC(glm::vec3(0.5f, -0.5f, 0.5f), glm::vec4(1.0f, 0.0f, 0, 1)),
-    VertexPC(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec4(1.0f, 1.0f, 0, 1)),
-    VertexPC(glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec4(0.0f, 1.0, 0, 1)),
-
-    VertexPC(glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec4(0.0f, 0.0, 0, 1)),
-    VertexPC(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 0.0, 0, 1)),
-    VertexPC(glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec4(1.0f, 1.0, 0, 1)),
-    VertexPC(glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec4(0.0f, 1.0, 0, 1)),
-    VertexPC(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec4(0.0f, 0.0f, 0, 1)),
-    VertexPC(glm::vec3(0.5f, 0.5f, -0.5f), glm::vec4(1.0f, 0.0f, 0, 1)),
-    VertexPC(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec4(1.0f, 1.0f, 0, 1)),
-    VertexPC(glm::vec3(0.5f, -0.5f, 0.5f), glm::vec4(0.0f, 1.0f, 0, 1)),
-
-    VertexPC(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec4(0.0f, 0.0, 0, 1)),
-    VertexPC(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 0.0f, 0, 1)),
-    VertexPC(glm::vec3(0.5f, -0.5f, 0.5f), glm::vec4(1.0f, 1.0f, 0, 1)),
-    VertexPC(glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec4(0.0f, 1.0, 0, 1)),
-    VertexPC(glm::vec3(0.5f, 0.5f, -0.5f), glm::vec4(0.0f, 0.0, 0, 1)),
-    VertexPC(glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec4(1.0f, 0.0, 0, 1)),
-    VertexPC(glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec4(1.0f, 1.0, 0, 1)),
-    VertexPC(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec4(0.0f, 1.0, 0, 1)),
+std::vector<VertexPC> vertices = {
+    // positions          // colors           // texture coords
+    VertexPC(0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0, 1),   // top right
+    VertexPC(0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0, 1),  // bottom right
+    VertexPC(-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0, 1), // bottom left
+    VertexPC(-0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0, 1)   // top left
 };
+
+// std::vector<VertexPC> vertices{
+//     // VertexPC(-1, -1, 1, 1, 0, 1, 1),  VertexPC(1, -1, 1, 0, 1, 0, 1),
+//     // VertexPC(-1, 1, 1, 1, 0, 0, 1),   VertexPC(1, 1, 1, 0, 1, 0, 1),
+//     // VertexPC(-1, -1, -1, 0, 0, 0, 1), VertexPC(1, -1, -1, 0, 1, 1, 1),
+//     // VertexPC(-1, 1, -1, 0, 1, 0, 1),  VertexPC(1, 1, -1, 0, 1, 0, 1),
+//     VertexPC(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec4(0.0f, 0.0f, 0, 1)),
+//     VertexPC(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 0.0f, 0, 1)),
+//     VertexPC(glm::vec3(0.5f, 0.5f, -0.5f), glm::vec4(1.0f, 1.0f, 0, 1)),
+//     VertexPC(glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec4(0.0f, 1.0, 0, 1)),
+//     VertexPC(glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec4(0.0f, 0.0, 0, 1)),
+//     VertexPC(glm::vec3(0.5f, -0.5f, 0.5f), glm::vec4(1.0f, 0.0f, 0, 1)),
+//     VertexPC(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec4(1.0f, 1.0f, 0, 1)),
+//     VertexPC(glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec4(0.0f, 1.0, 0, 1)),
+//
+//     VertexPC(glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec4(0.0f, 0.0, 0, 1)),
+//     VertexPC(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 0.0, 0, 1)),
+//     VertexPC(glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec4(1.0f, 1.0, 0, 1)),
+//     VertexPC(glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec4(0.0f, 1.0, 0, 1)),
+//     VertexPC(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec4(0.0f, 0.0f, 0, 1)),
+//     VertexPC(glm::vec3(0.5f, 0.5f, -0.5f), glm::vec4(1.0f, 0.0f, 0, 1)),
+//     VertexPC(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec4(1.0f, 1.0f, 0, 1)),
+//     VertexPC(glm::vec3(0.5f, -0.5f, 0.5f), glm::vec4(0.0f, 1.0f, 0, 1)),
+//
+//     VertexPC(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec4(0.0f, 0.0, 0, 1)),
+//     VertexPC(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 0.0f, 0, 1)),
+//     VertexPC(glm::vec3(0.5f, -0.5f, 0.5f), glm::vec4(1.0f, 1.0f, 0, 1)),
+//     VertexPC(glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec4(0.0f, 1.0, 0, 1)),
+//     VertexPC(glm::vec3(0.5f, 0.5f, -0.5f), glm::vec4(0.0f, 0.0, 0, 1)),
+//     VertexPC(glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec4(1.0f, 0.0, 0, 1)),
+//     VertexPC(glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec4(1.0f, 1.0, 0, 1)),
+//     VertexPC(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec4(0.0f, 1.0, 0, 1)),
+// };
 
 const char *basic_vertex_shader =
-    "#version 330 core\n"
+    "#version 460 core\n"
     "layout (location = 0) in vec3 vert_pos;\n"
     "layout (location = 1) in vec4 vert_color;\n"
     "out vec4 frag_color;"
@@ -109,10 +112,10 @@ const char *basic_vertex_shader =
     "}\0";
 
 const char *camera_vs =
-    R"(#version 330
+    R"(#version 460
 layout(location = 0) in vec3 vertex_position;
 layout(location = 1) in vec4 vertex_color;
-// layout(location = 2) in vec2 vertex_texcoord;
+ // layout(location = 2) in vec2 vertex_texcoord;
 // layout(location = 3) in vec3 vertex_normal;
 
 out vec3 vs_position;
@@ -137,16 +140,16 @@ void main() {
 }
 )";
 
-const char *basic_fragment_shader =
-    "#version 330 core\n"
-    "in vec4 frag_color;\n"
-    "out vec4 FragColor;\n"
-    "uniform sampler2D tex0;"
-    "void main(){\n"
-    // "FragColor = vec4(0.3f,1.f,0.5f,1.f);\n"
-    "FragColor = texture(tex0,vec2(frag_color.xy));\n"
-    // "FragColor = frag_color;\n"
-    "}\0";
+const char *basic_fragment_shader = "#version 460 core\n"
+                                    "in vec4 frag_color;\n"
+                                    // "in vec2 vs_texcoord;\n"
+                                    "out vec4 FragColor;\n"
+                                    "uniform sampler2D tex;"
+                                    "void main(){\n"
+                                    // "FragColor = vec4(0.3f,1.f,0.5f,1.f);\n"
+                                    "FragColor = texture(tex,frag_color.xy);\n"
+                                    // "FragColor = frag_color;\n"
+                                    "}\0";
 
 Shader shader;
 
@@ -216,6 +219,7 @@ int Game::init(int argc, char *argv[]) {
   // If all initialisation functions run succesfully
   // set game state to inited
   this->inited = true;
+  this->paused = false;
 
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
@@ -448,6 +452,9 @@ int Game::render() {
     ImGui::SliderFloat("Camera Y", &cam.get_pos()->y, -10.0f, 10.0f);
     ImGui::SliderFloat("Camera Z", &cam.get_pos()->z, -10.0f, 10.0f);
     ImGui::SliderFloat("Camera FOV", cam.get_fov(), 0, 180);
+    ImGui::SliderFloat("Camera pitch", cam.get_pitch(), -90, 90);
+    ImGui::SliderFloat("Camera yaw", cam.get_yaw(), 0, 180);
+    ImGui::SliderFloat("Camera roll", cam.get_roll(), 0, 180);
     ImGui::EndGroup();
   }
 
