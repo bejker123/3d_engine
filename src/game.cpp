@@ -39,66 +39,115 @@
 //     1, 2, 3  // second Triangle
 // };
 
-unsigned int indices[] = {
-    // front and back
-    0, 3, 2, 2, 1, 0, // // Top
-                      // 2, 6, 7, 2, 3, 7,
-                      //
-                      // // Bottom
-                      // 0, 4, 5, 0, 1, 5,
-                      //
-                      // // Left
-                      // 0, 2, 6, 0, 4, 6,
-                      //
-                      // // Right
-                      // 1, 3, 7, 1, 5, 7,
-                      //
-                      // // Front
-                      // 0, 2, 3, 0, 1, 3,
-                      //
-                      // // Back
-                      // 4, 6, 7, 4, 5, 7
+std::vector<VertexPC> vertices{
+    // Front Face 0
+    VertexPC(-1, 1, 1, 0.0f, 0.0f, 0, 1),
+    VertexPC(-1, -1, 1, 0.0f, 1, 0, 1),
+    VertexPC(1, -1, 1, 1, 1, 0, 1),
+    VertexPC(1, 1, 1, 1, 0.0f, 0, 1),
+
+    // Top Face 4
+    VertexPC(-1, 1, -1, 0.0f, 0.0f, 0, 1),
+    VertexPC(1, 1, -1, 1, 0.0f, 0, 1),
+    VertexPC(-1, 1, 1, 0.0f, 1, 0, 1),
+    VertexPC(1, 1, 1, 1, 1, 0, 1),
+
+    // Right Face 8
+    VertexPC(1, 1, 1, 1, 1, 0, 1),
+    VertexPC(1, -1, 1, 1, 0, 0, 1),
+    VertexPC(1, -1, -1, 0.0f, 0.0f, 0, 1),
+    VertexPC(1, 1, -1, 0, 1.0f, 0, 1),
+
+    // Left Face 12
+    VertexPC(-1, 1, 1, 1.0f, 1.0f, 0, 1),
+    VertexPC(-1, 1, -1, 0.0f, 1, 0, 1),
+    VertexPC(-1, -1, -1, 0, 0, 0, 1),
+    VertexPC(-1, -1, 1, 1, 0.0f, 0, 1),
+
+    // Bottom Face 16
+    VertexPC(-1, -1, -1, 1.0f, 0.0f, 0, 1),
+    VertexPC(-1, -1, 1, 0.0f, 0, 0, 1),
+    VertexPC(1, -1, -1, 1, 1, 0, 1),
+    VertexPC(1, -1, 1, 0, 1.0f, 0, 1),
+
+    // Back Face 20
+    VertexPC(-1, 1, -1, 1, 1.0f, 0, 1),
+    VertexPC(1, 1, -1, 0.0f, 1.0f, 0, 1),
+    VertexPC(-1, -1, -1, 1, 0, 0, 1),
+    VertexPC(1, -1, -1, 0.0f, 0, 0, 1),
 };
 
-std::vector<VertexPC> vertices = {
-    // positions          // colors           // texture coords
-    VertexPC(0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0, 1),   // top right
-    VertexPC(0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0, 1),  // bottom right
-    VertexPC(-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0, 1), // bottom left
-    VertexPC(-0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0, 1)   // top left
+unsigned int indices[] = {
+    0,  1,  3,  3,  1,  2,  // Front face
+    7,  5,  6,  6,  5,  4,  // Top Face
+    8,  9,  11, 11, 9,  10, // Right face
+    12, 13, 15, 15, 13, 14, // Left face
+    19, 17, 18, 18, 17, 16, // Bottom face
+    20, 21, 22, 22, 21, 23  // Back face
 };
+// unsigned int indices[] = {
+//     // front and back
+//     // // Top
+//     2, 6, 7, 2, 3, 7,
+//
+//     // Bottom
+//     0, 4, 5, 0, 1, 5,
+//
+//     // Left
+//     0, 2, 6, 0, 4, 6,
+//
+//     // Right
+//     1, 3, 7, 1, 5, 7,
+//
+//     // Front
+//     0, 2, 3, 0, 1, 3,
+//
+//     // Back
+//     4, 6, 7, 4, 5, 7};
+
+// std::vector<VertexPC> vertices = {
+//     // positions          // colors           // texture coords
+//     VertexPC(0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0, 1),   // top right
+//     VertexPC(0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0, 1),  // bottom right
+//     VertexPC(-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0, 1), // bottom left
+//     VertexPC(-0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0, 1)   // top left
+// };
 
 // std::vector<VertexPC> vertices{
-//     // VertexPC(-1, -1, 1, 1, 0, 1, 1),  VertexPC(1, -1, 1, 0, 1, 0, 1),
-//     // VertexPC(-1, 1, 1, 1, 0, 0, 1),   VertexPC(1, 1, 1, 0, 1, 0, 1),
-//     // VertexPC(-1, -1, -1, 0, 0, 0, 1), VertexPC(1, -1, -1, 0, 1, 1, 1),
-//     // VertexPC(-1, 1, -1, 0, 1, 0, 1),  VertexPC(1, 1, -1, 0, 1, 0, 1),
-//     VertexPC(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec4(0.0f, 0.0f, 0, 1)),
-//     VertexPC(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 0.0f, 0, 1)),
-//     VertexPC(glm::vec3(0.5f, 0.5f, -0.5f), glm::vec4(1.0f, 1.0f, 0, 1)),
-//     VertexPC(glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec4(0.0f, 1.0, 0, 1)),
-//     VertexPC(glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec4(0.0f, 0.0, 0, 1)),
-//     VertexPC(glm::vec3(0.5f, -0.5f, 0.5f), glm::vec4(1.0f, 0.0f, 0, 1)),
-//     VertexPC(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec4(1.0f, 1.0f, 0, 1)),
-//     VertexPC(glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec4(0.0f, 1.0, 0, 1)),
-//
-//     VertexPC(glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec4(0.0f, 0.0, 0, 1)),
-//     VertexPC(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 0.0, 0, 1)),
-//     VertexPC(glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec4(1.0f, 1.0, 0, 1)),
-//     VertexPC(glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec4(0.0f, 1.0, 0, 1)),
-//     VertexPC(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec4(0.0f, 0.0f, 0, 1)),
-//     VertexPC(glm::vec3(0.5f, 0.5f, -0.5f), glm::vec4(1.0f, 0.0f, 0, 1)),
-//     VertexPC(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec4(1.0f, 1.0f, 0, 1)),
-//     VertexPC(glm::vec3(0.5f, -0.5f, 0.5f), glm::vec4(0.0f, 1.0f, 0, 1)),
-//
-//     VertexPC(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec4(0.0f, 0.0, 0, 1)),
-//     VertexPC(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 0.0f, 0, 1)),
-//     VertexPC(glm::vec3(0.5f, -0.5f, 0.5f), glm::vec4(1.0f, 1.0f, 0, 1)),
-//     VertexPC(glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec4(0.0f, 1.0, 0, 1)),
-//     VertexPC(glm::vec3(0.5f, 0.5f, -0.5f), glm::vec4(0.0f, 0.0, 0, 1)),
-//     VertexPC(glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec4(1.0f, 0.0, 0, 1)),
-//     VertexPC(glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec4(1.0f, 1.0, 0, 1)),
-//     VertexPC(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec4(0.0f, 1.0, 0, 1)),
+//     VertexPC(-1, -1, 1, 0, 0, 1, 1),  // 0
+//     VertexPC(1, -1, 1, 1, 0, 0, 1),   // 1
+//     VertexPC(-1, 1, 1, 0, 1, 0, 1),   // 2
+//     VertexPC(1, 1, 1, 1, 1, 0, 1),    // 3
+//     VertexPC(-1, -1, -1, 0, 0, 0, 1), // 4
+//     VertexPC(1, -1, -1, 0, 1, 1, 1),  // 5
+//     VertexPC(-1, 1, -1, 0, 1, 0, 1),  // 6
+//     VertexPC(1, 1, -1, 0, 1, 0, 1),   // 7
+//     // VertexPC(glm::vec3(-1, -1, -1), glm::vec4(0.0f, 0.0f, 0, 1)), // 8
+//     // VertexPC(glm::vec3(1, -1, -1), glm::vec4(1.0f, 0.0f, 0, 1)),
+//     // VertexPC(glm::vec3(1, 1, -1), glm::vec4(1.0f, 1.0f, 0, 1)),
+//     // VertexPC(glm::vec3(-1, 1, -1), glm::vec4(0.0f, 1.0, 0, 1)),
+//     // VertexPC(glm::vec3(-1, -1, 1), glm::vec4(0.0f, 0.0, 0, 1)),
+//     // VertexPC(glm::vec3(1, -1, 1), glm::vec4(1.0f, 0.0f, 0, 1)),
+//     // VertexPC(glm::vec3(1, 1, 1), glm::vec4(1.0f, 1.0f, 0, 1)),
+//     // VertexPC(glm::vec3(-1, 1, 1), glm::vec4(0.0f, 1.0, 0, 1)),
+//     //
+//     // VertexPC(glm::vec3(-1, 1, -1), glm::vec4(0.0f, 0.0, 0, 1)),
+//     // VertexPC(glm::vec3(-1, -1, -1), glm::vec4(1.0f, 0.0, 0, 1)),
+//     // VertexPC(glm::vec3(-1, -1, 1), glm::vec4(1.0f, 1.0, 0, 1)),
+//     // VertexPC(glm::vec3(-1, 1, 1), glm::vec4(0.0f, 1.0, 0, 1)),
+//     // VertexPC(glm::vec3(1, -1, -1), glm::vec4(0.0f, 0.0f, 0, 1)),
+//     // VertexPC(glm::vec3(1, 1, -1), glm::vec4(1.0f, 0.0f, 0, 1)),
+//     // VertexPC(glm::vec3(1, 1, 1), glm::vec4(1.0f, 1.0f, 0, 1)),
+//     // VertexPC(glm::vec3(1, -1, 1), glm::vec4(0.0f, 1.0f, 0, 1)),
+//     //
+//     // VertexPC(glm::vec3(-1, -1, -1), glm::vec4(0.0f, 0.0, 0, 1)),
+//     // VertexPC(glm::vec3(1, -1, -1), glm::vec4(1.0f, 0.0f, 0, 1)),
+//     // VertexPC(glm::vec3(1, -1, 1), glm::vec4(1.0f, 1.0f, 0, 1)),
+//     // VertexPC(glm::vec3(-1, -1, 1), glm::vec4(0.0f, 1.0, 0, 1)),
+//     // VertexPC(glm::vec3(1, 1, -1), glm::vec4(0.0f, 0.0, 0, 1)),
+//     // VertexPC(glm::vec3(-1, 1, -1), glm::vec4(1.0f, 0.0, 0, 1)),
+//     // VertexPC(glm::vec3(-1, 1, 1), glm::vec4(1.0f, 1.0, 0, 1)),
+//     // VertexPC(glm::vec3(1, 1, 1), glm::vec4(0.0f, 1.0, 0, 1)),
 // };
 
 const char *basic_vertex_shader =
@@ -140,16 +189,17 @@ void main() {
 }
 )";
 
-const char *basic_fragment_shader = "#version 460 core\n"
-                                    "in vec4 frag_color;\n"
-                                    // "in vec2 vs_texcoord;\n"
-                                    "out vec4 FragColor;\n"
-                                    "uniform sampler2D tex;"
-                                    "void main(){\n"
-                                    // "FragColor = vec4(0.3f,1.f,0.5f,1.f);\n"
-                                    "FragColor = texture(tex,frag_color.xy);\n"
-                                    // "FragColor = frag_color;\n"
-                                    "}\0";
+const char *basic_fragment_shader =
+    "#version 460 core\n"
+    "in vec4 frag_color;\n"
+    // "in vec2 vs_texcoord;\n"
+    "out vec4 FragColor;\n"
+    "uniform sampler2D tex;"
+    "void main(){\n"
+    // "FragColor = vec4(0.3f,1.f,0.5f,1.f);\n"
+    "FragColor = texture(tex,frag_color.xy) * vec4(1,1,1,0.5);\n"
+    // "FragColor = frag_color;\n"
+    "}\0";
 
 Shader shader;
 
@@ -203,7 +253,7 @@ int Game::init(int argc, char *argv[]) {
   mat.init(std::make_shared<Shader>(shader));
   // TODO: Change this texture
   Texture tex("/run/media/bejker/DATA/C++ OpenGL Game Engine/C++ OpenGL Game "
-              "Engine/Images/container.png");
+              "Engine/Images/cat.png");
   mat.set_texture(std::make_shared<Texture>(tex));
   // model.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
   // model1.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));

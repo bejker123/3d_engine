@@ -29,6 +29,7 @@ void Texture::load_from_file(char *fileName) {
     glDeleteTextures(1, &this->id);
   }
 
+  stbi_set_flip_vertically_on_load(true);
   int nrChannels;
   unsigned char *data =
       stbi_load(fileName, &this->width, &this->height, &nrChannels, 0);
