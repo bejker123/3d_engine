@@ -13,7 +13,7 @@ public:
 
   void bind();
 
-  void unbind();
+  static void unbind();
 
   GLuint get_id() const;
   uint32_t get_elements() const;

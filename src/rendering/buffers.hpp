@@ -36,7 +36,7 @@ public:
   void init(std::vector<VertexPC> vertices);
 
   void bind();
-  void unbind();
+  static void unbind();
 
   void terminate();
 
@@ -53,7 +53,7 @@ public:
   void init(uint32_t *indices, uint32_t size);
 
   void bind();
-  void unbind();
+  static void unbind();
 
   void terminate();
   uint32_t id;

@@ -18,12 +18,11 @@ void Texture::bind(const GLuint texture_unit) {
   glEnable(GL_TEXTURE_2D);
 }
 
-void Texture::unbind() {
+void Texture::unbind(const uint32_t type) {
   glActiveTexture(0);
-  glBindTexture(this->type, 0);
-  glDisable(GL_TEXTURE_2D);
+  glBindTexture(type, 0);
+  glDisable(type);
 }
-
 void Texture::load_from_file(char *fileName) {
   if (this->id) {
     glDeleteTextures(1, &this->id);

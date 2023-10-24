@@ -17,7 +17,7 @@ public:
 
   void bind(const GLuint texture_unit);
 
-  void unbind();
+  static void unbind(const uint32_t type = GL_TEXTURE_2D);
 
 private:
   GLuint id;

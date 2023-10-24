@@ -3,12 +3,12 @@
 #include "shader.hpp"
 #include "texture.hpp"
 #include <memory>
+#include <optional>
 class MaterialOptions {
 public:
   MaterialOptions();
   void bind();
-  void unbind();
-
+  static void unbind();
   // Valid modes: GL_POINT GL_LINE GL_FILL
   // Return true if set succesfully
   bool set_polygon_mode(int mode);
@@ -22,6 +22,7 @@ public:
   bool blend;
   bool multisample;
   bool stencil;
+  bool texture;
 };
 
 class Material {
@@ -36,7 +37,7 @@ public:
 
 private:
   std::shared_ptr<Shader> shader;
-  std::shared_ptr<Texture> texture;
+  std::optional<std::shared_ptr<Texture>> texture;
   MaterialOptions options;
 };
 #endif // !MATERIAL_HPP

@@ -98,7 +98,6 @@ void VertexArray::set_index_buffer(IndexBuffer *ib) {
 }
 
 void VertexArray::bind() { glBindVertexArray(this->id); }
-
 void VertexArray::unbind() { glBindVertexArray(0); }
 
 GLuint VertexArray::get_id() const { return this->id; }

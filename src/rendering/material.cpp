@@ -1,6 +1,8 @@
 #include "material.hpp"
+#include "shader.hpp"
 #include <GL/gl.h>
 #include <memory>
+#include <optional>
 
 MaterialOptions::MaterialOptions() {
   this->cull_backfaces = false;
@@ -9,6 +11,7 @@ MaterialOptions::MaterialOptions() {
   this->blend = true;
   this->multisample = true;
   this->stencil = true;
+  this->texture = true;
 }
 
 bool MaterialOptions::set_polygon_mode(int mode) {
@@ -79,17 +82,19 @@ void MaterialOptions::unbind() {
 void Material::init(std::shared_ptr<Shader> shader) {
   this->shader = shader;
   this->options = MaterialOptions();
+  this->texture = std::nullopt;
 }
 void Material::bind() {
   this->options.bind();
-  this->texture->bind(0);
+  if (this->texture.has_value() && this->options.texture)
+    this->texture.value()->bind(0);
   this->shader->set1i(0, "tex");
   this->shader->bind();
 }
 void Material::unbind() {
-  this->options.unbind();
-  this->shader->unbind();
-  this->texture->unbind();
+  MaterialOptions::unbind();
+  Shader::unbind();
+  Texture::unbind();
 }
 
 void Material::set_texture(std::shared_ptr<Texture> texture) {

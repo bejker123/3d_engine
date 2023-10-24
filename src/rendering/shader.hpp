@@ -15,7 +15,7 @@ public:
             const char *geometry_source);
 
   void bind();
-  void unbind();
+  static void unbind();
 
   GLuint get_attrib_loc(char *attrib);
 
