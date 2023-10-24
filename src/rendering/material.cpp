@@ -86,9 +86,10 @@ void Material::init(std::shared_ptr<Shader> shader) {
 }
 void Material::bind() {
   this->options.bind();
-  if (this->texture.has_value() && this->options.texture)
+  if (this->texture.has_value() && this->options.texture) {
     this->texture.value()->bind(0);
-  this->shader->set1i(0, "tex");
+    this->shader->set1i(0, "tex");
+  }
   this->shader->bind();
 }
 void Material::unbind() {
