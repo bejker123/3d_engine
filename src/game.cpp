@@ -187,8 +187,7 @@ int Game::init(int argc, char *argv[]) {
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
   ImGuiIO &io = ImGui::GetIO();
-  io.ConfigFlags |=
-      ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+  ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
   io.ConfigFlags |=
       ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
   // io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // IF using Docking
@@ -386,11 +385,13 @@ int Game::update() {
   return 1;
 }
 
-void render_imgui() {
+void Game::render_imgui() {
   // Start the Dear ImGui frame
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
+
+  ImGui::Text("Delta: %f FPS: %d", this->dt, (int)(1 / this->dt));
 
   if (ImGui::CollapsingHeader("Camera")) {
     ImGui::BeginGroup();

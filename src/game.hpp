@@ -17,6 +17,9 @@ public:
   // FUNCTIONS
   // init functions
   int init(int argc, char *argv[]);
+
+  // render functions
+private:
   void init_command_line_args(int argc, char *argv[]);
   bool init_opengl();
 
@@ -29,12 +32,10 @@ public:
   int run();
   int update();
   int render();
+  void render_imgui();
 
   // update functions
   int handle_keyboard();
-
-  // render functions
-private:
   GameOptions options;
   Window window;
   GLFWmonitor *monitor;
