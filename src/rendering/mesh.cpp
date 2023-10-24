@@ -5,7 +5,11 @@
 void Mesh::render() {
   for (auto i : this->vas) {
     i->bind();
-    glDrawElements(GL_TRIANGLES, i->get_elements(), GL_UNSIGNED_INT, 0);
+    if (i->get_elements() >
+        0) // If a buffer va doesn't contain an ib draw just the vertices
+      glDrawElements(GL_TRIANGLES, i->get_elements(), GL_UNSIGNED_INT, 0);
+    else
+      glDrawArrays(GL_TRIANGLES, 0, i->get_count());
     i->unbind();
   }
 }

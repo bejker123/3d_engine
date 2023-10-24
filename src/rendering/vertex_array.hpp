@@ -17,6 +17,7 @@ public:
 
   GLuint get_id() const;
   uint32_t get_elements() const;
+  uint32_t get_count() const;
 
   // IndexBuffer* ib;
 private:
