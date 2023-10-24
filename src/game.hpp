@@ -1,6 +1,7 @@
 #ifndef __GAME_H
 #define __GAME_H
 #include "window.hpp"
+#include <chrono>
 
 #define OPENGL_VER_MAJ 4
 #define OPENGL_VER_MIN 6
@@ -41,9 +42,8 @@ private:
   GLFWmonitor *monitor;
   bool inited;
 
-  float dt;
-  float curTime;
-  float lastTime;
+  float delta;
+  std::chrono::steady_clock::time_point curr_time, last_time;
   bool paused;
 };
 

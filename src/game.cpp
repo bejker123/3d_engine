@@ -13,12 +13,15 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
+#include <bits/chrono.h>
 #include <cglm/cglm.h>
+#include <chrono>
 #include <cstring>
 #include <iostream>
 #include <memory>
 #include <optional>
 #include <string>
+#include <thread>
 #include <vector>
 
 std::vector<VertexPC> vertices{
@@ -233,7 +236,6 @@ bool Game::init_opengl() {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_SAMPLES, 4);
   // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
 #ifdef __APPLE__
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
@@ -245,6 +247,7 @@ bool Game::init_opengl() {
     this->terminate_opengl();
   }
   window.hide_cursor();
+  glfwSwapInterval(0);
 
   LOG("INITIALISING GLEW\n");
 
@@ -329,19 +332,19 @@ int Game::handle_keyboard() {
     cam_speed = 3;
 
   if (this->window.get_key(GLFW_KEY_W) == GLFW_PRESS)
-    cam.add_pos(glm::vec3(cam_speed * this->dt) * cam.get_front());
+    cam.add_pos(glm::vec3(cam_speed * this->delta) * cam.get_front());
   if (this->window.get_key(GLFW_KEY_S) == GLFW_PRESS)
-    cam.add_pos(glm::vec3(cam_speed * this->dt) * -cam.get_front());
+    cam.add_pos(glm::vec3(cam_speed * this->delta) * -cam.get_front());
 
   if (this->window.get_key(GLFW_KEY_A) == GLFW_PRESS)
-    cam.add_pos(glm::vec3(cam_speed * this->dt) * -cam.get_right());
+    cam.add_pos(glm::vec3(cam_speed * this->delta) * -cam.get_right());
   if (this->window.get_key(GLFW_KEY_D) == GLFW_PRESS)
-    cam.add_pos(glm::vec3(cam_speed * this->dt) * cam.get_right());
+    cam.add_pos(glm::vec3(cam_speed * this->delta) * cam.get_right());
 
   if (this->window.get_key(GLFW_KEY_SPACE) == GLFW_PRESS)
-    cam.add_pos(glm::vec3(cam_speed * this->dt) * cam.get_up());
+    cam.add_pos(glm::vec3(cam_speed * this->delta) * cam.get_up());
   if (this->window.get_key(GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-    cam.add_pos(glm::vec3(cam_speed * this->dt) * -cam.get_world_up());
+    cam.add_pos(glm::vec3(cam_speed * this->delta) * -cam.get_world_up());
   if ((this->window.get_key(GLFW_KEY_TAB) == GLFW_PRESS) &&
       last_tab_pressed == 0) {
     this->paused = !paused;
@@ -357,13 +360,32 @@ int Game::handle_keyboard() {
   return 1;
 }
 
+uint64_t fps = 0;
+uint64_t counter = 0;
+const double max_timer = 1000000000.0;
+float timer = 0.0;
+
 // Update loop running every frame,
 // before render function,
 // handles user input, updates phisics, logic, etc.
 int Game::update() {
-  this->curTime = static_cast<float>(glfwGetTime());
-  this->dt = this->curTime - this->lastTime;
-  this->lastTime = this->curTime;
+  this->curr_time = std::chrono::steady_clock::now();
+  this->delta = std::chrono::duration_cast<std::chrono::nanoseconds>(
+                    this->curr_time - this->last_time)
+                    .count();
+  this->last_time = this->curr_time;
+  if (delta < 0)
+    this->delta = 0;
+  if (timer >= max_timer) {
+    fps = counter;
+    counter = 0.0;
+    timer = 0.0;
+  } else {
+    timer += delta;
+    counter++;
+  }
+
+  this->delta /= max_timer;
   glfwPollEvents();
 
   if (!handle_keyboard())
@@ -391,7 +413,7 @@ void Game::render_imgui() {
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
 
-  ImGui::Text("Delta: %f FPS: %d", this->dt, (int)(1 / this->dt));
+  ImGui::Text("Delta: %fms FPS: %ld", this->delta * 1000, fps);
 
   if (ImGui::CollapsingHeader("Camera")) {
     ImGui::BeginGroup();
