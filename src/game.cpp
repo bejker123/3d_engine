@@ -315,34 +315,6 @@ int Game::run() {
   return EXIT_SUCCESS;
 }
 
-// Update loop running every frame,
-// before render function,
-// handles user input, updates phisics, logic, etc.
-int Game::update() {
-  this->curTime = static_cast<float>(glfwGetTime());
-  this->dt = this->curTime - this->lastTime;
-  this->lastTime = this->curTime;
-  glfwPollEvents();
-
-  if (!handle_keyboard())
-    return 0;
-
-  auto [mouse_x, mouse_y] = this->window.get_mouse_pos();
-
-  if (!paused)
-    cam.update_mosue_input(1, mouse_x - last_mouse_x, last_mouse_y - mouse_y);
-
-  last_mouse_x = mouse_x;
-  last_mouse_y = mouse_y;
-
-  // model.update();
-  // model1.update();
-  for (auto &m : models) {
-    m.update();
-  }
-  return 1;
-}
-
 int last_tab_pressed = 0;
 
 // Handles keyboard user input
@@ -385,11 +357,35 @@ int Game::handle_keyboard() {
   return 1;
 }
 
-// Rendering function running every frame, after update
-int Game::render() {
-  glClearColor(1.f, 1.f, 1.f, 1.f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+// Update loop running every frame,
+// before render function,
+// handles user input, updates phisics, logic, etc.
+int Game::update() {
+  this->curTime = static_cast<float>(glfwGetTime());
+  this->dt = this->curTime - this->lastTime;
+  this->lastTime = this->curTime;
+  glfwPollEvents();
 
+  if (!handle_keyboard())
+    return 0;
+
+  auto [mouse_x, mouse_y] = this->window.get_mouse_pos();
+
+  if (!paused)
+    cam.update_mosue_input(1, mouse_x - last_mouse_x, last_mouse_y - mouse_y);
+
+  last_mouse_x = mouse_x;
+  last_mouse_y = mouse_y;
+
+  // model.update();
+  // model1.update();
+  for (auto &m : models) {
+    m.update();
+  }
+  return 1;
+}
+
+void render_imgui() {
   // Start the Dear ImGui frame
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
@@ -436,6 +432,14 @@ int Game::render() {
       ImGui::EndGroup();
     }
   }
+}
+
+// Rendering function running every frame, after update
+int Game::render() {
+  glClearColor(1.f, 1.f, 1.f, 1.f);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+  render_imgui();
 
   // TODO: Possibly don't use pointers to bind in the future?
   cam.upload_to_shader(&shader, &window);
