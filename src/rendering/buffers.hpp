@@ -24,9 +24,21 @@ public:
   glm::vec2 tex_coord;
 };
 
+struct VertexC {
+public:
+  VertexC(glm::vec3 pos, glm::vec3 normal, glm::vec2 tex_coord, glm::vec4 color)
+      : pos(pos), normal(normal), tex_coord(tex_coord), color(color) {}
+  glm::vec3 pos;
+  glm::vec3 normal;
+  glm::vec2 tex_coord;
+  glm::vec4 color;
+};
+
 enum VertexType {
-  POSx3F_NORMx3F_TEXx2F, // vec3 pos; vec3 normal; vec2 tex_coord
-  POSx3F_COLORx4F        // vec3 pos; vec4 color
+  POSx3F_NORMx3F_TEXx2F,        // vec3 pos; vec3 normal; vec2 tex_coord
+  POSx3F_COLORx4F,              // vec3 pos; vec4 color
+  POSx3F_NORMx3F_TEXx2F_COLx4F, // vec3 pos; vec3 normal; vec2 tex_coord;
+                                // vec4 color
 };
 
 class VertexBuffer {
@@ -34,6 +46,7 @@ public:
   void init(void *vertices, uint32_t size, uint32_t elements, VertexType type);
   void init(std::vector<Vertex> vertices);
   void init(std::vector<VertexPC> vertices);
+  void init(std::vector<VertexC> vertices);
 
   void bind();
   static void unbind();

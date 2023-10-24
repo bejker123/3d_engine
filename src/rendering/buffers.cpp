@@ -32,6 +32,15 @@ void VertexBuffer::init(std::vector<VertexPC> vertices) {
                vertices.data(), GL_STATIC_DRAW);
   this->count = vertices.size();
 }
+void VertexBuffer::init(std::vector<VertexC> vertices) {
+  this->type = VertexType::POSx3F_NORMx3F_TEXx2F_COLx4F;
+  glGenBuffers(1, &this->id);
+
+  this->bind();
+  glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(VertexC),
+               vertices.data(), GL_STATIC_DRAW);
+  this->count = vertices.size();
+}
 
 void VertexBuffer::bind() { glBindBuffer(GL_ARRAY_BUFFER, this->id); }
 void VertexBuffer::unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }

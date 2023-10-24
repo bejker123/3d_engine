@@ -39,6 +39,8 @@ void Camera::add_pos(glm::vec3 pos) { this->pos += pos; }
 
 void Camera::update_mosue_input(const float &dt, const double &offsetX,
                                 const double &offsetY) {
+  if (offsetX == 0 && offsetY == 0)
+    return;
   // Update pitch yaw and roll
   this->pitch += static_cast<float>(offsetY) * this->sensitivity * dt; // Y
   this->yaw += static_cast<float>(offsetX) * this->sensitivity * dt;   // X

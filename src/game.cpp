@@ -24,42 +24,66 @@
 #include <thread>
 #include <vector>
 
-std::vector<VertexPC> vertices{
+std::vector<VertexC> vertices{
     // Front Face 0
-    VertexPC(-1, 1, 1, 0.0f, 0.0f, 0, 1),
-    VertexPC(-1, -1, 1, 0.0f, 1, 0, 1),
-    VertexPC(1, -1, 1, 1, 1, 0, 1),
-    VertexPC(1, 1, 1, 1, 0.0f, 0, 1),
+    VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(0.0f, 0.0f),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(0.0f, 1),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(1, 1),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(1, 0.0f),
+            glm::vec4(1, 1, 0, 1)),
 
-    // Top Face 4
-    VertexPC(-1, 1, -1, 0.0f, 0.0f, 0, 1),
-    VertexPC(1, 1, -1, 1, 0.0f, 0, 1),
-    VertexPC(-1, 1, 1, 0.0f, 1, 0, 1),
-    VertexPC(1, 1, 1, 1, 1, 0, 1),
+    // Top Fglm::vec3(ace 4
+    VertexC(glm::vec3(-1, 1, -1), glm::vec3(1), glm::vec2(0.0f, 0.0f),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(1, 0.0f),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(0.0f, 1),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(1, 1),
+            glm::vec4(1, 1, 0, 1)),
 
-    // Right Face 8
-    VertexPC(1, 1, 1, 1, 1, 0, 1),
-    VertexPC(1, -1, 1, 1, 0, 0, 1),
-    VertexPC(1, -1, -1, 0.0f, 0.0f, 0, 1),
-    VertexPC(1, 1, -1, 0, 1.0f, 0, 1),
+    // Rightglm::vec3( Face 8
+    VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(1, 1),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(1, 0),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(0.0f, 0.0f),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(0, 1.0f),
+            glm::vec4(1, 1, 0, 1)),
 
-    // Left Face 12
-    VertexPC(-1, 1, 1, 1.0f, 1.0f, 0, 1),
-    VertexPC(-1, 1, -1, 0.0f, 1, 0, 1),
-    VertexPC(-1, -1, -1, 0, 0, 0, 1),
-    VertexPC(-1, -1, 1, 1, 0.0f, 0, 1),
+    // Left glm::vec3(Face 12
+    VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(1.0f, 1.0f),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(-1, 1, -1), glm::vec3(1), glm::vec2(0.0f, 1),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(-1, -1, -1), glm::vec3(1), glm::vec2(0, 0),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(1, 0.0f),
+            glm::vec4(1, 1, 0, 1)),
 
-    // Bottom Face 16
-    VertexPC(-1, -1, -1, 1.0f, 0.0f, 0, 1),
-    VertexPC(-1, -1, 1, 0.0f, 0, 0, 1),
-    VertexPC(1, -1, -1, 1, 1, 0, 1),
-    VertexPC(1, -1, 1, 0, 1.0f, 0, 1),
+    // Bottoglm::vec3(m Face 16
+    VertexC(glm::vec3(-1, -1, -1), glm::vec3(1), glm::vec2(1.0f, 0.0f),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(0.0f, 0),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(1, 1),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(0, 1.0f),
+            glm::vec4(1, 1, 0, 1)),
 
-    // Back Face 20
-    VertexPC(-1, 1, -1, 1, 1.0f, 0, 1),
-    VertexPC(1, 1, -1, 0.0f, 1.0f, 0, 1),
-    VertexPC(-1, -1, -1, 1, 0, 0, 1),
-    VertexPC(1, -1, -1, 0.0f, 0, 0, 1),
+    // Back glm::vec3(Face 20
+    VertexC(glm::vec3(-1, 1, -1), glm::vec3(1), glm::vec2(1, 1.0f),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(0.0f, 1.0f),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(-1, -1, -1), glm::vec3(1), glm::vec2(1, 0),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(0.0f, 0),
+            glm::vec4(1, 1, 0, 1)),
 };
 
 unsigned int indices[] = {
@@ -84,23 +108,24 @@ const char *basic_vertex_shader =
 const char *camera_vs =
     R"(#version 460
 layout(location = 0) in vec3 vertex_position;
-layout(location = 1) in vec4 vertex_color;
- // layout(location = 2) in vec2 vertex_texcoord;
-// layout(location = 3) in vec3 vertex_normal;
+layout(location = 1) in vec3 vertex_normal;
+layout(location = 2) in vec2 vertex_texcoord;
+layout(location = 3) in vec4 vertex_color;
 
 out vec3 vs_position;
-out vec4 frag_color;
-// out vec2 vs_texcoord;
 // out vec3 vs_normal;
+out vec2 vs_texcoord;
+out vec4 frag_color;
 
 uniform mat4 ModelMatrix;
 uniform mat4 ViewMatrix;
 uniform mat4 ProjectionMatrix;
 
 void main() {
-  vs_position = vec4(ModelMatrix * vec4(vertex_position, 1.f)).xyz;
+  // vs_position = vec4(ModelMatrix * vec4(vertex_position, 1.f)).xyz;
   // vs_position = vertex_position;
   frag_color = vertex_color;
+  vs_texcoord = vertex_texcoord;
   // vs_texcoord = vec2(vertex_texcoord.x, vertex_texcoord.y * -1.f);
   // vs_normal = mat3(ModelMatrix) * vertex_normal;
 
@@ -113,12 +138,12 @@ void main() {
 const char *basic_fragment_shader =
     "#version 460 core\n"
     "in vec4 frag_color;\n"
-    // "in vec2 vs_texcoord;\n"
+    "in vec2 vs_texcoord;\n"
     "out vec4 FragColor;\n"
     "uniform sampler2D tex;"
     "void main(){\n"
     // "FragColor = vec4(0.3f,1.f,0.5f,1.f);\n"
-    "FragColor = texture(tex,frag_color.xy) * vec4(1,1,1,0.5);\n"
+    "FragColor = texture(tex,vs_texcoord)* frag_color;\n"
     // "FragColor = frag_color;\n"
     "}\0";
 
@@ -249,7 +274,7 @@ bool Game::init_opengl() {
   window.hide_cursor();
 
   // Disable V-Sync
-  // glfwSwapInterval(0);
+  glfwSwapInterval(0);
 
   LOG("INITIALISING GLEW\n");
 

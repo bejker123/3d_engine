@@ -58,6 +58,33 @@ void VertexArray::add_vertex_buffer(VertexBuffer *vb) {
                           (void *)offsetof(Vertex, tex_coord));
     glEnableVertexAttribArray(this->vbi);
     this->vbi++;
+  } else if (vb_type == POSx3F_NORMx3F_TEXx2F_COLx4F) {
+    // position
+    glVertexAttribPointer(this->vbi, sizeof(VertexC::pos) / sizeof(float),
+                          GL_FLOAT, GL_FALSE, sizeof(VertexC),
+                          (void *)offsetof(VertexC, pos));
+    glEnableVertexAttribArray(this->vbi);
+    this->vbi++;
+
+    // normal
+    glVertexAttribPointer(this->vbi, sizeof(VertexC::normal) / sizeof(float),
+                          GL_FLOAT, false, sizeof(VertexC),
+                          (void *)offsetof(VertexC, normal));
+    glEnableVertexAttribArray(this->vbi);
+    this->vbi++;
+
+    // tex coord
+    glVertexAttribPointer(this->vbi, sizeof(VertexC::tex_coord) / sizeof(float),
+                          GL_FLOAT, false, sizeof(VertexC),
+                          (void *)offsetof(VertexC, tex_coord));
+    glEnableVertexAttribArray(this->vbi);
+    this->vbi++;
+
+    glVertexAttribPointer(this->vbi, sizeof(VertexC::color) / sizeof(float),
+                          GL_FLOAT, false, sizeof(VertexC),
+                          (void *)offsetof(VertexC, color));
+    glEnableVertexAttribArray(this->vbi);
+    this->vbi++;
   }
 
   // pos
