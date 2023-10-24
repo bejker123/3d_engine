@@ -20,25 +20,6 @@
 #include <string>
 #include <vector>
 
-// std::vector<VertexPC> vertices = {
-//     VertexPC(glm::vec3(0.5f, 0.5f, 0.0f),
-//              glm::vec4(0.3f, 1.f, 1.f, 1.f)), // top right
-//                                               //
-//     VertexPC(glm::vec3(0.5f, -0.5f, 0.0f),
-//              glm::vec4(1.f, 1.f, 0.5f, 1.f)), // bottom right
-//                                               //
-//     VertexPC(glm::vec3(-0.5f, -0.5f, 0.0f),
-//              glm::vec4(0.3f, 0.f, 0.5f, 1.f)), // bottom left
-//                                                //
-//     VertexPC(glm::vec3(-0.5f, 0.5, 0.0f),
-//              glm::vec4(0.3f, 1.f, 0.5f, 1.f)) // top left
-// };
-// unsigned int indices[] = {
-//     // note that we start from 0!
-//     0, 1, 3, // first Triangle
-//     1, 2, 3  // second Triangle
-// };
-
 std::vector<VertexPC> vertices{
     // Front Face 0
     VertexPC(-1, 1, 1, 0.0f, 0.0f, 0, 1),
@@ -85,70 +66,6 @@ unsigned int indices[] = {
     19, 17, 18, 18, 17, 16, // Bottom face
     20, 21, 22, 22, 21, 23  // Back face
 };
-// unsigned int indices[] = {
-//     // front and back
-//     // // Top
-//     2, 6, 7, 2, 3, 7,
-//
-//     // Bottom
-//     0, 4, 5, 0, 1, 5,
-//
-//     // Left
-//     0, 2, 6, 0, 4, 6,
-//
-//     // Right
-//     1, 3, 7, 1, 5, 7,
-//
-//     // Front
-//     0, 2, 3, 0, 1, 3,
-//
-//     // Back
-//     4, 6, 7, 4, 5, 7};
-
-// std::vector<VertexPC> vertices = {
-//     // positions          // colors           // texture coords
-//     VertexPC(0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0, 1),   // top right
-//     VertexPC(0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0, 1),  // bottom right
-//     VertexPC(-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0, 1), // bottom left
-//     VertexPC(-0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0, 1)   // top left
-// };
-
-// std::vector<VertexPC> vertices{
-//     VertexPC(-1, -1, 1, 0, 0, 1, 1),  // 0
-//     VertexPC(1, -1, 1, 1, 0, 0, 1),   // 1
-//     VertexPC(-1, 1, 1, 0, 1, 0, 1),   // 2
-//     VertexPC(1, 1, 1, 1, 1, 0, 1),    // 3
-//     VertexPC(-1, -1, -1, 0, 0, 0, 1), // 4
-//     VertexPC(1, -1, -1, 0, 1, 1, 1),  // 5
-//     VertexPC(-1, 1, -1, 0, 1, 0, 1),  // 6
-//     VertexPC(1, 1, -1, 0, 1, 0, 1),   // 7
-//     // VertexPC(glm::vec3(-1, -1, -1), glm::vec4(0.0f, 0.0f, 0, 1)), // 8
-//     // VertexPC(glm::vec3(1, -1, -1), glm::vec4(1.0f, 0.0f, 0, 1)),
-//     // VertexPC(glm::vec3(1, 1, -1), glm::vec4(1.0f, 1.0f, 0, 1)),
-//     // VertexPC(glm::vec3(-1, 1, -1), glm::vec4(0.0f, 1.0, 0, 1)),
-//     // VertexPC(glm::vec3(-1, -1, 1), glm::vec4(0.0f, 0.0, 0, 1)),
-//     // VertexPC(glm::vec3(1, -1, 1), glm::vec4(1.0f, 0.0f, 0, 1)),
-//     // VertexPC(glm::vec3(1, 1, 1), glm::vec4(1.0f, 1.0f, 0, 1)),
-//     // VertexPC(glm::vec3(-1, 1, 1), glm::vec4(0.0f, 1.0, 0, 1)),
-//     //
-//     // VertexPC(glm::vec3(-1, 1, -1), glm::vec4(0.0f, 0.0, 0, 1)),
-//     // VertexPC(glm::vec3(-1, -1, -1), glm::vec4(1.0f, 0.0, 0, 1)),
-//     // VertexPC(glm::vec3(-1, -1, 1), glm::vec4(1.0f, 1.0, 0, 1)),
-//     // VertexPC(glm::vec3(-1, 1, 1), glm::vec4(0.0f, 1.0, 0, 1)),
-//     // VertexPC(glm::vec3(1, -1, -1), glm::vec4(0.0f, 0.0f, 0, 1)),
-//     // VertexPC(glm::vec3(1, 1, -1), glm::vec4(1.0f, 0.0f, 0, 1)),
-//     // VertexPC(glm::vec3(1, 1, 1), glm::vec4(1.0f, 1.0f, 0, 1)),
-//     // VertexPC(glm::vec3(1, -1, 1), glm::vec4(0.0f, 1.0f, 0, 1)),
-//     //
-//     // VertexPC(glm::vec3(-1, -1, -1), glm::vec4(0.0f, 0.0, 0, 1)),
-//     // VertexPC(glm::vec3(1, -1, -1), glm::vec4(1.0f, 0.0f, 0, 1)),
-//     // VertexPC(glm::vec3(1, -1, 1), glm::vec4(1.0f, 1.0f, 0, 1)),
-//     // VertexPC(glm::vec3(-1, -1, 1), glm::vec4(0.0f, 1.0, 0, 1)),
-//     // VertexPC(glm::vec3(1, 1, -1), glm::vec4(0.0f, 0.0, 0, 1)),
-//     // VertexPC(glm::vec3(-1, 1, -1), glm::vec4(1.0f, 0.0, 0, 1)),
-//     // VertexPC(glm::vec3(-1, 1, 1), glm::vec4(1.0f, 1.0, 0, 1)),
-//     // VertexPC(glm::vec3(1, 1, 1), glm::vec4(0.0f, 1.0, 0, 1)),
-// };
 
 const char *basic_vertex_shader =
     "#version 460 core\n"
@@ -226,14 +143,8 @@ int Game::init(int argc, char *argv[]) {
   if (!init_opengl())
     return EXIT_FAILURE;
 
-  // LOG_VAR("%d", shader.id);
-  // LOG_VAR("%d", shader.success);
-
   cam.init(60, 0.0001, 100000, glm::vec3(1, 0, 1));
   shader.init(camera_vs, basic_fragment_shader, "");
-
-  // LOG_VAR("%d", shader.id);
-  // LOG_VAR("%d", shader.success);
 
   va.init();
 
@@ -335,16 +246,6 @@ bool Game::init_opengl() {
   }
   window.hide_cursor();
 
-  /*int frameBufferWidth = 0;
-        int frameBufferHeight = 0;
-
- glfwGetFramebufferSize(this->window, &frameBufferWidth, &frameBufferHeight);
-        glViewport(0, 0, frameBufferWidth, frameBufferHeight);
-
-        glfwSetFramebufferSizeCallback(this->window,
- (GLFWframebuffersizefun)framebuffer_resize_callback);
-*/
-
   LOG("INITIALISING GLEW\n");
 
   glewExperimental = GL_TRUE;
@@ -439,7 +340,6 @@ int Game::update() {
   for (auto &m : models) {
     m.update();
   }
-  // PRINT_VAR(x);
   return 1;
 }
 
@@ -494,7 +394,6 @@ int Game::render() {
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
-  // ImGui::ShowDemoWindow(); // Show demo window! :)
 
   if (ImGui::CollapsingHeader("Camera")) {
     ImGui::BeginGroup();
@@ -538,8 +437,6 @@ int Game::render() {
     }
   }
 
-  // ImGui::SliderFloat("Camera Y", &y, -10.0f, 10.0f);
-  // ImGui::SliderFloat("Camera Z", &z, -10.0f, 10.0f);
   // TODO: Possibly don't use pointers to bind in the future?
   cam.upload_to_shader(&shader, &window);
   // model.render();
