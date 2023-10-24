@@ -191,8 +191,8 @@ int Game::init(int argc, char *argv[]) {
   ImGui::CreateContext();
   ImGuiIO &io = ImGui::GetIO();
   // ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-  io.ConfigFlags |=
-      ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
+  // io.ConfigFlags |=
+  //     ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
   // io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // IF using Docking
   // Branch
 
@@ -247,7 +247,9 @@ bool Game::init_opengl() {
     this->terminate_opengl();
   }
   window.hide_cursor();
-  glfwSwapInterval(0);
+
+  // Disable V-Sync
+  // glfwSwapInterval(0);
 
   LOG("INITIALISING GLEW\n");
 
@@ -350,18 +352,6 @@ int Game::handle_keyboard() {
   if (this->window.get_key(GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
     cam.add_pos(glm::vec3(cam_speed * this->perf.get_delta()) *
                 -cam.get_world_up());
-  if ((this->window.get_key(GLFW_KEY_TAB) == GLFW_PRESS) &&
-      last_tab_pressed == 0) {
-    this->paused = !paused;
-    if (this->paused)
-      this->window.show_cursor();
-    else
-      this->window.hide_cursor();
-    last_tab_pressed = 5;
-  } else {
-    if (last_tab_pressed > 0)
-      last_tab_pressed--;
-  }
   return 1;
 }
 
@@ -371,6 +361,23 @@ int Game::handle_keyboard() {
 int Game::update() {
   this->perf.update();
   glfwPollEvents();
+  bool cancel_mouse_delta = false;
+  if ((this->window.get_key(GLFW_KEY_TAB) == GLFW_PRESS) &&
+      last_tab_pressed == 0) {
+    this->paused = !paused;
+    if (this->paused)
+      this->window.show_cursor();
+    else {
+      this->window.hide_cursor();
+      cancel_mouse_delta = true;
+    }
+    last_tab_pressed = 5;
+  } else {
+    if (last_tab_pressed > 0)
+      last_tab_pressed--;
+  }
+  if (paused)
+    return 1;
 
   if (!handle_keyboard())
     return 0;
@@ -378,7 +385,8 @@ int Game::update() {
   auto [mouse_x, mouse_y] = this->window.get_mouse_pos();
 
   if (!paused)
-    cam.update_mosue_input(1, mouse_x - last_mouse_x, last_mouse_y - mouse_y);
+    cam.update_mosue_input(1, cancel_mouse_delta ? 0 : mouse_x - last_mouse_x,
+                           cancel_mouse_delta ? 0 : last_mouse_y - mouse_y);
 
   last_mouse_x = mouse_x;
   last_mouse_y = mouse_y;
@@ -399,6 +407,8 @@ void Game::render_imgui() {
 
   ImGui::Text("Delta: %fms FPS: %ld", this->perf.get_delta() * 1000,
               this->perf.get_fps());
+  if (!paused)
+    return;
 
   if (ImGui::CollapsingHeader("Camera")) {
     ImGui::BeginGroup();

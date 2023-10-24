@@ -5,7 +5,7 @@
 #include <optional>
 
 MaterialOptions::MaterialOptions() {
-  this->cull_backfaces = false;
+  this->cull_backfaces = true;
   this->polygon_mode = GL_FILL;
   this->depth = true;
   this->blend = true;
