@@ -42,7 +42,7 @@ void Texture::load_from_file(char *fileName) {
   glTexParameteri(this->type, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
   glTexParameteri(this->type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-  if (data) {
+  if (data != nullptr) {
     glTexImage2D(this->type, 0, GL_RGB, this->width, this->height, 0, GL_RGBA,
                  GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(this->type);

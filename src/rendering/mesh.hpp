@@ -1,5 +1,5 @@
-#ifndef MESH
-#define MESH
+#ifndef MESH_HPP
+#define MESH_HPP
 #include "ll/vertex_array.hpp"
 #include <memory>
 #include <vector>
@@ -19,4 +19,4 @@ private:
   std::vector<std::shared_ptr<VertexArray>> vas;
 };
 
-#endif // !MESH
+#endif // !MESH_HPP

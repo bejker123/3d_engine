@@ -1,3 +1,6 @@
+#ifndef CAMERA_HPP
+#define CAMERA_HPP
+
 #include "../window.hpp"
 #include "ll/shader.hpp"
 #include <GLFW/glfw3.h>
@@ -62,3 +65,5 @@ private:
   const GLfloat MAX_YAW = 360.f;
   const GLfloat MAX_ROLL = 0.f;
 };
+
+#endif // !CAMERA_HPP

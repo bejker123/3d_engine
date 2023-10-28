@@ -1,28 +1,23 @@
 #include "game.hpp"
+#include "shaders.hpp"
+
 #include "../imgui/backends/imgui_impl_glfw.h"
 #include "../imgui/backends/imgui_impl_opengl3.h"
 #include "../imgui/imgui.h"
-#include "rendering/camera.hpp"
-#include "rendering/ll/buffers.hpp"
-#include "rendering/ll/vertex_array.hpp"
-#include "rendering/material.hpp"
-#include "rendering/mesh.hpp"
-#include "rendering/model.hpp"
+
 #include "stb/stb_image.h"
-#include <GLFW/glfw3.h>
+
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
-#include <bits/chrono.h>
-#include <cglm/cglm.h>
-#include <chrono>
-#include <cstring>
+
 #include <iostream>
 #include <memory>
-#include <optional>
-#include <string>
+#include <ranges>
 #include <thread>
-#include <vector>
+
+namespace rv = std::ranges::views;
+namespace ranges = std::ranges;
 
 std::vector<VertexC> vertices{
     // Front Face 0
@@ -95,76 +90,12 @@ unsigned int indices[] = {
     20, 21, 22, 22, 21, 23  // Back face
 };
 
-const char *basic_vertex_shader =
-    "#version 460 core\n"
-    "layout (location = 0) in vec3 vert_pos;\n"
-    "layout (location = 1) in vec4 vert_color;\n"
-    "out vec4 frag_color;"
-    "void main(){\n"
-    "frag_color = vert_color;"
-    "gl_Position = vec4(vert_pos.x,vert_pos.y,vert_pos.z,1.f);\n"
-    "}\0";
-
-const char *camera_vs =
-    R"(#version 460
-layout(location = 0) in vec3 vertex_position;
-layout(location = 1) in vec3 vertex_normal;
-layout(location = 2) in vec2 vertex_texcoord;
-layout(location = 3) in vec4 vertex_color;
-
-out vec3 vs_position;
-// out vec3 vs_normal;
-out vec2 vs_texcoord;
-out vec4 frag_color;
-
-uniform mat4 ModelMatrix;
-uniform mat4 ViewMatrix;
-uniform mat4 ProjectionMatrix;
-
-void main() {
-  // vs_position = vec4(ModelMatrix * vec4(vertex_position, 1.f)).xyz;
-  // vs_position = vertex_position;
-  frag_color = vertex_color;
-  vs_texcoord = vertex_texcoord;
-  // vs_texcoord = vec2(vertex_texcoord.x, vertex_texcoord.y * -1.f);
-  // vs_normal = mat3(ModelMatrix) * vertex_normal;
-
-  gl_Position =
-      ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(vertex_position, 1.f);
-      // ProjectionMatrix * ViewMatrix * vec4(vertex_position, 1.f);
-}
-)";
-
-const char *basic_fragment_shader =
-    "#version 460 core\n"
-    "in vec4 frag_color;\n"
-    "in vec2 vs_texcoord;\n"
-    "out vec4 FragColor;\n"
-    "uniform sampler2D tex;"
-    "void main(){\n"
-    // "FragColor = vec4(0.3f,1.f,0.5f,1.f);\n"
-    "FragColor = texture(tex,vs_texcoord)* frag_color;\n"
-    // "FragColor = frag_color;\n"
-    "}\0";
-
-Shader shader;
-
-VertexBuffer vb;
-VertexBuffer vb1;
-IndexBuffer ib;
-VertexArray va;
-Camera cam;
-std::vector<Model> models;
-
-float last_mouse_x = 0, last_mouse_y = 0;
-
 // Init Game State, run the main loop
 int Game::init(int argc, char *argv[]) {
   LOG("INITIALISATION STARTED\n");
 
   // First set the game state to uninitialised
   this->inited = false;
-  this->monitor = NULL;
 
   // Run initialisation functions
   this->init_command_line_args(argc, argv);
@@ -173,7 +104,9 @@ int Game::init(int argc, char *argv[]) {
     return EXIT_FAILURE;
 
   cam.init(60, 0.0001, 100000, glm::vec3(-40, 20, 30));
-  shader.init(camera_vs, basic_fragment_shader, "");
+  Shader shader;
+  shader.init(camera_vs, basic_fs, "");
+  shaders.push_back(shader);
 
   va.init();
 
@@ -192,17 +125,16 @@ int Game::init(int argc, char *argv[]) {
   Material mat;
   mat.init(std::make_shared<Shader>(shader));
   // TODO: Change this texture
-  Texture tex("/run/media/bejker/DATA/C++ OpenGL Game Engine/C++ OpenGL Game "
-              "Engine/Images/cat.png");
+  Texture tex("face.png");
   mat.set_texture(std::make_shared<Texture>(tex));
   // model.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
   // model1.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
   // // model1.setPos(glm::vec3(1, 0, 1));
   // model1.setRot(glm::vec3(90, 0, 0));
-  for (int i = 0; i < 10; i++) {
+  for (uint64_t i : rv::iota(0, 10)) {
     Model m;
     m.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
-    m.set_origin(glm::vec3(i * 21, 0, 0));
+    m.set_origin(glm::vec3((double)i * 21, 0, 0));
     models.push_back(m);
   }
 
@@ -240,7 +172,6 @@ void Game::init_command_line_args(int argc, char *argv[]) {
   this->options.window_height = 600;
   this->options.window_resizable = false;
   this->options.window_fullscreen = true;
-  this->monitor = NULL;
 }
 
 // Initialise OpenGL, return true if successful
@@ -324,7 +255,9 @@ void Game::terminate() {
 void Game::terminate_opengl() {
   LOG("TERMINATING OPENGL\n");
   this->window.~Window();
-  shader.~Shader();
+  for (auto &i : this->shaders)
+    i.~Shader();
+  this->cam.~Camera();
   glfwTerminate();
 }
 
@@ -342,8 +275,6 @@ int Game::run() {
 
   return EXIT_SUCCESS;
 }
-
-int last_tab_pressed = 0;
 
 // Handles keyboard user input
 // runs every frame
@@ -385,6 +316,7 @@ int Game::update() {
   this->perf.update();
   glfwPollEvents();
   bool cancel_mouse_delta = false;
+
   if ((this->window.get_key(GLFW_KEY_TAB) == GLFW_PRESS) &&
       last_tab_pressed == 0) {
     this->paused = !paused;
@@ -414,11 +346,9 @@ int Game::update() {
   last_mouse_x = mouse_x;
   last_mouse_y = mouse_y;
 
-  // model.update();
-  // model1.update();
-  for (auto &m : models) {
+  for (auto &m : models)
     m.update();
-  }
+
   return 1;
 }
 
@@ -445,7 +375,7 @@ void Game::render_imgui() {
     ImGui::EndGroup();
   }
 
-  for (int i = 0; i < models.size(); i++) {
+  for (auto i : rv::iota((uint64_t)0, models.size())) {
     if (ImGui::CollapsingHeader(("models[" + std::to_string(i) + "]").data())) {
       ImGui::BeginGroup();
       if (ImGui::Button("Teleport")) {
@@ -486,7 +416,7 @@ int Game::render() {
   render_imgui();
 
   // TODO: Possibly don't use pointers to bind in the future?
-  cam.upload_to_shader(&shader, &window);
+  cam.upload_to_shader(&shaders[0], &window);
   // model.render();
   // model1.render();
   for (auto &m : models) {
