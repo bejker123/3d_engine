@@ -84,6 +84,8 @@ void Shader::init(const char *vertex_source, const char *fragment_source,
   LOG_END();
 }
 
+Shader::~Shader() { glDeleteShader(this->id); }
+
 GLuint Shader::compile_shader(const char *source, const GLuint shader_type) {
 
   GLuint id = glCreateShader(shader_type);

@@ -1,7 +1,7 @@
 #include "texture.hpp"
 #include <iostream>
 #define STB_IMAGE_IMPLEMENTATION
-#include "../stb/stb_image.h"
+#include "../../stb/stb_image.h"
 
 Texture::Texture(const char *fileName, GLenum type) {
   this->type = type;

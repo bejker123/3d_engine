@@ -5,8 +5,8 @@
 #include <tuple>
 class Window {
 public:
-  bool init(int width, int height, char *title, bool resizable,
-            bool fullscreen);
+  bool init(int width, int height, char *title, bool resizable, bool fullscreen,
+            bool vsync = false);
 
   void terminate();
 

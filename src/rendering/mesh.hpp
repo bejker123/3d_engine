@@ -1,6 +1,6 @@
 #ifndef MESH
 #define MESH
-#include "vertex_array.hpp"
+#include "ll/vertex_array.hpp"
 #include <memory>
 #include <vector>
 

@@ -1,7 +1,7 @@
 #ifndef MATERIAL_HPP
 #define MATERIAL_HPP
-#include "shader.hpp"
-#include "texture.hpp"
+#include "ll/shader.hpp"
+#include "ll/texture.hpp"
 #include <memory>
 #include <optional>
 class MaterialOptions {
@@ -39,5 +39,6 @@ private:
   std::shared_ptr<Shader> shader;
   std::optional<std::shared_ptr<Texture>> texture;
   MaterialOptions options;
+  uint32_t texture_bind_idx = 0;
 };
 #endif // !MATERIAL_HPP

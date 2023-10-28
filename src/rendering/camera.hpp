@@ -1,5 +1,5 @@
 #include "../window.hpp"
-#include "shader.hpp"
+#include "ll/shader.hpp"
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
@@ -10,8 +10,8 @@ public:
     this->right = glm::vec3(0.f);
     this->up = world_up;
 
-    this->pitch = 0.f;
-    this->yaw = -90.f;
+    this->pitch = -20.f;
+    this->yaw = -30.f;
     this->roll = 0.f;
 
     this->update_vectors();

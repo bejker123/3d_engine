@@ -2,12 +2,12 @@
 #include "../imgui/backends/imgui_impl_glfw.h"
 #include "../imgui/backends/imgui_impl_opengl3.h"
 #include "../imgui/imgui.h"
-#include "rendering/buffers.hpp"
 #include "rendering/camera.hpp"
+#include "rendering/ll/buffers.hpp"
+#include "rendering/ll/vertex_array.hpp"
 #include "rendering/material.hpp"
 #include "rendering/mesh.hpp"
 #include "rendering/model.hpp"
-#include "rendering/vertex_array.hpp"
 #include "stb/stb_image.h"
 #include <GLFW/glfw3.h>
 #include <assimp/Importer.hpp>
@@ -172,7 +172,7 @@ int Game::init(int argc, char *argv[]) {
   if (!init_opengl())
     return EXIT_FAILURE;
 
-  cam.init(60, 0.0001, 100000, glm::vec3(1, 0, 1));
+  cam.init(60, 0.0001, 100000, glm::vec3(-40, 20, 30));
   shader.init(camera_vs, basic_fragment_shader, "");
 
   va.init();
@@ -273,9 +273,6 @@ bool Game::init_opengl() {
   }
   window.hide_cursor();
 
-  // Disable V-Sync
-  glfwSwapInterval(0);
-
   LOG("INITIALISING GLEW\n");
 
   glewExperimental = GL_TRUE;
@@ -327,6 +324,7 @@ void Game::terminate() {
 void Game::terminate_opengl() {
   LOG("TERMINATING OPENGL\n");
   this->window.~Window();
+  shader.~Shader();
   glfwTerminate();
 }
 
@@ -396,7 +394,7 @@ int Game::update() {
       this->window.hide_cursor();
       cancel_mouse_delta = true;
     }
-    last_tab_pressed = 5;
+    last_tab_pressed = 0.1 / this->perf.get_delta();
   } else {
     if (last_tab_pressed > 0)
       last_tab_pressed--;
@@ -455,6 +453,8 @@ void Game::render_imgui() {
       }
       ImGui::Checkbox("Cull Backfaces",
                       &models[i].get_material()->get_options()->cull_backfaces);
+      ImGui::Checkbox("Textured",
+                      &models[i].get_material()->get_options()->texture);
       ImGui::RadioButton("Lines",
                          &models[i].get_material()->get_options()->polygon_mode,
                          GL_LINE);

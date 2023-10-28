@@ -1,5 +1,5 @@
 #include "buffers.hpp"
-#include "../logger.hpp"
+#include "../../logger.hpp"
 #include <vector>
 
 void VertexBuffer::init(void *vertices, uint32_t size, uint32_t elements,

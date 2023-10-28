@@ -1,5 +1,5 @@
 #include "material.hpp"
-#include "shader.hpp"
+#include "ll/shader.hpp"
 #include <GL/gl.h>
 #include <memory>
 #include <optional>
@@ -87,8 +87,8 @@ void Material::init(std::shared_ptr<Shader> shader) {
 void Material::bind() {
   this->options.bind();
   if (this->texture.has_value() && this->options.texture) {
-    this->texture.value()->bind(0);
-    this->shader->set1i(0, "tex");
+    this->texture.value()->bind(texture_bind_idx);
+    this->shader->set1i(texture_bind_idx, "tex");
   }
   this->shader->bind();
 }

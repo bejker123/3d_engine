@@ -1,6 +1,6 @@
 #ifndef __SHADER_H
 #define __SHADER_H
-#include "../logger.hpp"
+#include "../../logger.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -13,6 +13,8 @@ class Shader {
 public:
   void init(const char *vertex_source, const char *fragment_source,
             const char *geometry_source);
+
+  ~Shader();
 
   void bind();
   static void unbind();

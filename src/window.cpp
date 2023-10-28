@@ -5,7 +5,7 @@
 #include <cstring>
 
 bool Window::init(int width, int height, char *title, bool resizable,
-                  bool fullscreen) {
+                  bool fullscreen, bool vsync) {
   glfwWindowHint(GLFW_RESIZABLE, resizable);
   GLFWmonitor *monitor = nullptr;
   if (fullscreen) {
@@ -29,6 +29,8 @@ bool Window::init(int width, int height, char *title, bool resizable,
     LOG("FAIELD TO INIT WINDOW\n");
     return false;
   }
+  if (!vsync) // Disable V-Sync
+    glfwSwapInterval(0);
 
   return true;
 }

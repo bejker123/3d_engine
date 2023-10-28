@@ -1,8 +1,8 @@
 #ifndef MODEL_HPP
 #define MODEL_HPP
+#include "ll/shader.hpp"
 #include "material.hpp"
 #include "mesh.hpp"
-#include "shader.hpp"
 #include <memory>
 
 class Model {
