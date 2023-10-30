@@ -58,7 +58,6 @@ void IndexBuffer::init(uint32_t *indices, uint32_t size) {
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->id);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
   this->elements = size / sizeof(uint32_t);
-  LOG_VAR("%i", this->elements);
 }
 
 void IndexBuffer::bind() { glBindBuffer(GL_ARRAY_BUFFER, this->id); }

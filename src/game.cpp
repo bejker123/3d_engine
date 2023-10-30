@@ -1,4 +1,5 @@
 #include "game.hpp"
+#include "rendering/ll/opengl.hpp"
 #include "shaders.hpp"
 
 #include "../imgui/backends/imgui_impl_glfw.h"
@@ -178,23 +179,13 @@ void Game::init_command_line_args(int argc, char *argv[]) {
 bool Game::init_opengl() {
   LOG("INITIALISING OPENGL\n");
   LOG("INITIALISING GLFW\n");
-  if (!glfwInit()) {
+  if (!opengl::setup()) {
     LOG("FAILED TO INIT GLFW\n");
     this->terminate_opengl();
     return false;
   }
 
   LOG("INITIALISING WINDOW\n");
-
-  // set opengl version to 3.3
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_VER_MAJ);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VER_MIN);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  glfwWindowHint(GLFW_SAMPLES, 4);
-  // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#ifdef __APPLE__
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
 
   if (!this->window.init(
           this->options.window_width, this->options.window_height,
@@ -208,46 +199,23 @@ bool Game::init_opengl() {
 
   glewExperimental = GL_TRUE;
 
-  if (glewInit() != GLEW_OK) {
+  if (!opengl::setup_glew()) {
     LOG("FAILED TO INIT GLEW\n");
     terminate_opengl();
     return false;
   }
 
-  glDepthFunc(GL_LESS);
-  glEnable(GL_LINE_SMOOTH);
   LOG("OPENGL INITIALISED\n");
-  /*
-      glEnable(GL_DEPTH_TEST);
-                  glDepthFunc(GL_ALWAYS);
 
-                  //TODO: see if antialiasing impacts the performence.
-                  glfwWindowHint(GLFW_SAMPLES, 4);
-                  glEnable(GL_MULTISAMPLE);
-
-                  glEnable(GL_CULL_FACE);
-                  glCullFace(GL_BACK);//use this?
-                  glFrontFace(GL_CCW);
-      */
-
-  LOG("OPENGL DEBUG INFO:\n");
-  const GLubyte *vendor = glGetString(GL_VENDOR);     // get renderer string
-  const GLubyte *renderer = glGetString(GL_RENDERER); // get renderer string
-  const GLubyte *version = glGetString(GL_VERSION);   // version as a string
-  LOG("\tGraphics card vendor: %s\n", vendor);
-  LOG("\tGraphics card: %s\n", renderer);
-  LOG("\tOpenGL version: %s\n", version);
-
+  opengl::debug_info();
   return true;
 }
 
 void Game::terminate() {
   LOG("TERMINATION STARTED\n");
 
+  this->cam.~Camera();
   terminate_opengl();
-  ImGui_ImplOpenGL3_Shutdown();
-  ImGui_ImplGlfw_Shutdown();
-  ImGui::DestroyContext();
 
   LOG("TERMINATION COMPELTE\n");
 }
@@ -257,8 +225,10 @@ void Game::terminate_opengl() {
   this->window.~Window();
   for (auto &i : this->shaders)
     i.~Shader();
-  this->cam.~Camera();
-  glfwTerminate();
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui_ImplGlfw_Shutdown();
+  ImGui::DestroyContext();
+  opengl::terminate();
 }
 
 // Main game loop
@@ -410,8 +380,7 @@ void Game::render_imgui() {
 
 // Rendering function running every frame, after update
 int Game::render() {
-  glClearColor(1.f, 1.f, 1.f, 1.f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+  opengl::clear_buffer();
 
   render_imgui();
 

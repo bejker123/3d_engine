@@ -118,10 +118,7 @@ void VertexArray::set_index_buffer(IndexBuffer *ib) {
   ib->bind();
   ib->unbind();
   this->unbind();
-  // LOG_thisR("%d",ib->elements);
   this->elements = ib->elements;
-  // printf("this->ib == ib ? %d\n",(this->ib->id ==
-  // ib->id)&&(this->ib->elements == ib->elements));
 }
 
 void VertexArray::bind() { glBindVertexArray(this->id); }

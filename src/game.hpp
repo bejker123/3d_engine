@@ -5,9 +5,6 @@
 #include "rendering/model.hpp"
 #include "window.hpp"
 
-#define OPENGL_VER_MAJ 4
-#define OPENGL_VER_MIN 6
-
 class GameOptions {
 public:
   int window_width, window_height;
@@ -21,7 +18,6 @@ public:
   // init functions
   int init(int argc, char *argv[]);
 
-  // render functions
 private:
   void init_command_line_args(int argc, char *argv[]);
   bool init_opengl();
@@ -34,11 +30,15 @@ private:
 
   int run();
   int update();
+
+  // render functions
   int render();
   void render_imgui();
 
   // update functions
   int handle_keyboard();
+
+  // variables
   GameOptions options;
   Window window;
   bool inited;

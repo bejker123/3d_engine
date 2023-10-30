@@ -15,13 +15,13 @@ GLuint Texture::get_id() const { return this->id; }
 void Texture::bind(const GLuint texture_unit) {
   glActiveTexture(GL_TEXTURE0 + texture_unit);
   glBindTexture(this->type, this->id);
-  glEnable(GL_TEXTURE_2D);
 }
 
 void Texture::unbind(const uint32_t type) {
-  glActiveTexture(0);
+  // Fix debug info:
+  //  glActiveTexture(0);
   glBindTexture(type, 0);
-  glDisable(type);
+  // glDisable(type);
 }
 void Texture::load_from_file(char *fileName) {
   if (this->id) {
@@ -52,7 +52,7 @@ void Texture::load_from_file(char *fileName) {
               << " culdn't load texture: " << fileName << std::endl;
   }
 
-  glActiveTexture(0);
+  // glActiveTexture(0);
   glBindTexture(this->type, 0);
   stbi_image_free(data);
 }

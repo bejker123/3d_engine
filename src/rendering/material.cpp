@@ -28,7 +28,6 @@ void MaterialOptions::set_cull_backfaces(bool cull) {
 
 void MaterialOptions::bind() {
 
-  glEnable(GL_TEXTURE_2D);
   // Set Front Face
   glFrontFace(GL_CCW);
 
