@@ -27,6 +27,7 @@ std::optional<std::string> opengl::get_error() {
 void gl_debug_handler(GLenum source, GLenum type, GLuint id, GLenum severity,
                       GLsizei length, const GLchar *message,
                       const void *userParam) {
+#if OPENGL_DEBUG_INFO
   std::string _source;
   std::string _type;
   std::string _severity;
@@ -119,6 +120,7 @@ void gl_debug_handler(GLenum source, GLenum type, GLuint id, GLenum severity,
 
   LOG("[GL_DEBUG_MESSAGE] %s::%s::%s::ID: %d:\n\t%s\n", _source.c_str(),
       _type.c_str(), _severity.c_str(), id, message);
+#endif
 }
 
 void glfw_error_handler(int code, const char *desc) {

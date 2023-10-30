@@ -9,7 +9,7 @@ using namespace std;
 
 class Texture {
 public:
-  Texture(const char *fileName, GLenum type = GL_TEXTURE_2D);
+  Texture(std::string file, GLenum type = GL_TEXTURE_2D);
 
   ~Texture();
 
@@ -22,9 +22,9 @@ public:
 private:
   GLuint id;
   int width, height;
-  unsigned int type;
+  uint32_t type;
 
-  void load_from_file(char *fileName);
+  void load_from_file(std::string file);
 };
 
 #endif // !TEXTURE_HPP
