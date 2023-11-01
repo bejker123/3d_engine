@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SHADERS_HPP
+#define SHADERS_HPP
 
 const char *basic_vertex_shader =
     "#version 460 core\n"
@@ -50,3 +51,5 @@ const char *basic_fs = "#version 460 core\n"
                        "FragColor = texture(tex,vs_texcoord)* frag_color;\n"
                        // "FragColor = frag_color;\n"
                        "}\0";
+
+#endif
