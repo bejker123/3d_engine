@@ -17,6 +17,7 @@
 #include <memory>
 #include <ranges>
 #include <thread>
+
 const char *basic_vertex_shader =
     "#version 460 core\n"
     "layout (location = 0) in vec3 vert_pos;\n"
@@ -211,6 +212,7 @@ int Engine::init(int argc, char *argv[]) {
       true); // Second param install_callback=true will install
              // GLFW callbacks and chain to existing ones.
   ImGui_ImplOpenGL3_Init();
+  game.init();
 
   // Run the main loop
   return run();
@@ -367,6 +369,8 @@ int Engine::update() {
   last_mouse_x = mouse_x;
   last_mouse_y = mouse_y;
 
+  game.update();
+
   for (auto &m : models)
     m.update();
 
@@ -442,6 +446,7 @@ int Engine::render() {
   for (auto &m : models) {
     m.render();
   }
+  game.render();
 
   // Rendering
   // (Your code clears your framebuffer, renders your other stuff etc.)

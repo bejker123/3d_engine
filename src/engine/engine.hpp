@@ -1,6 +1,7 @@
 
 #ifndef ENGINE_HPP
 #define ENGINE_HPP
+#include "../game.hpp"
 #include "logic/performence.hpp"
 #include "rendering/camera.hpp"
 #include "rendering/model.hpp"
@@ -64,6 +65,7 @@ private:
   IndexBuffer ib;
   VertexArray va;
   Camera cam;
+  Game game;
 };
 
 #endif //__GAME_H
