@@ -1,8 +1,17 @@
 #include "performence.hpp"
+#include <iostream>
+#include <utility>
 
 uint64_t counter = 0;
-const double max_timer = 1000000000.0;
+const double max_timer = 1000000000.0; // 1 s in nanoseconds
 float timer = 0.0;
+
+Performence::~Performence() {
+  for (auto &i : data_points) {
+    std::cout << "FPS: " << i.first
+              << " timer: " << (double)i.second / max_timer << std::endl;
+  }
+}
 
 void Performence::update() {
   this->curr_time = std::chrono::steady_clock::now();
@@ -14,6 +23,7 @@ void Performence::update() {
     delta = 0;
   if (timer >= max_timer) {
     fps = counter;
+    this->data_points.push_back(std::make_pair(fps, timer));
     counter = 0;
     timer = 0;
   } else {

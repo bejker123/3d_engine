@@ -4,6 +4,7 @@
 #include <cstdint>
 class Performence {
 public:
+  ~Performence();
   // void init();
   void update();
 
@@ -14,6 +15,7 @@ private:
   uint64_t fps;
   float delta;
   std::chrono::steady_clock::time_point curr_time, last_time;
+  std::vector<std::pair<uint64_t, float>> data_points;
 };
 
 #endif // !PERFORMENCE_HPP
