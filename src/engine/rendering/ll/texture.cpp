@@ -4,8 +4,8 @@
 #include <map>
 #include <vector>
 #define STB_IMAGE_IMPLEMENTATION
+#include "../../../stb/stb_image.h"
 #include "../../logger.hpp"
-#include "../../stb/stb_image.h"
 
 static std::map<std::string, uint32_t> hashes;
 

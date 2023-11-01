@@ -1,6 +1,6 @@
 #include "game.hpp"
-#include "rendering/ll/opengl.hpp"
-#include "shaders.hpp"
+#include "engine/rendering/ll/opengl.hpp"
+#include "engine/shaders.hpp"
 
 #include "../imgui/backends/imgui_impl_glfw.h"
 #include "../imgui/backends/imgui_impl_opengl3.h"

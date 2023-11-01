@@ -1,9 +1,9 @@
 #ifndef __GAME_H
 #define __GAME_H
-#include "logic/performence.hpp"
-#include "rendering/camera.hpp"
-#include "rendering/model.hpp"
-#include "window.hpp"
+#include "engine/logic/performence.hpp"
+#include "engine/rendering/camera.hpp"
+#include "engine/rendering/model.hpp"
+#include "engine/window.hpp"
 
 class GameOptions {
 public:
