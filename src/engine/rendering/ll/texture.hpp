@@ -6,6 +6,8 @@
 #include <GLFW/glfw3.h>
 
 using namespace std;
+namespace En {
+namespace ll {
 
 class Texture {
 public:
@@ -27,4 +29,6 @@ private:
   void load_from_file(std::string file);
 };
 
+} // namespace ll
+} // namespace En
 #endif // !TEXTURE_HPP

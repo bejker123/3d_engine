@@ -9,6 +9,9 @@
 
 enum ShaderState { NOT_INITED = -1, ERROR = 0, INITED = 1 };
 
+namespace En {
+namespace ll {
+
 class Shader {
 public:
   Shader();
@@ -42,4 +45,6 @@ private:
   int success;
 };
 
+} // namespace ll
+} // namespace En
 #endif //__SHADER_H

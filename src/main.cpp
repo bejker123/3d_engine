@@ -1,3 +1,3 @@
 #include "engine/engine.hpp"
 
-int main(int argc, char **argv) { Engine engine; }
+int main(int argc, char **argv) { En::Engine engine; }

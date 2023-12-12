@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <tuple>
+namespace En {
 class Window {
 public:
   bool init(int width, int height, char *title, bool resizable, bool fullscreen,
@@ -31,4 +32,6 @@ public:
 private:
   GLFWwindow *window;
 };
+
+} // namespace En
 #endif // !WINDOW_HPP

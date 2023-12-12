@@ -5,12 +5,12 @@
 #include <cstdlib>
 #include <cstring>
 
-void opengl::clear_buffer() {
+void En::ll::opengl::clear_buffer() {
   glClearColor(1.f, 1.f, 1.f, 1.f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
-std::optional<std::string> opengl::get_error() {
+std::optional<std::string> En::ll::opengl::get_error() {
   char *desc = (char *)malloc(1024);
   memset(desc, 0, 1024);
   auto ret = glfwGetError((const char **)&desc);
@@ -127,9 +127,9 @@ void glfw_error_handler(int code, const char *desc) {
   LOG("GLFW ERROR: %d\n\t%s\n", code, desc);
 }
 
-bool opengl::setup() {
+bool En::ll::opengl::setup() {
   if (!glfwInit()) {
-    LOG("GLFW INIT ERROR: \n\t%s\n", opengl::get_error()->c_str());
+    LOG("GLFW INIT ERROR: \n\t%s\n", En::ll::opengl::get_error()->c_str());
     return false;
   }
 
@@ -147,9 +147,9 @@ bool opengl::setup() {
 #endif
   return true;
 }
-bool opengl::setup_glew() { return glewInit() == GLEW_OK; }
-void opengl::terminate() { glfwTerminate(); }
-void opengl::debug_info() {
+bool En::ll::opengl::setup_glew() { return glewInit() == GLEW_OK; }
+void En::ll::opengl::terminate() { glfwTerminate(); }
+void En::ll::opengl::debug_info() {
 
   LOG("OPENGL DEBUG INFO:\n");
   const GLubyte *vendor = glGetString(GL_VENDOR);

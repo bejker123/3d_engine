@@ -4,6 +4,7 @@
 #include "prelude.hpp"
 #include <memory>
 
+namespace En {
 class WindowOptions {
 public:
   int window_width, window_height;
@@ -25,7 +26,7 @@ public:
   // init functions
   void add_shader(const char *v, const char *f, const char *g);
   void add_model(Model &shader);
-  optional<shared_ptr<Shader const>> get_shader(const size_t idx) const;
+  optional<shared_ptr<ll::Shader const>> get_shader(const size_t idx) const;
   const size_t get_shaders_count() const;
 
   // main functions
@@ -61,7 +62,8 @@ private:
   int last_tab_pressed = 0;
 
   std::vector<Model> models;
-  std::vector<shared_ptr<Shader>> shaders;
+  std::vector<shared_ptr<ll::Shader>> shaders;
 };
+} // namespace En
 
 #endif //__GAME_H

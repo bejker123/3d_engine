@@ -9,27 +9,27 @@
 
 static std::map<std::string, uint32_t> hashes;
 
-Texture::Texture(std::string file, GLenum type) {
+En::ll::Texture::Texture(std::string file, GLenum type) {
   this->type = type;
   this->load_from_file(file);
 }
 
-Texture::~Texture() { glDeleteTextures(1, &this->id); }
+En::ll::Texture::~Texture() { glDeleteTextures(1, &this->id); }
 
-GLuint Texture::get_id() const { return this->id; }
+GLuint En::ll::Texture::get_id() const { return this->id; }
 
-void Texture::bind(const GLuint texture_unit) {
+void En::ll::Texture::bind(const GLuint texture_unit) {
   glActiveTexture(GL_TEXTURE0 + texture_unit);
   glBindTexture(this->type, this->id);
 }
 
-void Texture::unbind(const uint32_t type) {
+void En::ll::Texture::unbind(const uint32_t type) {
   // Fix debug info:
   //  glActiveTexture(0);
   glBindTexture(type, 0);
   // glDisable(type);
 }
-void Texture::load_from_file(std::string file) {
+void En::ll::Texture::load_from_file(std::string file) {
   if (this->id) {
     glDeleteTextures(1, &this->id);
   }

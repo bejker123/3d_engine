@@ -3,6 +3,9 @@
 #include "buffers.hpp"
 #include <stdbool.h>
 
+namespace En {
+namespace ll {
+
 class VertexArray {
 public:
   void init();
@@ -31,5 +34,7 @@ private:
 
   // VertexBuffer* vbs;
 };
+} // namespace ll
+} // namespace En
 
 #endif

@@ -8,15 +8,15 @@ public:
   // FUNCTIONS
   // init functions
 
-  int init(Engine *engine);
-  int update(Engine *engine);
-  void render(Engine *engine);
+  int init(En::Engine *engine);
+  int update(En::Engine *engine);
+  void render(En::Engine *engine);
 
 private:
-  VertexBuffer vb;
-  VertexBuffer vb1;
-  IndexBuffer ib;
-  VertexArray va;
+  En::ll::VertexBuffer vb;
+  En::ll::VertexBuffer vb1;
+  En::ll::IndexBuffer ib;
+  En::ll::VertexArray va;
 };
 
 #endif //__GAME_H

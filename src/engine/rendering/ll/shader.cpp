@@ -11,14 +11,15 @@ void logEnd(int success, const char *file, int line) {
     return;                                                                    \
   }
 
-Shader::Shader(const char *vertex_source, const char *fragment_source,
-               const char *geometry_source) {
+En::ll::Shader::Shader(const char *vertex_source, const char *fragment_source,
+                       const char *geometry_source) {
   this->init(vertex_source, fragment_source, geometry_source);
 }
 
 // TODO: Add a game id to every shader.
-void Shader::init(const char *vertex_source, const char *fragment_source,
-                  const char *geometry_source) {
+void En::ll::Shader::init(const char *vertex_source,
+                          const char *fragment_source,
+                          const char *geometry_source) {
 
   LOG("[SHADER] INITING STARTED\n");
   LOG("[SHADER] COMPILATION STARTED\n");
@@ -89,9 +90,10 @@ void Shader::init(const char *vertex_source, const char *fragment_source,
   LOG_END();
 }
 
-Shader::~Shader() { glDeleteShader(this->id); }
+En::ll::Shader::~Shader() { glDeleteShader(this->id); }
 
-GLuint Shader::compile_shader(const char *source, const GLuint shader_type) {
+GLuint En::ll::Shader::compile_shader(const char *source,
+                                      const GLuint shader_type) {
 
   GLuint id = glCreateShader(shader_type);
 
@@ -124,58 +126,58 @@ GLuint Shader::compile_shader(const char *source, const GLuint shader_type) {
   return id;
 }
 
-void Shader::bind() const {
+void En::ll::Shader::bind() const {
   assert(this->success == 1); // Check if shader is initialised
   glUseProgram(this->id);
 }
 
-void Shader::unbind() { glUseProgram(0); };
-GLuint Shader::get_attrib_loc(char *attrib) {
+void En::ll::Shader::unbind() { glUseProgram(0); };
+GLuint En::ll::Shader::get_attrib_loc(char *attrib) {
   return glGetAttribLocation(this->id, attrib);
 }
 
-void Shader::set1i(GLint value, const GLchar *name) const {
+void En::ll::Shader::set1i(GLint value, const GLchar *name) const {
   this->bind();
   glUniform1i(glGetUniformLocation(this->id, name), value);
-  Shader::unbind();
+  En::ll::Shader::unbind();
 }
 
-void Shader::set1f(GLfloat value, const GLchar *name) const {
+void En::ll::Shader::set1f(GLfloat value, const GLchar *name) const {
   this->bind();
   glUniform1f(glGetUniformLocation(this->id, name), value);
-  Shader::unbind();
+  En::ll::Shader::unbind();
 }
 
-void Shader::set_vec2f(glm::fvec2 value, const GLchar *name) const {
+void En::ll::Shader::set_vec2f(glm::fvec2 value, const GLchar *name) const {
   this->bind();
   glUniform2fv(glGetUniformLocation(this->id, name), 1, glm::value_ptr(value));
-  Shader::unbind();
+  En::ll::Shader::unbind();
 }
 
-void Shader::set_vec3f(glm::fvec3 value, const GLchar *name) const {
+void En::ll::Shader::set_vec3f(glm::fvec3 value, const GLchar *name) const {
   this->bind();
   glUniform3fv(glGetUniformLocation(this->id, name), 1, glm::value_ptr(value));
-  Shader::unbind();
+  En::ll::Shader::unbind();
 }
 
-void Shader::set_vec4f(glm::fvec4 value, const GLchar *name) const {
+void En::ll::Shader::set_vec4f(glm::fvec4 value, const GLchar *name) const {
   this->bind();
   glUniform4fv(glGetUniformLocation(this->id, name), 1, glm::value_ptr(value));
-  Shader::unbind();
+  En::ll::Shader::unbind();
 }
 
-void Shader::set_mat3fv(glm::mat3 value, const GLchar *name,
-                        bool transpose) const {
+void En::ll::Shader::set_mat3fv(glm::mat3 value, const GLchar *name,
+                                bool transpose) const {
   this->bind();
   glUniformMatrix3fv(glGetUniformLocation(this->id, name), 1, transpose,
                      glm::value_ptr(value));
-  Shader::unbind();
+  En::ll::Shader::unbind();
 }
 
-void Shader::set_mat4fv(glm::mat4 value, const GLchar *name,
-                        bool transpose) const {
+void En::ll::Shader::set_mat4fv(glm::mat4 value, const GLchar *name,
+                                bool transpose) const {
   this->bind();
   glUniformMatrix4fv(glGetUniformLocation(this->id, name), 1, transpose,
                      glm::value_ptr(value));
-  Shader::unbind();
+  En::ll::Shader::unbind();
 }

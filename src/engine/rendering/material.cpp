@@ -4,7 +4,7 @@
 #include <memory>
 #include <optional>
 
-MaterialOptions::MaterialOptions() {
+En::MaterialOptions::MaterialOptions() {
   this->cull_backfaces = true;
   this->polygon_mode = GL_FILL;
   this->depth = true;
@@ -14,7 +14,7 @@ MaterialOptions::MaterialOptions() {
   this->texture = true;
 }
 
-bool MaterialOptions::set_polygon_mode(int mode) {
+bool En::MaterialOptions::set_polygon_mode(int mode) {
   if (mode == GL_POINT || mode == GL_LINE || mode == GL_FILL)
     this->polygon_mode = mode;
   else
@@ -22,11 +22,11 @@ bool MaterialOptions::set_polygon_mode(int mode) {
   return true;
 }
 
-void MaterialOptions::set_cull_backfaces(bool cull) {
+void En::MaterialOptions::set_cull_backfaces(bool cull) {
   this->cull_backfaces = cull;
 }
 
-void MaterialOptions::bind() {
+void En::MaterialOptions::bind() {
 
   // Set Front Face
   glFrontFace(GL_CCW);
@@ -64,7 +64,7 @@ void MaterialOptions::bind() {
   else
     glDisable(GL_STENCIL_TEST);
 }
-void MaterialOptions::unbind() {
+void En::MaterialOptions::unbind() {
   glDisable(GL_CULL_FACE);
 
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -78,12 +78,12 @@ void MaterialOptions::unbind() {
   glDisable(GL_STENCIL_TEST);
 }
 
-void Material::init(std::shared_ptr<const Shader> shader) {
+void En::Material::init(std::shared_ptr<const ll::Shader> shader) {
   this->shader = shader;
   this->options = MaterialOptions();
   this->texture = std::nullopt;
 }
-void Material::bind() {
+void En::Material::bind() {
   this->options.bind();
   if (this->texture.has_value() && this->options.texture) {
     this->texture.value()->bind(texture_bind_idx);
@@ -91,20 +91,20 @@ void Material::bind() {
   }
   this->shader->bind();
 }
-void Material::unbind() {
-  MaterialOptions::unbind();
-  Shader::unbind();
-  Texture::unbind();
+void En::Material::unbind() {
+  En::MaterialOptions::unbind();
+  ll::Shader::unbind();
+  ll::Texture::unbind();
 }
 
-void Material::set_texture(const std::shared_ptr<Texture> texture) {
+void En::Material::set_texture(const std::shared_ptr<ll::Texture> texture) {
   this->texture = texture;
 }
 
-void Material::set_shader(const std::shared_ptr<const Shader> shader) {
+void En::Material::set_shader(const std::shared_ptr<const ll::Shader> shader) {
   this->shader = shader;
 }
-std::shared_ptr<const Shader> Material::get_shader() const {
+std::shared_ptr<const En::ll::Shader> En::Material::get_shader() const {
   return this->shader;
 }
-MaterialOptions *Material::get_options() { return &this->options; }
+En::MaterialOptions *En::Material::get_options() { return &this->options; }

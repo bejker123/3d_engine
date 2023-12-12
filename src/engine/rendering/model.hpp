@@ -5,6 +5,8 @@
 #include "mesh.hpp"
 #include <memory>
 
+namespace En {
+
 class Model {
 public:
   void init(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> mat);
@@ -33,4 +35,5 @@ private:
 
   glm::vec3 pos, origin, rot, scale;
 };
+} // namespace En
 #endif // !MODEL_HPP

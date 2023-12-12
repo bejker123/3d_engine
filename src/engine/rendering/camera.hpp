@@ -6,6 +6,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+namespace En {
+
 class Camera {
 public:
   Camera() {
@@ -22,7 +24,7 @@ public:
 
   void init(float fov, float znear, float zfar, glm::vec3 pos);
 
-  void upload_to_shader(Shader *shader, Window *win);
+  void upload_to_shader(ll::Shader *shader, Window *win);
 
   void add_pos(glm::vec3 pos);
 
@@ -65,5 +67,5 @@ private:
   const GLfloat MAX_YAW = 360.f;
   const GLfloat MAX_ROLL = 0.f;
 };
-
+} // namespace En
 #endif // !CAMERA_HPP

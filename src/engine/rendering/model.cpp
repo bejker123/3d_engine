@@ -7,7 +7,8 @@
 #include <memory>
 #include <string>
 
-void Model::init(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> mat) {
+void En::Model::init(std::shared_ptr<Mesh> mesh,
+                     std::shared_ptr<Material> mat) {
   this->meshes.push_back(mesh);
   this->mat = mat;
 
@@ -17,7 +18,7 @@ void Model::init(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> mat) {
   this->scale = glm::vec3(10);
 }
 
-void Model::update() {
+void En::Model::update() {
   this->mmatrix = glm::mat4(1.f);
   this->mmatrix = glm::translate(this->mmatrix, this->origin);
   this->mmatrix = glm::rotate(this->mmatrix, glm::radians(this->rot.x),
@@ -31,7 +32,7 @@ void Model::update() {
   this->mat->get_shader()->set_mat4fv(this->mmatrix, "ModelMatrix");
 }
 
-void Model::render() {
+void En::Model::render() {
   this->update();
   this->mat->bind();
   for (auto &i : this->meshes) {
@@ -40,7 +41,7 @@ void Model::render() {
   this->mat->unbind();
 }
 
-void Model::load(std::string path) {
+void En::Model::load(std::string path) {
   Assimp::Importer import;
   const aiScene *scene =
       import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -63,8 +64,8 @@ void processNode(aiNode *node, const aiScene *scene) {
   }
 }
 
-Mesh processMesh(aiMesh *mesh, const aiScene *scene) {
-  std::vector<Vertex> vertices;
+En::Mesh processMesh(aiMesh *mesh, const aiScene *scene) {
+  std::vector<En::ll::Vertex> vertices;
   std::vector<unsigned int> indices;
   // std::vector<Texture> textures;
 
@@ -78,17 +79,17 @@ Mesh processMesh(aiMesh *mesh, const aiScene *scene) {
   if (mesh->mMaterialIndex >= 0) {
   }
 
-  return Mesh(vertices, indices);
+  return En::Mesh(vertices, indices);
 }
 
-void Model::set_pos(glm::vec3 pos) { this->pos = pos; }
-void Model::set_origin(glm::vec3 origin) {
+void En::Model::set_pos(glm::vec3 pos) { this->pos = pos; }
+void En::Model::set_origin(glm::vec3 origin) {
   this->origin = origin;
   this->pos = origin;
 }
-void Model::set_rot(glm::vec3 rot) { this->rot = rot; }
-glm::vec3 *Model::get_rot() { return &this->rot; }
-glm::vec3 *Model::get_pos() { return &this->pos; }
-glm::vec3 *Model::get_origin() { return &this->origin; }
-glm::vec3 *Model::get_scale() { return &this->scale; }
-std::shared_ptr<Material> Model::get_material() { return this->mat; }
+void En::Model::set_rot(glm::vec3 rot) { this->rot = rot; }
+glm::vec3 *En::Model::get_rot() { return &this->rot; }
+glm::vec3 *En::Model::get_pos() { return &this->pos; }
+glm::vec3 *En::Model::get_origin() { return &this->origin; }
+glm::vec3 *En::Model::get_scale() { return &this->scale; }
+std::shared_ptr<En::Material> En::Model::get_material() { return this->mat; }

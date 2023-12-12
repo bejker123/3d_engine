@@ -5,6 +5,9 @@
 #include <glm/glm.hpp>
 #include <vector>
 
+namespace En {
+namespace ll {
+
 struct VertexPC {
 public:
   VertexPC(glm::vec3 pos, glm::vec4 color) : pos(pos), color(color) {}
@@ -73,4 +76,6 @@ public:
   uint32_t elements;
 };
 
+} // namespace ll
+} // namespace En
 #endif

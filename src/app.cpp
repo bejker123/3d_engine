@@ -7,66 +7,66 @@
 
 namespace rv = std::ranges::views;
 
-std::vector<VertexC> vertices{
+std::vector<En::ll::VertexC> vertices{
     // Front Face 0
-    VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(0.0f, 1.0f),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(0.0f, 0),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(1, 0),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(1, 1),
-            glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(0.0f, 1.0f),
+                    glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(0.0f, 0),
+                    glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(1, 0),
+                    glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(1, 1),
+                    glm::vec4(1, 1, 0, 1)),
 
     // Top Fglm::vec3(ace 4
-    VertexC(glm::vec3(-1, 1, -1), glm::vec3(1), glm::vec2(0.0f, 1.0f),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(1, 1.0f),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(0.0f, 0),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(1, 0),
-            glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(-1, 1, -1), glm::vec3(1), glm::vec2(0.0f, 1.0f),
+                    glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(1, 1.0f),
+                    glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(0.0f, 0),
+                    glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(1, 0),
+                    glm::vec4(1, 1, 0, 1)),
 
     // Rightglm::vec3( Face 8
-    VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(0, 1),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(0, 0),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(1.0f, 0.0f),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(1, 1.0f),
-            glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(0, 1),
+                    glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(0, 0),
+                    glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(1.0f, 0.0f),
+                    glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(1, 1.0f),
+                    glm::vec4(1, 1, 0, 1)),
 
     // Left glm::vec3(Face 12
-    VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(1.0f, 1.0f),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(-1, 1, -1), glm::vec3(1), glm::vec2(0.0f, 1),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(-1, -1, -1), glm::vec3(1), glm::vec2(0, 0),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(1, 0.0f),
-            glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(1.0f, 1.0f),
+                    glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(-1, 1, -1), glm::vec3(1), glm::vec2(0.0f, 1),
+                    glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(-1, -1, -1), glm::vec3(1), glm::vec2(0, 0),
+                    glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(1, 0.0f),
+                    glm::vec4(1, 1, 0, 1)),
 
     // Bottoglm::vec3(m Face 16
-    VertexC(glm::vec3(-1, -1, -1), glm::vec3(1), glm::vec2(1.0f, 0.0f),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(1.0f, 1),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(0, 0),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(0, 1.0f),
-            glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(-1, -1, -1), glm::vec3(1), glm::vec2(1.0f, 0.0f),
+                    glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(1.0f, 1),
+                    glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(0, 0),
+                    glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(0, 1.0f),
+                    glm::vec4(1, 1, 0, 1)),
 
     // Back glm::vec3(Face 20
-    VertexC(glm::vec3(-1, 1, -1), glm::vec3(1), glm::vec2(1, 1.0f),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(0.0f, 1.0f),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(-1, -1, -1), glm::vec3(1), glm::vec2(1, 0),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(0.0f, 0),
-            glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(-1, 1, -1), glm::vec3(1), glm::vec2(1, 1.0f),
+                    glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(0.0f, 1.0f),
+                    glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(-1, -1, -1), glm::vec3(1), glm::vec2(1, 0),
+                    glm::vec4(1, 1, 0, 1)),
+    En::ll::VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(0.0f, 0),
+                    glm::vec4(1, 1, 0, 1)),
 };
 
 unsigned int indices[] = {
@@ -78,7 +78,7 @@ unsigned int indices[] = {
     20, 21, 22, 22, 21, 23  // Back face
 };
 // MAKE GAME INHERETE FROM ENGINE AND OVERLOAD GAME ORIENTED FUNCTIONS
-int App::init(Engine *engine) {
+int App::init(En::Engine *engine) {
   engine->cam.init(60, 0.0001, 100000, glm::vec3(-40, 20, 30));
   engine->add_shader(camera_vs, basic_fs, "");
   engine->add_shader(camera_vs, cool_fs, "");
@@ -93,25 +93,26 @@ int App::init(Engine *engine) {
   // va.addVertexBuffer(&vb1);
   va.set_index_buffer(&ib);
 
-  Mesh mesh;
-  mesh.init(make_shared<VertexArray>(va));
+  En::Mesh mesh;
+  mesh.init(make_shared<En::ll::VertexArray>(va));
   // mesh.load(
   //     "/home/bejker/Downloads/Survival_BackPack_2/Survival_BackPack_2.fbx");
-  Material mat;
+  En::Material mat;
   mat.init(engine->get_shader(0).value());
   // TODO: Change this texture
   // Creating the texture "on the fly" makes is appear propely
-  mat.set_texture(shared_ptr<Texture>(new Texture("face.png")));
+  mat.set_texture(shared_ptr<En::ll::Texture>(new En::ll::Texture("face.png")));
 
   for (uint64_t i : rv::iota(0, 10)) {
-    Model m;
-    m.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
+    En::Model m;
+    m.init(std::make_shared<En::Mesh>(mesh),
+           std::make_unique<En::Material>(mat));
     m.set_origin(glm::vec3((double)i * 21, 0, 0));
     engine->add_model(m);
   }
   return 1;
 }
 
-int App::update(Engine *engine) { return 1; }
+int App::update(En::Engine *engine) { return 1; }
 
-void App::render(Engine *engine) {}
+void App::render(En::Engine *engine) {}
