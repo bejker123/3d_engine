@@ -100,6 +100,7 @@ int App::init(Engine *engine) {
   Material mat;
   mat.init(engine->get_shader(0).value());
   // TODO: Change this texture
+  // Creating the texture "on the fly" makes is appear propely
   mat.set_texture(shared_ptr<Texture>(new Texture("face.png")));
 
   for (uint64_t i : rv::iota(0, 10)) {
