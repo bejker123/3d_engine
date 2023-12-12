@@ -127,21 +127,6 @@ void Engine::terminate_opengl() {
   opengl::terminate();
 }
 
-// Main game loop
-int Engine::run() {
-  while (!this->window.should_close()) {
-    if (!update())
-      return EXIT_SUCCESS;
-
-    if (!render())
-      return EXIT_SUCCESS;
-  }
-
-  terminate();
-
-  return EXIT_SUCCESS;
-}
-
 // Handles keyboard user input
 // runs every frame
 int Engine::handle_keyboard() {

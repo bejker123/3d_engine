@@ -22,6 +22,7 @@ enum EngineState {
 
 class Engine {
 public:
+  ~Engine();
   // FUNCTIONS
   // init functions
   int init();
@@ -42,7 +43,6 @@ private:
   void init_imgui();
 
   // terminate functions
-  ~Engine();
   void terminate_opengl();
 
   // render functions
