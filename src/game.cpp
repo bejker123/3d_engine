@@ -1,12 +1,9 @@
 #include "game.hpp"
 #include "engine/shaders.hpp"
-#include <iostream>
 #include <memory>
 #include <ranges>
-#include <thread>
 
 namespace rv = std::ranges::views;
-namespace ranges = std::ranges;
 
 std::vector<VertexC> vertices{
     // Front Face 0
@@ -84,9 +81,8 @@ Game::Game() {
   this->engine->init();
 
   this->engine->cam.init(60, 0.0001, 100000, glm::vec3(-40, 20, 30));
-  Shader shader;
-  shader.init(camera_vs, cool_fs, "");
-  this->engine->add_shader(shader);
+  this->engine->add_shader(camera_vs, basic_fs, "");
+  this->engine->add_shader(camera_vs, cool_fs, "");
 
   va.init();
 
@@ -103,14 +99,11 @@ Game::Game() {
   // mesh.load(
   //     "/home/bejker/Downloads/Survival_BackPack_2/Survival_BackPack_2.fbx");
   Material mat;
-  mat.init(std::make_shared<Shader>(shader));
+  mat.init(this->engine->get_shader(0).value());
   // TODO: Change this texture
   Texture tex("face.png");
   mat.set_texture(std::make_shared<Texture>(tex));
-  // model.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
-  // model1.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
-  // // model1.setPos(glm::vec3(1, 0, 1));
-  // model1.setRot(glm::vec3(90, 0, 0));
+
   for (uint64_t i : rv::iota(0, 10)) {
     Model m;
     m.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));

@@ -1,19 +1,16 @@
 
 #include "engine.hpp"
 #include "rendering/ll/opengl.hpp"
-// #include "shaders.hpp"
 
 #include "../../imgui/backends/imgui_impl_glfw.h"
 #include "../../imgui/backends/imgui_impl_opengl3.h"
 #include "../../imgui/imgui.h"
 
-#include <iostream>
 #include <memory>
 #include <ranges>
 #include <thread>
 
 namespace rv = std::ranges::views;
-namespace ranges = std::ranges;
 
 // Init Game State, run the main loop
 int Engine::init() {
@@ -40,8 +37,23 @@ int Engine::init() {
   return this->state;
 }
 
-void Engine::add_shader(Shader &shader) { this->shaders.push_back(shader); }
-void Engine::add_model(Model &model) { this->models.push_back(model); }
+vector<int> ms_idxs;
+void Engine::add_shader(const char *v, const char *f, const char *g) {
+  this->shaders.push_back(shared_ptr<Shader>(new Shader(v, f, g)));
+}
+void Engine::add_model(Model &model) {
+  this->models.push_back(model);
+  ms_idxs.push_back(0);
+}
+
+optional<shared_ptr<const Shader>> Engine::get_shader(const size_t idx) const {
+  if (this->get_shaders_count() - 1 < idx || this->get_shaders_count() == 0)
+    return nullopt;
+  auto ret = this->shaders.at(idx);
+  return optional(ret);
+}
+
+const size_t Engine::get_shaders_count() const { return this->shaders.size(); }
 
 // Parse and init cmd line args
 void Engine::init_command_line_args() {
@@ -119,8 +131,6 @@ Engine::~Engine() {
 void Engine::terminate_opengl() {
   LOG("TERMINATING OPENGL\n");
   this->window.~Window();
-  for (auto &i : this->shaders)
-    i.~Shader();
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
@@ -266,7 +276,7 @@ int Engine::render() {
   render_imgui();
 
   // TODO: Possibly don't use pointers to bind in the future?
-  cam.upload_to_shader(&shaders[0], &window);
+  cam.upload_to_shader(shaders[0].get(), &window);
   // model.render();
   // model1.render();
   for (auto &m : models) {

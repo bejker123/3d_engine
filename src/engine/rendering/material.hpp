@@ -27,16 +27,17 @@ public:
 
 class Material {
 public:
-  void init(std::shared_ptr<Shader> shader);
+  void init(std::shared_ptr<const Shader> shader);
   void bind();
   void unbind();
 
-  void set_texture(std::shared_ptr<Texture> texture);
-  std::shared_ptr<Shader> get_shader() const;
+  void set_texture(const std::shared_ptr<Texture> texture);
+  void set_shader(const std::shared_ptr<const Shader> shader);
+  std::shared_ptr<const Shader> get_shader() const;
   MaterialOptions *get_options();
 
 private:
-  std::shared_ptr<Shader> shader;
+  std::shared_ptr<const Shader> shader;
   std::optional<std::shared_ptr<Texture>> texture;
   MaterialOptions options;
   uint32_t texture_bind_idx = 0;

@@ -6,6 +6,7 @@
 #include "rendering/model.hpp"
 
 #include "window.hpp"
+#include <memory>
 
 class WindowOptions {
 public:
@@ -26,8 +27,10 @@ public:
   // FUNCTIONS
   // init functions
   int init();
-  void add_shader(Shader &shader);
+  void add_shader(const char *v, const char *f, const char *g);
   void add_model(Model &shader);
+  optional<shared_ptr<Shader const>> get_shader(const size_t idx) const;
+  const size_t get_shaders_count() const;
 
   // main functions
 
@@ -62,7 +65,7 @@ private:
   int last_tab_pressed = 0;
 
   std::vector<Model> models;
-  std::vector<Shader> shaders;
+  std::vector<shared_ptr<Shader>> shaders;
 };
 
 #endif //__GAME_H

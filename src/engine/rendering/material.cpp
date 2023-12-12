@@ -78,7 +78,7 @@ void MaterialOptions::unbind() {
   glDisable(GL_STENCIL_TEST);
 }
 
-void Material::init(std::shared_ptr<Shader> shader) {
+void Material::init(std::shared_ptr<const Shader> shader) {
   this->shader = shader;
   this->options = MaterialOptions();
   this->texture = std::nullopt;
@@ -97,8 +97,14 @@ void Material::unbind() {
   Texture::unbind();
 }
 
-void Material::set_texture(std::shared_ptr<Texture> texture) {
+void Material::set_texture(const std::shared_ptr<Texture> texture) {
   this->texture = texture;
 }
-std::shared_ptr<Shader> Material::get_shader() const { return this->shader; }
+
+void Material::set_shader(const std::shared_ptr<const Shader> shader) {
+  this->shader = shader;
+}
+std::shared_ptr<const Shader> Material::get_shader() const {
+  return this->shader;
+}
 MaterialOptions *Material::get_options() { return &this->options; }
