@@ -7,189 +7,26 @@
 #include "../../imgui/backends/imgui_impl_opengl3.h"
 #include "../../imgui/imgui.h"
 
-#include "../stb/stb_image.h"
-
-#include <assimp/Importer.hpp>
-#include <assimp/postprocess.h>
-#include <assimp/scene.h>
-
 #include <iostream>
 #include <memory>
 #include <ranges>
 #include <thread>
 
-const char *basic_vertex_shader =
-    "#version 460 core\n"
-    "layout (location = 0) in vec3 vert_pos;\n"
-    "layout (location = 1) in vec4 vert_color;\n"
-    "out vec4 frag_color;"
-    "void main(){\n"
-    "frag_color = vert_color;"
-    "gl_Position = vec4(vert_pos.x,vert_pos.y,vert_pos.z,1.f);\n"
-    "}\0";
-
-const char *camera_vs =
-    R"(#version 460
-layout(location = 0) in vec3 vertex_position;
-layout(location = 1) in vec3 vertex_normal;
-layout(location = 2) in vec2 vertex_texcoord;
-layout(location = 3) in vec4 vertex_color;
-
-out vec3 vs_position;
-// out vec3 vs_normal;
-out vec2 vs_texcoord;
-out vec4 frag_color;
-
-uniform mat4 ModelMatrix;
-uniform mat4 ViewMatrix;
-uniform mat4 ProjectionMatrix;
-
-void main() {
-  // vs_position = vec4(ModelMatrix * vec4(vertex_position, 1.f)).xyz;
-  // vs_position = vertex_position;
-  frag_color = vertex_color;
-  vs_texcoord = vertex_texcoord;
-  // vs_texcoord = vec2(vertex_texcoord.x, vertex_texcoord.y * -1.f);
-  // vs_normal = mat3(ModelMatrix) * vertex_normal;
-
-  gl_Position =
-      ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(vertex_position, 1.f);
-      // ProjectionMatrix * ViewMatrix * vec4(vertex_position, 1.f);
-}
-)";
-
-const char *basic_fs = "#version 460 core\n"
-                       "in vec4 frag_color;\n"
-                       "in vec2 vs_texcoord;\n"
-                       "out vec4 FragColor;\n"
-                       "uniform sampler2D tex;"
-                       "void main(){\n"
-                       // "FragColor = vec4(0.3f,1.f,0.5f,1.f);\n"
-                       "FragColor = texture(tex,vs_texcoord)* frag_color;\n"
-                       // "FragColor = frag_color;\n"
-                       "}\0";
-
 namespace rv = std::ranges::views;
 namespace ranges = std::ranges;
 
-std::vector<VertexC> vertices{
-    // Front Face 0
-    VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(0.0f, 0.0f),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(0.0f, 1),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(1, 1),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(1, 0.0f),
-            glm::vec4(1, 1, 0, 1)),
-
-    // Top Fglm::vec3(ace 4
-    VertexC(glm::vec3(-1, 1, -1), glm::vec3(1), glm::vec2(0.0f, 0.0f),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(1, 0.0f),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(0.0f, 1),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(1, 1),
-            glm::vec4(1, 1, 0, 1)),
-
-    // Rightglm::vec3( Face 8
-    VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(1, 1),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(1, 0),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(0.0f, 0.0f),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(0, 1.0f),
-            glm::vec4(1, 1, 0, 1)),
-
-    // Left glm::vec3(Face 12
-    VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(1.0f, 1.0f),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(-1, 1, -1), glm::vec3(1), glm::vec2(0.0f, 1),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(-1, -1, -1), glm::vec3(1), glm::vec2(0, 0),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(1, 0.0f),
-            glm::vec4(1, 1, 0, 1)),
-
-    // Bottoglm::vec3(m Face 16
-    VertexC(glm::vec3(-1, -1, -1), glm::vec3(1), glm::vec2(1.0f, 0.0f),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(0.0f, 0),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(1, 1),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(0, 1.0f),
-            glm::vec4(1, 1, 0, 1)),
-
-    // Back glm::vec3(Face 20
-    VertexC(glm::vec3(-1, 1, -1), glm::vec3(1), glm::vec2(1, 1.0f),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(0.0f, 1.0f),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(-1, -1, -1), glm::vec3(1), glm::vec2(1, 0),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(0.0f, 0),
-            glm::vec4(1, 1, 0, 1)),
-};
-
-unsigned int indices[] = {
-    0,  1,  3,  3,  1,  2,  // Front face
-    7,  5,  6,  6,  5,  4,  // Top Face
-    8,  9,  11, 11, 9,  10, // Right face
-    12, 13, 15, 15, 13, 14, // Left face
-    19, 17, 18, 18, 17, 16, // Bottom face
-    20, 21, 22, 22, 21, 23  // Back face
-};
-
 // Init Game State, run the main loop
-int Engine::init(int argc, char *argv[]) {
+int Engine::init() {
   LOG("INITIALISATION STARTED\n");
 
   // First set the game state to uninitialised
   this->state = EngineState::UNINITED;
 
   // Run initialisation functions
-  this->init_command_line_args(argc, argv);
+  this->init_command_line_args();
 
   if (!init_opengl())
     return EXIT_FAILURE;
-
-  cam.init(60, 0.0001, 100000, glm::vec3(-40, 20, 30));
-  Shader shader;
-  shader.init(camera_vs, basic_fs, "");
-  shaders.push_back(shader);
-
-  va.init();
-
-  vb.init(vertices);
-
-  ib.init(indices, sizeof(indices));
-
-  va.add_vertex_buffer(&vb);
-  // va.addVertexBuffer(&vb1);
-  va.set_index_buffer(&ib);
-
-  Mesh mesh;
-  mesh.init(std::make_shared<VertexArray>(va));
-  // mesh.load(
-  //     "/home/bejker/Downloads/Survival_BackPack_2/Survival_BackPack_2.fbx");
-  Material mat;
-  mat.init(std::make_shared<Shader>(shader));
-  // TODO: Change this texture
-  Texture tex("face.png");
-  mat.set_texture(std::make_shared<Texture>(tex));
-  // model.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
-  // model1.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
-  // // model1.setPos(glm::vec3(1, 0, 1));
-  // model1.setRot(glm::vec3(90, 0, 0));
-  for (uint64_t i : rv::iota(0, 10)) {
-    Model m;
-    m.init(std::make_shared<Mesh>(mesh), std::make_unique<Material>(mat));
-    m.set_origin(glm::vec3((double)i * 21, 0, 0));
-    models.push_back(m);
-  }
 
   // If all initialisation functions run succesfully
   // set game state to inited
@@ -212,14 +49,17 @@ int Engine::init(int argc, char *argv[]) {
       true); // Second param install_callback=true will install
              // GLFW callbacks and chain to existing ones.
   ImGui_ImplOpenGL3_Init();
-  game.init();
 
   // Run the main loop
-  return run();
+  // return run();
+  return this->state;
 }
 
+void Engine::add_shader(Shader &shader) { this->shaders.push_back(shader); }
+void Engine::add_model(Model &model) { this->models.push_back(model); }
+
 // Parse and init cmd line args
-void Engine::init_command_line_args(int argc, char *argv[]) {
+void Engine::init_command_line_args() {
   LOG("INITIALISING Command Line Arguments\n");
   this->options.window_title = (char *)"test";
   this->options.window_width = 800;
@@ -267,7 +107,6 @@ bool Engine::init_opengl() {
 void Engine::terminate() {
   LOG("TERMINATION STARTED\n");
 
-  this->cam.~Camera();
   terminate_opengl();
 
   LOG("TERMINATION COMPELTE\n");
@@ -369,8 +208,6 @@ int Engine::update() {
   last_mouse_x = mouse_x;
   last_mouse_y = mouse_y;
 
-  game.update();
-
   for (auto &m : models)
     m.update();
 
@@ -446,7 +283,6 @@ int Engine::render() {
   for (auto &m : models) {
     m.render();
   }
-  game.render();
 
   // Rendering
   // (Your code clears your framebuffer, renders your other stuff etc.)

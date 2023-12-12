@@ -1,10 +1,10 @@
 
 #ifndef ENGINE_HPP
 #define ENGINE_HPP
-#include "../game.hpp"
 #include "logic/performence.hpp"
 #include "rendering/camera.hpp"
 #include "rendering/model.hpp"
+
 #include "window.hpp"
 
 class WindowOptions {
@@ -24,23 +24,27 @@ class Engine {
 public:
   // FUNCTIONS
   // init functions
-  int init(int argc, char *argv[]);
+  int init();
+  void add_shader(Shader &shader);
+  void add_model(Model &shader);
+
+  // main functions
+
+  int run();
+  int update();
+  int render();
+  Camera cam;
+  Window window;
 
 private:
-  void init_command_line_args(int argc, char *argv[]);
+  void init_command_line_args();
   bool init_opengl();
 
   // terminate functions
   void terminate();
   void terminate_opengl();
 
-  // main functions
-
-  int run();
-  int update();
-
   // render functions
-  int render();
   void render_imgui();
 
   // update functions
@@ -48,7 +52,6 @@ private:
 
   // variables
   WindowOptions options;
-  Window window;
   EngineState state;
 
   Performence perf;
@@ -59,13 +62,6 @@ private:
 
   std::vector<Model> models;
   std::vector<Shader> shaders;
-
-  VertexBuffer vb;
-  VertexBuffer vb1;
-  IndexBuffer ib;
-  VertexArray va;
-  Camera cam;
-  Game game;
 };
 
 #endif //__GAME_H
