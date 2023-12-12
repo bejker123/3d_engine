@@ -13,6 +13,10 @@ public:
   void render(Engine *engine);
 
 private:
+  VertexBuffer vb;
+  VertexBuffer vb1;
+  IndexBuffer ib;
+  VertexArray va;
 };
 
 #endif //__GAME_H
