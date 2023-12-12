@@ -1,11 +1,7 @@
 
 #ifndef ENGINE_HPP
 #define ENGINE_HPP
-#include "logic/performence.hpp"
-#include "rendering/camera.hpp"
-#include "rendering/model.hpp"
-
-#include "window.hpp"
+#include "prelude.hpp"
 #include <memory>
 
 class WindowOptions {
@@ -23,10 +19,10 @@ enum EngineState {
 
 class Engine {
 public:
+  Engine();
   ~Engine();
   // FUNCTIONS
   // init functions
-  int init();
   void add_shader(const char *v, const char *f, const char *g);
   void add_model(Model &shader);
   optional<shared_ptr<Shader const>> get_shader(const size_t idx) const;

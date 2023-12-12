@@ -35,6 +35,9 @@ public:
   void set_shader(const std::shared_ptr<const Shader> shader);
   std::shared_ptr<const Shader> get_shader() const;
   MaterialOptions *get_options();
+  std::optional<std::shared_ptr<Texture>> get_texture() {
+    return this->texture;
+  }
 
 private:
   std::shared_ptr<const Shader> shader;

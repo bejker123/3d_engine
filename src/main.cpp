@@ -1,3 +1,3 @@
-#include "game.hpp"
+#include "engine/engine.hpp"
 
-int main(int argc, char **argv) { Game game; }
+int main(int argc, char **argv) { Engine engine; }
