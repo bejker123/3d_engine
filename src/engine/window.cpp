@@ -16,8 +16,8 @@ bool Window::init(int width, int height, char *title, bool resizable,
 
   if (this->window == NULL) {
     LOG("FAILED TO INIT WINDOW\n");
-    const char *x = (const char *)malloc(1024);
-    memset((void *)x, '0', 1024);
+    const char *x = (const char *)malloc(1025);
+    memset((void *)x, '0', 1025);
     glfwGetError(&x);
     LOG(x);
     printf("\n");

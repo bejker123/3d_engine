@@ -1,6 +1,5 @@
 #ifndef __LOGGER_H
 #define __LOGGER_H
-#include <assert.h>
 #include <stdio.h>
 
 #define LOGGER_PREFIX "[LOGGER] "

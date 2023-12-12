@@ -5,6 +5,7 @@
 uint64_t counter = 0;
 const double max_timer = 1000000000.0; // 1 s in nanoseconds
 float timer = 0.0;
+constexpr bool collect_data_points = false;
 
 Performence::~Performence() {
   for (auto &i : data_points) {
@@ -23,7 +24,8 @@ void Performence::update() {
     delta = 0;
   if (timer >= max_timer) {
     fps = counter;
-    this->data_points.push_back(std::make_pair(fps, timer));
+    if (collect_data_points)
+      this->data_points.push_back(std::make_pair(fps, timer));
     counter = 0;
     timer = 0;
   } else {
