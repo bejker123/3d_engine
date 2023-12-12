@@ -3,18 +3,30 @@
 
 #include "engine/engine.hpp"
 #include "engine/rendering/ll/vertex_array.hpp"
+
+using EN = En::Engine *;
+
 class App {
 public:
   // FUNCTIONS
   // init functions
 
-  int init(En::Engine *engine);
-  int update(En::Engine *engine);
-  void render(En::Engine *engine);
+  int pre_init(EN engine);
+  int init(EN engine);
+
+  int pre_update(EN engine);
+  int update(EN engine);
+  int post_update(EN engine);
+
+  void pre_render(EN engine);
+  void render(EN engine);
+  void post_render(EN engine);
+
+  void pre_terminate(EN engine);
+  void terminate(EN engine);
 
 private:
   En::ll::VertexBuffer vb;
-  En::ll::VertexBuffer vb1;
   En::ll::IndexBuffer ib;
   En::ll::VertexArray va;
 };

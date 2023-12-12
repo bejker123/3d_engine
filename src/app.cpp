@@ -77,8 +77,11 @@ unsigned int indices[] = {
     19, 17, 18, 18, 17, 16, // Bottom face
     20, 21, 22, 22, 21, 23  // Back face
 };
+
+int App::pre_init(EN engine) { return 1; }
+
 // MAKE GAME INHERETE FROM ENGINE AND OVERLOAD GAME ORIENTED FUNCTIONS
-int App::init(En::Engine *engine) {
+int App::init(EN engine) {
   engine->cam.init(60, 0.0001, 100000, glm::vec3(-40, 20, 30));
   engine->add_shader(camera_vs, basic_fs, "");
   engine->add_shader(camera_vs, cool_fs, "");
@@ -113,6 +116,18 @@ int App::init(En::Engine *engine) {
   return 1;
 }
 
-int App::update(En::Engine *engine) { return 1; }
+int App::pre_update(EN engine) { return 1; }
 
-void App::render(En::Engine *engine) {}
+int App::update(EN engine) { return 1; }
+
+int App::post_update(EN engine) { return 1; }
+
+void App::pre_render(EN engine) {}
+
+void App::render(EN engine) {}
+
+void App::post_render(EN engine) {}
+
+void App::pre_terminate(EN engine) {}
+
+void App::terminate(EN engine) {}

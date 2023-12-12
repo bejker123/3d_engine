@@ -23,6 +23,7 @@ En::Engine::Engine() {
 
   // Run initialisation functions
   this->init_command_line_args();
+  app->pre_init(this);
 
   if (!init_opengl())
     return; // EXIT_FAILURE
@@ -132,7 +133,9 @@ void En::Engine::init_imgui() {
 En::Engine::~Engine() {
   LOG("TERMINATION STARTED\n");
 
+  app->pre_terminate(this);
   terminate_opengl();
+  app->terminate(this);
 
   LOG("TERMINATION COMPELTE\n");
 }
@@ -183,6 +186,7 @@ int En::Engine::handle_keyboard() {
 // before render function,
 // handles user input, updates phisics, logic, etc.
 int En::Engine::update() {
+  app->pre_update(this);
   this->perf.update();
   glfwPollEvents();
   bool cancel_mouse_delta = false;
@@ -216,10 +220,12 @@ int En::Engine::update() {
   last_mouse_x = mouse_x;
   last_mouse_y = mouse_y;
 
+  app->update(this);
+
   for (auto &m : models)
     m.update();
 
-  app->update(this);
+  app->post_update(this);
 
   return 1;
 }
@@ -282,6 +288,7 @@ void En::Engine::render_imgui() {
 
 // Rendering function running every frame, after update
 int En::Engine::render() {
+  app->pre_render(this);
   ll::opengl::clear_buffer();
 
   render_imgui();
@@ -301,5 +308,6 @@ int En::Engine::render() {
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
   // (Your code calls glfwSwapBuffers() etc.)
   this->window.swap_buffers();
+  app->post_render(this);
   return 1;
 }
