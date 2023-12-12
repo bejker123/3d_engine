@@ -10,33 +10,33 @@ namespace ranges = std::ranges;
 
 std::vector<VertexC> vertices{
     // Front Face 0
-    VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(0.0f, 0.0f),
+    VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(0.0f, 1.0f),
             glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(0.0f, 1),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(1, 1),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(1, 0.0f),
-            glm::vec4(1, 1, 0, 1)),
-
-    // Top Fglm::vec3(ace 4
-    VertexC(glm::vec3(-1, 1, -1), glm::vec3(1), glm::vec2(0.0f, 0.0f),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(1, 0.0f),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(0.0f, 1),
-            glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(1, 1),
-            glm::vec4(1, 1, 0, 1)),
-
-    // Rightglm::vec3( Face 8
-    VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(1, 1),
+    VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(0.0f, 0),
             glm::vec4(1, 1, 0, 1)),
     VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(1, 0),
             glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(0.0f, 0.0f),
+    VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(1, 1),
             glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(0, 1.0f),
+
+    // Top Fglm::vec3(ace 4
+    VertexC(glm::vec3(-1, 1, -1), glm::vec3(1), glm::vec2(0.0f, 1.0f),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(1, 1.0f),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(0.0f, 0),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(1, 0),
+            glm::vec4(1, 1, 0, 1)),
+
+    // Rightglm::vec3( Face 8
+    VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(0, 1),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(0, 0),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(1.0f, 0.0f),
+            glm::vec4(1, 1, 0, 1)),
+    VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(1, 1.0f),
             glm::vec4(1, 1, 0, 1)),
 
     // Left glm::vec3(Face 12
@@ -52,9 +52,9 @@ std::vector<VertexC> vertices{
     // Bottoglm::vec3(m Face 16
     VertexC(glm::vec3(-1, -1, -1), glm::vec3(1), glm::vec2(1.0f, 0.0f),
             glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(0.0f, 0),
+    VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(1.0f, 1),
             glm::vec4(1, 1, 0, 1)),
-    VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(1, 1),
+    VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(0, 0),
             glm::vec4(1, 1, 0, 1)),
     VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(0, 1.0f),
             glm::vec4(1, 1, 0, 1)),
@@ -85,7 +85,7 @@ Game::Game() {
 
   this->engine->cam.init(60, 0.0001, 100000, glm::vec3(-40, 20, 30));
   Shader shader;
-  shader.init(camera_vs, basic_fs, "");
+  shader.init(camera_vs, cool_fs, "");
   this->engine->add_shader(shader);
 
   va.init();

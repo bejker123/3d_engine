@@ -51,5 +51,16 @@ const char *basic_fs = "#version 460 core\n"
                        "FragColor = texture(tex,vs_texcoord)* frag_color;\n"
                        // "FragColor = frag_color;\n"
                        "}\0";
+const char *cool_fs = "#version 460 core\n"
+                      "in vec4 frag_color;\n"
+                      "in vec2 vs_texcoord;\n"
+                      "out vec4 FragColor;\n"
+                      "uniform sampler2D tex;"
+                      "void main(){\n"
+                      // "FragColor = vec4(0.3f,1.f,0.5f,1.f);\n"
+                      "FragColor = texture(tex,vs_texcoord) * frag_color * "
+                      "vec4(vs_texcoord,vs_texcoord);\n"
+                      // "FragColor = frag_color;\n"
+                      "}\0";
 
 #endif
