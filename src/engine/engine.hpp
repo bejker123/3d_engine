@@ -39,9 +39,10 @@ public:
 private:
   void init_command_line_args();
   bool init_opengl();
+  void init_imgui();
 
   // terminate functions
-  void terminate();
+  ~Engine();
   void terminate_opengl();
 
   // render functions

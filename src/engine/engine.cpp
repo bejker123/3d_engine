@@ -33,22 +33,7 @@ int Engine::init() {
   this->state = EngineState::OK;
   this->paused = false;
 
-  // Setup Dear ImGui context
-  IMGUI_CHECKVERSION();
-  ImGui::CreateContext();
-  ImGuiIO &io = ImGui::GetIO();
-  // ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-  // io.ConfigFlags |=
-  //     ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
-  // io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // IF using Docking
-  // Branch
-
-  // Setup Platform/Renderer backends
-  ImGui_ImplGlfw_InitForOpenGL(
-      this->window.raw(),
-      true); // Second param install_callback=true will install
-             // GLFW callbacks and chain to existing ones.
-  ImGui_ImplOpenGL3_Init();
+  this->init_imgui();
 
   // Run the main loop
   // return run();
@@ -83,7 +68,7 @@ bool Engine::init_opengl() {
   if (!this->window.init(
           this->options.window_width, this->options.window_height,
           this->options.window_title, this->options.window_resizable,
-          this->options.window_fullscreen)) {
+          this->options.window_fullscreen, true)) {
     this->terminate_opengl();
   }
   window.hide_cursor();
@@ -104,7 +89,26 @@ bool Engine::init_opengl() {
   return true;
 }
 
-void Engine::terminate() {
+void Engine::init_imgui() {
+  // Setup Dear ImGui context
+  IMGUI_CHECKVERSION();
+  ImGui::CreateContext();
+  ImGuiIO &io = ImGui::GetIO();
+  // ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+  // io.ConfigFlags |=
+  //     ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
+  // io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // IF using Docking
+  // Branch
+
+  // Setup Platform/Renderer backends
+  ImGui_ImplGlfw_InitForOpenGL(
+      this->window.raw(),
+      true); // Second param install_callback=true will install
+             // GLFW callbacks and chain to existing ones.
+  ImGui_ImplOpenGL3_Init();
+}
+
+Engine::~Engine() {
   LOG("TERMINATION STARTED\n");
 
   terminate_opengl();
