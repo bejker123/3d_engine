@@ -39,8 +39,6 @@ Engine::Engine() {
   // Run the main loop
   // return run();
   app->init(this);
-  while (this->update() && !this->window.should_close())
-    this->render();
   // return this->state;
 }
 
@@ -178,6 +176,12 @@ int Engine::handle_keyboard() {
     cam.add_pos(glm::vec3(cam_speed * this->perf.get_delta()) *
                 -cam.get_world_up());
   return 1;
+}
+
+int Engine::run() {
+  while (this->update() && !this->window.should_close())
+    this->render();
+  return 0;
 }
 
 // Update loop running every frame,

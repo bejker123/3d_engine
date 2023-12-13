@@ -1,3 +1,6 @@
 #include "engine/engine.hpp"
 
-int main(int argc, char **argv) { En::Engine engine; }
+int main(int argc, char **argv) {
+  En::Engine engine;
+  return engine.run();
+}
