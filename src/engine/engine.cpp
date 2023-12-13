@@ -173,7 +173,8 @@ int Engine::handle_keyboard() {
                 cam.get_right());
 
   if (!this->keyboard.get_key_released(Key::Code::KEY_SPACE))
-    cam.add_pos(glm::vec3(cam_speed * this->perf.get_delta()) * cam.get_up());
+    cam.add_pos(glm::vec3(cam_speed * this->perf.get_delta()) *
+                cam.get_world_up());
   if (!this->keyboard.get_key_released(Key::Code::KEY_LEFT_CONTROL))
     cam.add_pos(glm::vec3(cam_speed * this->perf.get_delta()) *
                 -cam.get_world_up());
