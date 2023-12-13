@@ -97,14 +97,15 @@ int App::init(EN engine) {
   va.set_index_buffer(&ib);
 
   En::Mesh mesh;
-  mesh.init(make_shared<En::ll::VertexArray>(va));
+  mesh.init(std::make_shared<En::ll::VertexArray>(va));
   // mesh.load(
   //     "/home/bejker/Downloads/Survival_BackPack_2/Survival_BackPack_2.fbx");
   En::Material mat;
   mat.init(engine->get_shader(0).value());
   // TODO: Change this texture
   // Creating the texture "on the fly" makes is appear propely
-  mat.set_texture(shared_ptr<En::ll::Texture>(new En::ll::Texture("face.png")));
+  mat.set_texture(
+      std::shared_ptr<En::ll::Texture>(new En::ll::Texture("face.png")));
 
   for (uint64_t i : rv::iota(0, 10)) {
     En::Model m;

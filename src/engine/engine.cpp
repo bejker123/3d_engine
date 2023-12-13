@@ -1,4 +1,3 @@
-
 #include "engine.hpp"
 #include "rendering/ll/opengl.hpp"
 
@@ -11,7 +10,7 @@
 #include <ranges>
 #include <thread>
 
-unique_ptr<App> app;
+std::unique_ptr<App> app;
 namespace rv = std::ranges::views;
 
 // Init Game State, run the main loop
@@ -37,28 +36,28 @@ En::Engine::Engine() {
 
   // Run the main loop
   // return run();
-  app = unique_ptr<App>(new App());
+  app = std::unique_ptr<App>(new App());
   app->init(this);
   while (this->update() && !this->window.should_close())
     this->render();
   // return this->state;
 }
 
-vector<int> ms_idxs;
+std::vector<int> ms_idxs;
 void En::Engine::add_shader(const char *v, const char *f, const char *g) {
-  this->shaders.push_back(shared_ptr<ll::Shader>(new ll::Shader(v, f, g)));
+  this->shaders.push_back(std::shared_ptr<ll::Shader>(new ll::Shader(v, f, g)));
 }
 void En::Engine::add_model(Model &model) {
   this->models.push_back(model);
   ms_idxs.push_back(0);
 }
 
-optional<shared_ptr<const En::ll::Shader>>
+std::optional<std::shared_ptr<const En::ll::Shader>>
 En::Engine::get_shader(const size_t idx) const {
   if (this->get_shaders_count() - 1 < idx || this->get_shaders_count() == 0)
-    return nullopt;
+    return std::nullopt;
   auto ret = this->shaders.at(idx);
-  return optional(ret);
+  return std::optional(ret);
 }
 
 const size_t En::Engine::get_shaders_count() const {

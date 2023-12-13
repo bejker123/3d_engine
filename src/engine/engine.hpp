@@ -27,7 +27,8 @@ public:
   // init functions
   void add_shader(const char *v, const char *f, const char *g);
   void add_model(Model &shader);
-  optional<shared_ptr<ll::Shader const>> get_shader(const size_t idx) const;
+  std::optional<std::shared_ptr<ll::Shader const>>
+  get_shader(const size_t idx) const;
   const size_t get_shaders_count() const;
 
   // main functions
@@ -63,7 +64,7 @@ private:
   int last_tab_pressed = 0;
 
   std::vector<Model> models;
-  std::vector<shared_ptr<ll::Shader>> shaders;
+  std::vector<std::shared_ptr<ll::Shader>> shaders;
 };
 } // namespace En
 
