@@ -33,6 +33,7 @@ void MaterialOptions::bind() {
   // Set Front Face
   glFrontFace(GL_CCW);
 
+  glDepthMask(GL_TRUE);
   // Set Backface Culling
   if (this->cull_backfaces) {
     glEnable(GL_CULL_FACE);
@@ -44,9 +45,10 @@ void MaterialOptions::bind() {
   glPolygonMode(GL_FRONT_AND_BACK, this->polygon_mode);
 
   // Set Depth Drawing Mode
-  if (this->depth)
+  if (this->depth) {
     glEnable(GL_DEPTH_TEST);
-  else
+    glDepthFunc(GL_LESS);
+  } else
     glDisable(GL_DEPTH_TEST);
 
   // Set Blending Mode

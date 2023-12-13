@@ -153,10 +153,10 @@ int Engine::handle_keyboard() {
   if (this->keyboard.get_key_pressed(Key::Code::KEY_ESCAPE))
     this->window.set_should_close(true);
 
-  float cam_speed = 10;
+  float cam_speed = 20;
 
   if (!this->keyboard.get_key_released(Key::Code::KEY_LEFT_SHIFT))
-    cam_speed = 3;
+    cam_speed = 40;
 
   if (!this->keyboard.get_key_released(Key::Code::KEY_W))
     cam.add_pos(glm::vec3(cam_speed * this->perf.get_delta()) *

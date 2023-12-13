@@ -80,7 +80,9 @@ int App::pre_init(EN engine) { return 1; }
 
 // MAKE GAME INHERETE FROM ENGINE AND OVERLOAD GAME ORIENTED FUNCTIONS
 int App::init(EN engine) {
-  engine->cam.init(60, 0.0001, 100000, glm::vec3(-40, 20, 30));
+  // Reamember to set the camera's 'z-near' (near plane) as far as possible (1
+  // is good enough)
+  engine->cam.init(60, 1., 100000, glm::vec3(-40, 20, 30));
   engine->add_shader(camera_vs, basic_fs, "");
   engine->add_shader(camera_vs, cool_fs, "");
 
