@@ -155,26 +155,26 @@ int Engine::handle_keyboard() {
 
   float cam_speed = 10;
 
-  if (this->keyboard.get_key_pressed(Key::Code::KEY_LEFT_SHIFT))
+  if (!this->keyboard.get_key_released(Key::Code::KEY_LEFT_SHIFT))
     cam_speed = 3;
 
-  if (this->keyboard.get_key_pressed(Key::Code::KEY_W))
+  if (!this->keyboard.get_key_released(Key::Code::KEY_W))
     cam.add_pos(glm::vec3(cam_speed * this->perf.get_delta()) *
                 cam.get_front());
-  if (this->keyboard.get_key_pressed(Key::Code::KEY_S))
+  if (!this->keyboard.get_key_released(Key::Code::KEY_S))
     cam.add_pos(glm::vec3(cam_speed * this->perf.get_delta()) *
                 -cam.get_front());
 
-  if (this->keyboard.get_key_pressed(Key::Code::KEY_A))
+  if (!this->keyboard.get_key_released(Key::Code::KEY_A))
     cam.add_pos(glm::vec3(cam_speed * this->perf.get_delta()) *
                 -cam.get_right());
-  if (this->keyboard.get_key_pressed(Key::Code::KEY_D))
+  if (!this->keyboard.get_key_released(Key::Code::KEY_D))
     cam.add_pos(glm::vec3(cam_speed * this->perf.get_delta()) *
                 cam.get_right());
 
-  if (this->keyboard.get_key_pressed(Key::Code::KEY_SPACE))
+  if (!this->keyboard.get_key_released(Key::Code::KEY_SPACE))
     cam.add_pos(glm::vec3(cam_speed * this->perf.get_delta()) * cam.get_up());
-  if (this->keyboard.get_key_pressed(Key::Code::KEY_LEFT_CONTROL))
+  if (!this->keyboard.get_key_released(Key::Code::KEY_LEFT_CONTROL))
     cam.add_pos(glm::vec3(cam_speed * this->perf.get_delta()) *
                 -cam.get_world_up());
   return 1;
