@@ -23,6 +23,7 @@ Engine::Engine() {
 
   // Run initialisation functions
   this->init_command_line_args();
+  app = std::unique_ptr<App>(new App());
   app->pre_init(this);
 
   if (!init_opengl())
@@ -37,7 +38,6 @@ Engine::Engine() {
 
   // Run the main loop
   // return run();
-  app = std::unique_ptr<App>(new App());
   app->init(this);
   while (this->update() && !this->window.should_close())
     this->render();
