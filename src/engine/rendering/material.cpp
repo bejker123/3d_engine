@@ -108,3 +108,6 @@ std::shared_ptr<const En::ll::Shader> En::Material::get_shader() const {
   return this->shader;
 }
 En::MaterialOptions *En::Material::get_options() { return &this->options; }
+std::optional<std::shared_ptr<En::ll::Texture>> En::Material::get_texture() {
+  return this->texture;
+}
