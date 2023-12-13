@@ -1,5 +1,5 @@
 #include "vertex_array.hpp"
-#include "../../logger.hpp"
+#include "../../io/logger.hpp"
 #include "buffers.hpp"
 #include <cstdio>
 

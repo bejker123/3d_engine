@@ -1,5 +1,5 @@
 #include "window.hpp"
-#include "logger.hpp"
+#include "io/logger.hpp"
 #include <GLFW/glfw3.h>
 #include <cstdlib>
 #include <cstring>
