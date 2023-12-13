@@ -12,8 +12,9 @@ namespace ll {
 
 static std::map<std::string, uint32_t> hashes;
 
-ll::Texture::Texture(std::string file, GLenum type) {
-  this->type = type;
+Texture::Texture(const std::string file, const bool transparent,
+                 const GLenum type)
+    : type(type), transparent(transparent) {
   this->load_from_file(file);
 }
 
@@ -63,8 +64,9 @@ void ll::Texture::load_from_file(std::string file) {
   glTexParameteri(this->type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
   if (data != nullptr) {
-    glTexImage2D(this->type, 0, GL_RGB, this->width, this->height, 0, GL_RGBA,
-                 GL_UNSIGNED_BYTE, data);
+    auto internal_format = this->transparent ? GL_RGBA : GL_RGB;
+    glTexImage2D(this->type, 0, internal_format, this->width, this->height, 0,
+                 GL_RGBA, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(this->type);
     // std::cout << "Texture loaded: " << file << std::endl;
     LOG("Texture Loaded, Debug Info:\n\tSize: (%d,%d)\n\tID: %d\n", this->width,
