@@ -199,9 +199,10 @@ int Engine::update() {
   if ((this->keyboard.get_key_pressed(Key::Code::KEY_TAB)) &&
       last_tab_pressed == 0) {
     this->paused = !paused;
-    if (this->paused)
+    if (this->paused) {
       this->window.show_cursor();
-    else {
+    } else {
+      ImGui::SetWindowFocus(nullptr);
       this->window.hide_cursor();
       cancel_mouse_delta = true;
     }
@@ -259,35 +260,40 @@ void Engine::render_imgui() {
   }
 
   for (auto i : rv::iota((uint64_t)0, models.size())) {
+    ImGui::BeginGroup();
     if (ImGui::CollapsingHeader(("models[" + std::to_string(i) + "]").data())) {
-      ImGui::BeginGroup();
-      if (ImGui::Button("Teleport")) {
+      if (ImGui::Button(("Teleport " + std::to_string(i)).data())) {
         *cam.get_pos() = *models[i].get_pos();
       }
-      ImGui::Checkbox("Cull Backfaces",
+      ImGui::Checkbox(("Cull Backfaces " + std::to_string(i)).data(),
                       &models[i].get_material()->get_options()->cull_backfaces);
-      ImGui::Checkbox("Textured",
+      ImGui::Checkbox(("Textured " + std::to_string(i)).data(),
                       &models[i].get_material()->get_options()->texture);
-      ImGui::RadioButton("Lines",
+      ImGui::RadioButton(("Lines " + std::to_string(i)).data(),
                          &models[i].get_material()->get_options()->polygon_mode,
                          GL_LINE);
-      ImGui::RadioButton("Fill",
+      ImGui::RadioButton(("Fill " + std::to_string(i)).data(),
                          &models[i].get_material()->get_options()->polygon_mode,
                          GL_FILL);
-      ImGui::RadioButton("Point",
+      ImGui::RadioButton(("Point" + std::to_string(i)).data(),
                          &models[i].get_material()->get_options()->polygon_mode,
                          GL_POINT);
 
-      ImGui::SliderFloat("Pos X", &models[i].get_pos()->x, -180, 180);
-      ImGui::SliderFloat("Pos Y", &models[i].get_pos()->y, -180, 180);
-      ImGui::SliderFloat("Pos Z", &models[i].get_pos()->z, -180, 180);
+      ImGui::SliderFloat(("Pos X " + std::to_string(i)).data(),
+                         &models[i].get_pos()->x, -180, 180);
+      ImGui::SliderFloat(("Pos Y " + std::to_string(i)).data(),
+                         &models[i].get_pos()->y, -180, 180);
+      ImGui::SliderFloat(("Pos Z " + std::to_string(i)).data(),
+                         &models[i].get_pos()->z, -180, 180);
 
-      ImGui::SliderFloat("Rotation X", &models[i].get_rot()->x, -180, 180);
-      ImGui::SliderFloat("Rotation Y", &models[i].get_rot()->y, -180, 180);
-      ImGui::SliderFloat("Rotation Z", &models[i].get_rot()->z, -180, 180);
-
-      ImGui::EndGroup();
+      ImGui::SliderFloat(("Rotation X " + std::to_string(i)).data(),
+                         &models[i].get_rot()->x, -180, 180);
+      ImGui::SliderFloat(("Rotation Y " + std::to_string(i)).data(),
+                         &models[i].get_rot()->y, -180, 180);
+      ImGui::SliderFloat(("Rotation Z " + std::to_string(i)).data(),
+                         &models[i].get_rot()->z, -180, 180);
     }
+    ImGui::EndGroup();
   }
 }
 
