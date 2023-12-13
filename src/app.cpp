@@ -1,6 +1,4 @@
 #include "app.hpp"
-#include "engine/engine.hpp"
-#include "engine/prelude.hpp"
 #include "engine/shaders.hpp"
 #include <memory>
 #include <ranges>

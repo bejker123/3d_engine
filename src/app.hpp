@@ -2,8 +2,6 @@
 #define __GAME_H
 
 #include "engine/engine.hpp"
-#include "engine/rendering/ll/vertex_array.hpp"
-
 using EN = En::Engine *;
 
 class App {
