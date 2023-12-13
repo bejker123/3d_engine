@@ -29,6 +29,8 @@ Engine::Engine() {
   if (!init_opengl())
     return; // EXIT_FAILURE
 
+  this->keyboard = Keyboard(this->window.raw());
+
   // If all initialisation functions run succesfully
   // set game state to inited
   this->state = EngineState::OK;
@@ -148,31 +150,31 @@ void Engine::terminate_opengl() {
 // Handles keyboard user input
 // runs every frame
 int Engine::handle_keyboard() {
-  if (this->window.get_key(GLFW_KEY_ESCAPE) == GLFW_PRESS)
+  if (this->keyboard.get_key_pressed(Key::Code::KEY_ESCAPE))
     this->window.set_should_close(true);
 
   float cam_speed = 10;
 
-  if (this->window.get_key(GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+  if (this->keyboard.get_key_pressed(Key::Code::KEY_LEFT_SHIFT))
     cam_speed = 3;
 
-  if (this->window.get_key(GLFW_KEY_W) == GLFW_PRESS)
+  if (this->keyboard.get_key_pressed(Key::Code::KEY_W))
     cam.add_pos(glm::vec3(cam_speed * this->perf.get_delta()) *
                 cam.get_front());
-  if (this->window.get_key(GLFW_KEY_S) == GLFW_PRESS)
+  if (this->keyboard.get_key_pressed(Key::Code::KEY_S))
     cam.add_pos(glm::vec3(cam_speed * this->perf.get_delta()) *
                 -cam.get_front());
 
-  if (this->window.get_key(GLFW_KEY_A) == GLFW_PRESS)
+  if (this->keyboard.get_key_pressed(Key::Code::KEY_A))
     cam.add_pos(glm::vec3(cam_speed * this->perf.get_delta()) *
                 -cam.get_right());
-  if (this->window.get_key(GLFW_KEY_D) == GLFW_PRESS)
+  if (this->keyboard.get_key_pressed(Key::Code::KEY_D))
     cam.add_pos(glm::vec3(cam_speed * this->perf.get_delta()) *
                 cam.get_right());
 
-  if (this->window.get_key(GLFW_KEY_SPACE) == GLFW_PRESS)
+  if (this->keyboard.get_key_pressed(Key::Code::KEY_SPACE))
     cam.add_pos(glm::vec3(cam_speed * this->perf.get_delta()) * cam.get_up());
-  if (this->window.get_key(GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+  if (this->keyboard.get_key_pressed(Key::Code::KEY_LEFT_CONTROL))
     cam.add_pos(glm::vec3(cam_speed * this->perf.get_delta()) *
                 -cam.get_world_up());
   return 1;
@@ -193,7 +195,7 @@ int Engine::update() {
   glfwPollEvents();
   bool cancel_mouse_delta = false;
 
-  if ((this->window.get_key(GLFW_KEY_TAB) == GLFW_PRESS) &&
+  if ((this->keyboard.get_key_pressed(Key::Code::KEY_TAB)) &&
       last_tab_pressed == 0) {
     this->paused = !paused;
     if (this->paused)

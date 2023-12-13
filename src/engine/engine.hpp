@@ -58,6 +58,7 @@ private:
   EngineState state;
 
   Performence perf;
+  Keyboard keyboard;
 
   bool paused;
   float last_mouse_x = 0, last_mouse_y = 0;

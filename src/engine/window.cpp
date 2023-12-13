@@ -50,8 +50,6 @@ void Window::swap_buffers() const { glfwSwapBuffers(this->window); };
 
 GLFWwindow *Window::raw() const { return this->window; };
 
-int Window::get_key(int key) const { return glfwGetKey(this->window, key); }
-
 std::tuple<int, int> Window::get_dimensions() {
   int frameBufferWidth, frameBufferHeight;
 

@@ -19,8 +19,6 @@ public:
 
   GLFWwindow *raw() const;
 
-  int get_key(int key) const;
-
   std::tuple<int, int> get_dimensions();
 
   std::tuple<double, double> get_mouse_pos();
