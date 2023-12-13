@@ -12,9 +12,10 @@
 
 std::unique_ptr<App> app;
 namespace rv = std::ranges::views;
+namespace En {
 
 // Init Game State, run the main loop
-En::Engine::Engine() {
+Engine::Engine() {
   LOG("INITIALISATION STARTED\n");
 
   // First set the game state to uninitialised
@@ -44,28 +45,26 @@ En::Engine::Engine() {
 }
 
 std::vector<int> ms_idxs;
-void En::Engine::add_shader(const char *v, const char *f, const char *g) {
+void Engine::add_shader(const char *v, const char *f, const char *g) {
   this->shaders.push_back(std::shared_ptr<ll::Shader>(new ll::Shader(v, f, g)));
 }
-void En::Engine::add_model(Model &model) {
+void Engine::add_model(Model &model) {
   this->models.push_back(model);
   ms_idxs.push_back(0);
 }
 
-std::optional<std::shared_ptr<const En::ll::Shader>>
-En::Engine::get_shader(const size_t idx) const {
+std::optional<std::shared_ptr<const ll::Shader>>
+Engine::get_shader(const size_t idx) const {
   if (this->get_shaders_count() - 1 < idx || this->get_shaders_count() == 0)
     return std::nullopt;
   auto ret = this->shaders.at(idx);
   return std::optional(ret);
 }
 
-const size_t En::Engine::get_shaders_count() const {
-  return this->shaders.size();
-}
+const size_t Engine::get_shaders_count() const { return this->shaders.size(); }
 
 // Parse and init cmd line args
-void En::Engine::init_command_line_args() {
+void Engine::init_command_line_args() {
   LOG("INITIALISING Command Line Arguments\n");
   this->options.window_title = (char *)"test";
   this->options.window_width = 800;
@@ -75,7 +74,7 @@ void En::Engine::init_command_line_args() {
 }
 
 // Initialise OpenGL, return true if successful
-bool En::Engine::init_opengl() {
+bool Engine::init_opengl() {
   LOG("INITIALISING OPENGL\n");
   LOG("INITIALISING GLFW\n");
   if (!ll::opengl::setup()) {
@@ -110,7 +109,7 @@ bool En::Engine::init_opengl() {
   return true;
 }
 
-void En::Engine::init_imgui() {
+void Engine::init_imgui() {
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
@@ -129,7 +128,7 @@ void En::Engine::init_imgui() {
   ImGui_ImplOpenGL3_Init();
 }
 
-En::Engine::~Engine() {
+Engine::~Engine() {
   LOG("TERMINATION STARTED\n");
 
   app->pre_terminate(this);
@@ -139,7 +138,7 @@ En::Engine::~Engine() {
   LOG("TERMINATION COMPELTE\n");
 }
 
-void En::Engine::terminate_opengl() {
+void Engine::terminate_opengl() {
   LOG("TERMINATING OPENGL\n");
   this->window.~Window();
   ImGui_ImplOpenGL3_Shutdown();
@@ -150,7 +149,7 @@ void En::Engine::terminate_opengl() {
 
 // Handles keyboard user input
 // runs every frame
-int En::Engine::handle_keyboard() {
+int Engine::handle_keyboard() {
   if (this->window.get_key(GLFW_KEY_ESCAPE) == GLFW_PRESS)
     this->window.set_should_close(true);
 
@@ -184,7 +183,7 @@ int En::Engine::handle_keyboard() {
 // Update loop running every frame,
 // before render function,
 // handles user input, updates phisics, logic, etc.
-int En::Engine::update() {
+int Engine::update() {
   app->pre_update(this);
   this->perf.update();
   glfwPollEvents();
@@ -229,7 +228,7 @@ int En::Engine::update() {
   return 1;
 }
 
-void En::Engine::render_imgui() {
+void Engine::render_imgui() {
   // Start the Dear ImGui frame
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
@@ -286,7 +285,7 @@ void En::Engine::render_imgui() {
 }
 
 // Rendering function running every frame, after update
-int En::Engine::render() {
+int Engine::render() {
   app->pre_render(this);
   ll::opengl::clear_buffer();
 
@@ -310,3 +309,5 @@ int En::Engine::render() {
   app->post_render(this);
   return 1;
 }
+
+} // namespace En

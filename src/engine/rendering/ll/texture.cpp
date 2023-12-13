@@ -7,29 +7,32 @@
 #include "../../../stb/stb_image.h"
 #include "../../logger.hpp"
 
+namespace En {
+namespace ll {
+
 static std::map<std::string, uint32_t> hashes;
 
-En::ll::Texture::Texture(std::string file, GLenum type) {
+ll::Texture::Texture(std::string file, GLenum type) {
   this->type = type;
   this->load_from_file(file);
 }
 
-En::ll::Texture::~Texture() { glDeleteTextures(1, &this->id); }
+ll::Texture::~Texture() { glDeleteTextures(1, &this->id); }
 
-GLuint En::ll::Texture::get_id() const { return this->id; }
+GLuint ll::Texture::get_id() const { return this->id; }
 
-void En::ll::Texture::bind(const GLuint texture_unit) {
+void ll::Texture::bind(const GLuint texture_unit) {
   glActiveTexture(GL_TEXTURE0 + texture_unit);
   glBindTexture(this->type, this->id);
 }
 
-void En::ll::Texture::unbind(const uint32_t type) {
+void ll::Texture::unbind(const uint32_t type) {
   // Fix debug info:
   //  glActiveTexture(0);
   glBindTexture(type, 0);
   // glDisable(type);
 }
-void En::ll::Texture::load_from_file(std::string file) {
+void ll::Texture::load_from_file(std::string file) {
   if (this->id) {
     glDeleteTextures(1, &this->id);
   }
@@ -76,3 +79,6 @@ void En::ll::Texture::load_from_file(std::string file) {
   glBindTexture(this->type, 0);
   stbi_image_free(data);
 }
+
+} // namespace ll
+} // namespace En

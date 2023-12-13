@@ -3,7 +3,10 @@
 #include "buffers.hpp"
 #include <cstdio>
 
-void En::ll::VertexArray::init() {
+namespace En {
+namespace ll {
+
+void VertexArray::init() {
   glGenVertexArrays(1, &this->id);
   glBindVertexArray(this->id);
   this->elements = 0;
@@ -12,7 +15,7 @@ void En::ll::VertexArray::init() {
   this->inited = true;
 }
 
-void En::ll::VertexArray::add_vertex_buffer(VertexBuffer *vb) {
+void VertexArray::add_vertex_buffer(VertexBuffer *vb) {
   assert(this->inited == true);
 
   this->bind();
@@ -112,7 +115,7 @@ void En::ll::VertexArray::add_vertex_buffer(VertexBuffer *vb) {
   this->count += vb->count;
 }
 
-void En::ll::VertexArray::set_index_buffer(IndexBuffer *ib) {
+void VertexArray::set_index_buffer(IndexBuffer *ib) {
   assert(this->inited == true);
   this->bind();
   ib->bind();
@@ -121,9 +124,12 @@ void En::ll::VertexArray::set_index_buffer(IndexBuffer *ib) {
   this->elements = ib->elements;
 }
 
-void En::ll::VertexArray::bind() { glBindVertexArray(this->id); }
-void En::ll::VertexArray::unbind() { glBindVertexArray(0); }
+void VertexArray::bind() { glBindVertexArray(this->id); }
+void VertexArray::unbind() { glBindVertexArray(0); }
 
-GLuint En::ll::VertexArray::get_id() const { return this->id; }
-uint32_t En::ll::VertexArray::get_elements() const { return this->elements; }
-uint32_t En::ll::VertexArray::get_count() const { return this->count; }
+GLuint VertexArray::get_id() const { return this->id; }
+uint32_t VertexArray::get_elements() const { return this->elements; }
+uint32_t VertexArray::get_count() const { return this->count; }
+
+} // namespace ll
+} // namespace En

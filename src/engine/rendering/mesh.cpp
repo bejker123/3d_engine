@@ -2,7 +2,9 @@
 #include "ll/buffers.hpp"
 #include "ll/vertex_array.hpp"
 
-void En::Mesh::render() {
+namespace En {
+
+void Mesh::render() {
   for (auto i : this->vas) {
     i->bind();
     if (i->get_elements() >
@@ -14,14 +16,16 @@ void En::Mesh::render() {
   }
 }
 
-En::Mesh::Mesh(std::vector<ll::Vertex> vertices,
-               std::vector<unsigned int> indices) {
+Mesh::Mesh(std::vector<ll::Vertex> vertices,
+           std::vector<unsigned int> indices) {
   ll::VertexArray va;
   va.init();
   ll::VertexBuffer vb;
   vb.init(vertices);
   va.add_vertex_buffer(&vb);
 }
-void En::Mesh::init(std::shared_ptr<ll::VertexArray> va) {
+void Mesh::init(std::shared_ptr<ll::VertexArray> va) {
   this->vas.push_back(va);
 };
+
+} // namespace En

@@ -1,14 +1,16 @@
 #include "camera.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
-void En::Camera::init(float fov, float znear, float zfar, glm::vec3 pos) {
+namespace En {
+
+void Camera::init(float fov, float znear, float zfar, glm::vec3 pos) {
   this->fov = fov;
   this->znear = znear;
   this->zfar = zfar;
   this->pos = pos;
 }
 
-void En::Camera::calculate_proj_matrix(int fbw, int fbh) {
+void Camera::calculate_proj_matrix(int fbw, int fbh) {
 
   this->proj_matrix = glm::mat4(1.f);
   this->proj_matrix =
@@ -16,12 +18,12 @@ void En::Camera::calculate_proj_matrix(int fbw, int fbh) {
                        this->znear, this->zfar);
 }
 
-void En::Camera::calculate_view_matrix() {
+void Camera::calculate_view_matrix() {
   // this->updateCameraVectors();
   this->view_matrix = glm::lookAt(this->pos, this->pos + this->front, this->up);
 }
 
-void En::Camera::upload_to_shader(ll::Shader *shader, Window *win) {
+void Camera::upload_to_shader(ll::Shader *shader, Window *win) {
 
   this->update_vectors();
 
@@ -35,10 +37,10 @@ void En::Camera::upload_to_shader(ll::Shader *shader, Window *win) {
   shader->set_mat4fv(this->proj_matrix, "ProjectionMatrix");
   shader->set_vec3f(this->pos, "cameraPos");
 }
-void En::Camera::add_pos(glm::vec3 pos) { this->pos += pos; }
+void Camera::add_pos(glm::vec3 pos) { this->pos += pos; }
 
-void En::Camera::update_mosue_input(const float &dt, const double &offsetX,
-                                    const double &offsetY) {
+void Camera::update_mosue_input(const float &dt, const double &offsetX,
+                                const double &offsetY) {
   if (offsetX == 0 && offsetY == 0)
     return;
   // Update pitch yaw and roll
@@ -57,17 +59,17 @@ void En::Camera::update_mosue_input(const float &dt, const double &offsetX,
   // cout << "Yaw:" << this->yaw << " Pitch:" << this->pitch << endl;
 }
 
-const glm::vec3 En::Camera::get_front() const { return this->front; }
-const glm::vec3 En::Camera::get_right() const { return this->right; }
-const glm::vec3 En::Camera::get_up() const { return this->up; }
-const glm::vec3 En::Camera::get_world_up() const { return this->world_up; }
-glm::vec3 *En::Camera::get_pos() { return &this->pos; };
-float *En::Camera::get_fov() { return &this->fov; };
-float *En::Camera::get_pitch() { return &this->pitch; };
-float *En::Camera::get_yaw() { return &this->yaw; };
-float *En::Camera::get_roll() { return &this->roll; };
+const glm::vec3 Camera::get_front() const { return this->front; }
+const glm::vec3 Camera::get_right() const { return this->right; }
+const glm::vec3 Camera::get_up() const { return this->up; }
+const glm::vec3 Camera::get_world_up() const { return this->world_up; }
+glm::vec3 *Camera::get_pos() { return &this->pos; };
+float *Camera::get_fov() { return &this->fov; };
+float *Camera::get_pitch() { return &this->pitch; };
+float *Camera::get_yaw() { return &this->yaw; };
+float *Camera::get_roll() { return &this->roll; };
 
-void En::Camera::update_vectors() {
+void Camera::update_vectors() {
   this->front.x = cos(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
   this->front.y = sin(glm::radians(this->pitch));
   this->front.z = sin(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
@@ -77,3 +79,5 @@ void En::Camera::update_vectors() {
   this->up =
       glm::normalize(glm::cross(this->right, this->front)); // = this->worldUp
 }
+
+} // namespace En
