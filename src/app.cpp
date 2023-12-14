@@ -104,16 +104,18 @@ int App::init(EN engine) {
   mat.init(engine->get_shader(0).value());
   // TODO: Change this texture
   // Creating the texture "on the fly" makes is appear propely
-  mat.set_texture(
-      std::shared_ptr<En::ll::Texture>(new En::ll::Texture("face.png")));
+  auto texture =
+      std::shared_ptr<En::ll::Texture>(new En::ll::Texture("face.png"));
+  mat.set_texture(texture);
   En::Model m;
-  auto tex0 = m.load("models/backpack/backpack.obj",
-                     std::make_shared<En::Material>(mat));
+  auto tex0 = std::shared_ptr<En::ll::Texture>(
+      m.load("models/backpack/backpack.obj",
+             std::make_shared<En::Material>(mat))
+          .value());
   m.set_origin(glm::vec3(-30, 0, 0));
 
-  if (tex0.has_value()) {
-    m.get_material()->set_texture(
-        std::make_shared<En::ll::Texture>(tex0.value()));
+  if (tex0) {
+    m.get_material()->set_texture(tex0);
   }
 
   engine->add_model(m);
@@ -127,8 +129,7 @@ int App::init(EN engine) {
   }
   auto lm = engine->get_model(1);
   if (lm.has_value())
-    lm.value()->get_material()->set_texture(
-        std::make_shared<En::ll::Texture>(tex0.value()));
+    lm.value()->get_material()->set_texture(tex0);
   return 1;
 }
 

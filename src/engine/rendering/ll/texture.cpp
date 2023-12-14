@@ -1,6 +1,5 @@
 #include "texture.hpp"
 #include <cstdint>
-#include <iostream>
 #include <map>
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../../stb/stb_image.h"
@@ -17,8 +16,7 @@ Texture::Texture(const std::string file, const bool transparent,
   this->load_from_file(file);
 }
 
-// TODO: add tracking when to delete(when no textures use this id)
-ll::Texture::~Texture() {} // glDeleteTextures(1, &this->id); }
+ll::Texture::~Texture() { glDeleteTextures(1, &this->id); }
 
 GLuint ll::Texture::get_id() const { return this->id; }
 
@@ -82,8 +80,6 @@ void ll::Texture::load_from_file(std::string file) {
         this->width, this->height, this->id, nrChannels);
   } else {
     LOG("Failed to load texture: %s", file.c_str());
-    // std::cout << "ERROR in:" << __FILE__ << " culdn't load texture: " << file
-    //           << std::endl;
   }
 
   // glActiveTexture(0);

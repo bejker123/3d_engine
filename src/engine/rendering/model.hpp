@@ -17,8 +17,8 @@ public:
   void render_batch();
 
   // Returns true on success
-  std::optional<ll::Texture> load(std::string path,
-                                  std::shared_ptr<Material> mat);
+  std::optional<ll::Texture *> load(std::string path,
+                                    std::shared_ptr<Material> mat);
 
   void set_pos(glm::vec3 pos);
   void set_origin(glm::vec3 origin);

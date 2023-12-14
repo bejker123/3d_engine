@@ -52,7 +52,7 @@ void Model::render() {
   this->mat->unbind();
 }
 
-ll::Texture tex0;
+ll::Texture *tex0;
 bool tex0_loaded = false;
 
 void load_texture(aiMaterial *mat, aiTextureType type, std::string directory) {
@@ -60,7 +60,7 @@ void load_texture(aiMaterial *mat, aiTextureType type, std::string directory) {
     aiString str;
     mat->GetTexture(type, i, &str);
     // std::cout << directory << std::endl;
-    tex0 = ll::Texture(directory + str.C_Str());
+    tex0 = new ll::Texture(directory + str.C_Str());
     tex0_loaded = true;
     return;
   }
@@ -119,8 +119,8 @@ void Model::process_node(aiNode *node, const aiScene *scene,
   }
 }
 
-std::optional<ll::Texture> Model::load(std::string path,
-                                       std::shared_ptr<Material> mat) {
+std::optional<ll::Texture *> Model::load(std::string path,
+                                         std::shared_ptr<Material> mat) {
   this->mat = mat;
   this->origin = glm::vec3(0);
   this->pos = glm::vec3(0);
