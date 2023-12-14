@@ -1,4 +1,5 @@
 #include "model.hpp"
+#include "ll/texture.hpp"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
@@ -8,7 +9,12 @@
 #include <string>
 
 namespace En {
-Model::Model() {}
+Model::Model() {
+  this->origin = glm::vec3(0);
+  this->pos = glm::vec3(0);
+  this->rot = glm::vec3(0, 0, 0);
+  this->scale = glm::vec3(10);
+}
 Model::Model(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> mat) {
   this->init(mesh, mat);
 }
@@ -46,45 +52,94 @@ void Model::render() {
   this->mat->unbind();
 }
 
-void Model::load(std::string path) {
-  Assimp::Importer import;
-  const aiScene *scene =
-      import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
-  if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE ||
-      !scene->mRootNode) {
-    std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
-    // return;
+ll::Texture tex0;
+bool tex0_loaded = false;
+
+void load_texture(aiMaterial *mat, aiTextureType type, std::string directory) {
+  for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
+    aiString str;
+    mat->GetTexture(type, i, &str);
+    // std::cout << directory << std::endl;
+    tex0 = ll::Texture(directory + str.C_Str());
+    tex0_loaded = true;
+    return;
   }
 }
 
-void processNode(aiNode *node, const aiScene *scene) {
-  // process all the node's meshes (if any)
-  for (unsigned int i = 0; i < node->mNumMeshes; i++) {
-    aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-    // meshes.push_back(processMesh(mesh, scene));
-  }
-  // then do the same for each of its children
-  for (unsigned int i = 0; i < node->mNumChildren; i++) {
-    processNode(node->mChildren[i], scene);
-  }
-}
-
-Mesh processMesh(aiMesh *mesh, const aiScene *scene) {
-  std::vector<ll::Vertex> vertices;
+Mesh process_mesh(aiMesh *mesh, const aiScene *scene, const std::string &dir) {
+  std::vector<ll::VertexC> vertices;
   std::vector<unsigned int> indices;
-  // std::vector<Texture> textures;
+  // std::vector<ll::Texture> textures;
 
   for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
+    auto vert = mesh->mVertices[i];
+    auto norm = mesh->mNormals[i];
+
+    auto _text = mesh->mTextureCoords[0];
+    auto text = aiVector3D(0, 0, 0);
+
+    if (_text)
+      text = _text[i];
+
+    vertices.push_back(ll::VertexC(
+        glm::vec3(vert.x, vert.y, vert.z), glm::vec3(norm.x, norm.y, norm.z),
+        glm::vec2(text.x, text.y), glm::vec4(0.2, 0.2, 0.2, 1)));
+
     // Vertex vertex;
     // process vertex positions, normals and texture coordinates
     // vertices.push_back(vertex);
   }
+
   // process indices
+  for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
+    aiFace face = mesh->mFaces[i];
+    for (unsigned int j = 0; j < face.mNumIndices; j++)
+      indices.push_back(face.mIndices[j]);
+  }
+
   // process material
-  if (mesh->mMaterialIndex >= 0) {
+  if (mesh->mMaterialIndex >= 0 && !tex0_loaded) {
+    aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
+    load_texture(material, aiTextureType_DIFFUSE, dir);
   }
 
   return Mesh(vertices, indices);
+}
+
+void Model::process_node(aiNode *node, const aiScene *scene,
+                         const std::string &dir) {
+  // process all the node's meshes (if any)
+  for (unsigned int i = 0; i < node->mNumMeshes; i++) {
+    aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
+    meshes.push_back(std::make_shared<Mesh>(process_mesh(mesh, scene, dir)));
+  }
+  // then do the same for each of its children
+  for (unsigned int i = 0; i < node->mNumChildren; i++) {
+    process_node(node->mChildren[i], scene, dir);
+  }
+}
+
+std::optional<ll::Texture> Model::load(std::string path,
+                                       std::shared_ptr<Material> mat) {
+  this->mat = mat;
+  this->origin = glm::vec3(0);
+  this->pos = glm::vec3(0);
+  this->rot = glm::vec3(0, 0, 0);
+  this->scale = glm::vec3(10);
+  Assimp::Importer importer;
+
+  const aiScene *scene = importer.ReadFile(
+      path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |
+                aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+  if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE ||
+      !scene->mRootNode) {
+    std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
+    // return;
+    return std::nullopt;
+  }
+  std::string dir = path.substr(0, path.find_last_of('/')) + "/";
+  process_node(scene->mRootNode, scene, dir);
+  return std::optional(tex0);
 }
 
 void Model::set_pos(glm::vec3 pos) { this->pos = pos; }

@@ -62,3 +62,37 @@ const char *cool_fs = "#version 460 core\n"
                       "vec4(vs_texcoord,vs_texcoord);\n"
                       // "FragColor = frag_color;\n"
                       "}\0";
+
+const char *normal_vs =
+    R"(#version 460
+layout(location = 0) in vec3 vertex_position;
+layout(location = 1) in vec3 vertex_normal;
+layout(location = 2) in vec2 vertex_texcoord;
+
+out vec3 vs_position;
+// out vec3 vs_normal;
+out vec2 vs_texcoord;
+
+uniform mat4 ModelMatrix;
+uniform mat4 ViewMatrix;
+uniform mat4 ProjectionMatrix;
+
+void main() {
+  vs_texcoord = vertex_texcoord;
+
+  gl_Position =
+      ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(vertex_position, 1.f);
+      // ProjectionMatrix * ViewMatrix * vec4(vertex_position, 1.f);
+}
+)";
+
+const char *normal_fs = "#version 460 core\n"
+                        "in vec2 vs_texcoord;\n"
+                        "out vec4 FragColor;\n"
+                        "uniform sampler2D tex;"
+                        "void main(){\n"
+                        // "FragColor = vec4(0.3f,1.f,0.5f,1.f);\n"
+                        "FragColor = texture(tex,vs_texcoord);\n"
+                        "if(FragColor.a == 0.0) discard;"
+                        // "FragColor = frag_color;\n"
+                        "}\0";

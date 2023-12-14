@@ -1,6 +1,7 @@
 #include "mesh.hpp"
 #include "ll/buffers.hpp"
 #include "ll/vertex_array.hpp"
+#include <iostream>
 
 namespace En {
 
@@ -23,6 +24,16 @@ Mesh::Mesh(std::vector<ll::Vertex> vertices,
   ll::VertexBuffer vb;
   vb.init(vertices);
   va.add_vertex_buffer(&vb);
+  this->vas.push_back(std::make_shared<ll::VertexArray>(va));
+}
+Mesh::Mesh(std::vector<ll::VertexC> vertices,
+           std::vector<unsigned int> indices) {
+  ll::VertexArray va;
+  va.init();
+  ll::VertexBuffer vb;
+  vb.init(vertices);
+  va.add_vertex_buffer(&vb);
+  this->vas.push_back(std::make_shared<ll::VertexArray>(va));
 }
 void Mesh::init(std::shared_ptr<ll::VertexArray> va) {
   this->vas.push_back(va);

@@ -1,5 +1,6 @@
 #include "app.hpp"
 #include "engine/shaders.hpp"
+#include <iostream>
 #include <ranges>
 
 namespace rv = std::ranges::views;
@@ -83,7 +84,7 @@ int App::init(EN engine) {
   // is good enough)
   engine->cam.init(60, 1., 10000, glm::vec3(-40, 20, 30));
   engine->add_shader(camera_vs, basic_fs, "");
-  engine->add_shader(camera_vs, cool_fs, "");
+  // engine->add_shader(normal_vs, normal_fs, "");
 
   va.init();
 
@@ -105,6 +106,17 @@ int App::init(EN engine) {
   // Creating the texture "on the fly" makes is appear propely
   mat.set_texture(
       std::shared_ptr<En::ll::Texture>(new En::ll::Texture("face.png")));
+  En::Model m;
+  auto tex0 = m.load("models/backpack/backpack.obj",
+                     std::make_shared<En::Material>(mat));
+  m.set_origin(glm::vec3(-30, 0, 0));
+
+  if (tex0.has_value()) {
+    m.get_material()->set_texture(
+        std::make_shared<En::ll::Texture>(tex0.value()));
+  }
+
+  engine->add_model(m);
 
   for (uint64_t i : rv::iota(0, 10)) {
     engine->add_model(std::make_shared<En::Mesh>(mesh),
@@ -113,6 +125,10 @@ int App::init(EN engine) {
     if (lm.has_value())
       lm.value()->set_origin(glm::vec3((double)i * 21, 0, 0));
   }
+  auto lm = engine->get_model(1);
+  if (lm.has_value())
+    lm.value()->get_material()->set_texture(
+        std::make_shared<En::ll::Texture>(tex0.value()));
   return 1;
 }
 

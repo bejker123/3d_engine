@@ -10,6 +10,7 @@ namespace ll {
 
 class Texture {
 public:
+  Texture(){};
   Texture(const std::string file, const bool transparent = false,
           const GLenum type = GL_TEXTURE_2D);
 
@@ -22,7 +23,7 @@ public:
   static void unbind(const uint32_t type = GL_TEXTURE_2D);
 
 private:
-  GLuint id;
+  GLuint id = 0;
   int width, height;
   uint32_t type;
   bool transparent;

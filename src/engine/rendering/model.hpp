@@ -2,6 +2,7 @@
 #define MODEL_HPP
 #include "material.hpp"
 #include "mesh.hpp"
+#include <assimp/scene.h>
 
 namespace En {
 
@@ -15,7 +16,9 @@ public:
   void render();
   void render_batch();
 
-  void load(std::string path);
+  // Returns true on success
+  std::optional<ll::Texture> load(std::string path,
+                                  std::shared_ptr<Material> mat);
 
   void set_pos(glm::vec3 pos);
   void set_origin(glm::vec3 origin);
@@ -29,6 +32,8 @@ public:
   std::shared_ptr<Material> get_material();
 
 private:
+  void process_node(aiNode *node, const aiScene *scene, const std::string &dir);
+
   glm::mat4 mmatrix;
   std::shared_ptr<Material> mat;
   std::vector<std::shared_ptr<Mesh>> meshes;

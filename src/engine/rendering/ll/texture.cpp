@@ -2,7 +2,6 @@
 #include <cstdint>
 #include <iostream>
 #include <map>
-#include <vector>
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../../stb/stb_image.h"
 #include "../../io/logger.hpp"
@@ -18,7 +17,8 @@ Texture::Texture(const std::string file, const bool transparent,
   this->load_from_file(file);
 }
 
-ll::Texture::~Texture() { glDeleteTextures(1, &this->id); }
+// TODO: add tracking when to delete(when no textures use this id)
+ll::Texture::~Texture() {} // glDeleteTextures(1, &this->id); }
 
 GLuint ll::Texture::get_id() const { return this->id; }
 
@@ -34,12 +34,10 @@ void ll::Texture::unbind(const uint32_t type) {
   // glDisable(type);
 }
 void ll::Texture::load_from_file(std::string file) {
-  if (this->id) {
+  if (this->id != 0) {
     glDeleteTextures(1, &this->id);
   }
-
   glGenTextures(1, &this->id);
-  glBindTexture(this->type, this->id);
 
   auto idx = hashes.end();
   if ((idx = hashes.find(file)) != hashes.end()) {
@@ -49,6 +47,7 @@ void ll::Texture::load_from_file(std::string file) {
     return;
   } else
     hashes.insert(std::make_pair(file, this->id));
+  glBindTexture(this->type, this->id);
 
   // std::cout << x << std::endl;
 
@@ -56,7 +55,6 @@ void ll::Texture::load_from_file(std::string file) {
   int nrChannels;
   unsigned char *data =
       stbi_load(file.data(), &this->width, &this->height, &nrChannels, 0);
-  // std::cout << this->width << " " << this->height << std::endl;
 
   glTexParameteri(this->type, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(this->type, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -64,13 +62,24 @@ void ll::Texture::load_from_file(std::string file) {
   glTexParameteri(this->type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
   if (data != nullptr) {
-    auto internal_format = this->transparent ? GL_RGBA : GL_RGB;
-    glTexImage2D(this->type, 0, internal_format, this->width, this->height, 0,
-                 GL_RGBA, GL_UNSIGNED_BYTE, data);
+    // auto format0 = this->alpha ? GL_RGBA : GL_RGB;
+    // auto format = this->alpha && this->transparent ? GL_RGBA : GL_RGB;
+    GLenum format = GL_RGB;
+    if (nrChannels == 1)
+      format = GL_RED;
+    else if (nrChannels == 4)
+      format = GL_RGBA;
+
+    GLenum format1 = this->transparent && nrChannels == 4 ? GL_RGBA : GL_RGB;
+
+    glTexImage2D(this->type, 0, format1, this->width, this->height, 0, format,
+                 GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(this->type);
     // std::cout << "Texture loaded: " << file << std::endl;
-    LOG("Texture Loaded, Debug Info:\n\tSize: (%d,%d)\n\tID: %d\n", this->width,
-        this->height, this->id);
+    LOG("Texture Loaded, Debug Info:\n\tSize: (%d,%d)\n\tID: %d\n\t# Channels: "
+        "%d"
+        "\n",
+        this->width, this->height, this->id, nrChannels);
   } else {
     LOG("Failed to load texture: %s", file.c_str());
     // std::cout << "ERROR in:" << __FILE__ << " culdn't load texture: " << file
