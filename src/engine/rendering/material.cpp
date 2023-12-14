@@ -1,6 +1,7 @@
 #include "material.hpp"
 #include "ll/shader.hpp"
 #include <GL/gl.h>
+#include <iostream>
 #include <memory>
 #include <optional>
 
@@ -28,7 +29,7 @@ void MaterialOptions::set_cull_backfaces(bool cull) {
   this->cull_backfaces = cull;
 }
 
-void MaterialOptions::bind() {
+void MaterialOptions::bind() const {
 
   // Set Front Face
   glFrontFace(GL_CCW);
@@ -82,12 +83,19 @@ void MaterialOptions::unbind() {
   glDisable(GL_STENCIL_TEST);
 }
 
-void Material::init(std::shared_ptr<const ll::Shader> shader) {
+Material::Material(pShader shader, const pTexture texture) {
+
+  this->shader = shader;
+  this->options = MaterialOptions();
+  this->texture = texture;
+}
+
+void Material::init(pShader shader) {
   this->shader = shader;
   this->options = MaterialOptions();
   this->texture = std::nullopt;
 }
-void Material::bind() {
+void Material::bind() const {
   this->options.bind();
   if (this->texture.has_value() && this->options.texture) {
     this->texture.value()->bind(texture_bind_idx);
@@ -95,25 +103,19 @@ void Material::bind() {
   }
   this->shader->bind();
 }
-void Material::unbind() {
+void Material::unbind() const {
   MaterialOptions::unbind();
   ll::Shader::unbind();
   ll::Texture::unbind();
 }
 
-void Material::set_texture(const std::shared_ptr<ll::Texture> texture) {
-  this->texture = texture;
-}
+void Material::set_texture(const pTexture texture) { this->texture = texture; }
 
-void Material::set_shader(const std::shared_ptr<const ll::Shader> shader) {
-  this->shader = shader;
-}
+void Material::set_shader(const pShader shader) { this->shader = shader; }
 std::shared_ptr<const ll::Shader> Material::get_shader() const {
   return this->shader;
 }
 MaterialOptions *Material::get_options() { return &this->options; }
-std::optional<std::shared_ptr<ll::Texture>> Material::get_texture() {
-  return this->texture;
-}
+std::optional<pTexture> Material::get_texture() { return this->texture; }
 
 } // namespace En

@@ -26,20 +26,18 @@ public:
   // FUNCTIONS
   // init functions
   void add_shader(const char *v, const char *f, const char *g);
-  void add_va(std::shared_ptr<ll::VertexArray> va);
+  void add_va(pVertexArray va);
 
-  void add_model(Model &shader);
-  void add_model(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> mat);
+  void add_model(Model &model);
+  void add_model(pMesh mesh);
   void add_model(std::vector<ll::Vertex> vertices,
-                 std::vector<unsigned int> indices,
-                 std::shared_ptr<Material> mat);
+                 std::vector<unsigned int> indices, pMaterial mat);
 
   std::optional<Model *> get_model(const uint32_t idx);
   std::optional<Model *> get_last_model();
   const size_t get_models_count() const;
 
-  std::optional<std::shared_ptr<ll::Shader const>>
-  get_shader(const size_t idx) const;
+  std::optional<pShader> get_shader(const size_t idx) const;
   const size_t get_shaders_count() const;
 
   // Ids correspond to opengl ids
@@ -79,9 +77,9 @@ private:
   int last_tab_pressed = 0;
 
   std::vector<Model> models;
-  std::vector<std::shared_ptr<Mesh>> meshes;
-  std::vector<std::shared_ptr<ll::Shader>> shaders;
-  std::map<uint32_t, std::shared_ptr<ll::VertexArray>> vas;
+  std::vector<pMesh> meshes;
+  std::vector<pShader> shaders;
+  std::map<uint32_t, pVertexArray> vas;
 };
 } // namespace En
 

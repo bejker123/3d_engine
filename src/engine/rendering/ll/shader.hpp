@@ -4,7 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <memory.h>
+#include <memory>
 
 enum ShaderState { NOT_INITED = -1, ERROR = 0, INITED = 1 };
 
@@ -19,6 +19,8 @@ public:
 
   void init(const char *vertex_source, const char *fragment_source,
             const char *geometry_source);
+
+  GLuint get_id() const { return this->id; }
 
   ~Shader();
 
@@ -46,4 +48,5 @@ private:
 
 } // namespace ll
 } // namespace En
+using pShader = std::shared_ptr<En::ll::Shader>;
 #endif //__SHADER_H

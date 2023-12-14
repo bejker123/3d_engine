@@ -1,4 +1,5 @@
 #include "app.hpp"
+#include "engine/rendering/material.hpp"
 #include "engine/shaders.hpp"
 #include <iostream>
 #include <ranges>
@@ -96,40 +97,41 @@ int App::init(EN engine) {
   // va.addVertexBuffer(&vb1);
   va.set_index_buffer(&ib);
 
+  auto texture = pTexture(new En::ll::Texture("face.png"));
+  En::Material mat(engine->get_shader(0).value(), texture);
   En::Mesh mesh;
-  mesh.init(std::make_shared<En::ll::VertexArray>(va));
-  // mesh.load(
-  //     "/home/bejker/Downloads/Survival_BackPack_2/Survival_BackPack_2.fbx");
-  En::Material mat;
-  mat.init(engine->get_shader(0).value());
+  mesh.init(std::make_shared<En::Material>(mat),
+            std::make_shared<En::ll::VertexArray>(va));
   // TODO: Change this texture
   // Creating the texture "on the fly" makes is appear propely
-  auto texture =
-      std::shared_ptr<En::ll::Texture>(new En::ll::Texture("face.png"));
   mat.set_texture(texture);
+
   En::Model m;
-  auto tex0 = std::shared_ptr<En::ll::Texture>(
-      m.load("models/backpack/backpack.obj",
-             std::make_shared<En::Material>(mat))
-          .value());
+  m.load(engine->get_shader(0).value(), "models/sb/sb.obj");
   m.set_origin(glm::vec3(-30, 0, 0));
-
-  if (tex0) {
-    m.get_material()->set_texture(tex0);
-  }
-
+  m.set_scale(glm::vec3(1));
   engine->add_model(m);
 
+  En::Model m1;
+  m1.load(engine->get_shader(0).value(), "models/backpack/backpack.obj");
+  m1.set_origin(glm::vec3(-50, 0, 0));
+  engine->add_model(m1);
+
+  // auto texture1 = std::shared_ptr<En::ll::Texture>(
+  //     new En::ll::Texture("models/sb/textures/suit.png"));
+  // if (tex0) {
+  //   // m.get_material()->set_texture(tex0);
+  // }
+
   for (uint64_t i : rv::iota(0, 10)) {
-    engine->add_model(std::make_shared<En::Mesh>(mesh),
-                      std::make_shared<En::Material>(mat));
+    engine->add_model(std::make_shared<En::Mesh>(mesh));
     auto lm = engine->get_last_model();
     if (lm.has_value())
       lm.value()->set_origin(glm::vec3((double)i * 21, 0, 0));
   }
-  auto lm = engine->get_model(1);
-  if (lm.has_value())
-    lm.value()->get_material()->set_texture(tex0);
+  // auto lm = engine->get_model(1);
+  // if (lm.has_value())
+  //   lm.value()->get_material()->set_texture(texture1);
   return 1;
 }
 

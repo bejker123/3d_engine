@@ -1,6 +1,8 @@
 #include "shader.hpp"
 #include "../../io/logger.hpp"
 #include <assert.h>
+#include <iostream>
+#include <ostream>
 
 namespace En {
 namespace ll {

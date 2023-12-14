@@ -23,7 +23,7 @@ void Camera::calculate_view_matrix() {
   this->view_matrix = glm::lookAt(this->pos, this->pos + this->front, this->up);
 }
 
-void Camera::upload_to_shader(ll::Shader *shader, Window *win) {
+void Camera::upload_to_shader(pShader shader, Window *win) {
 
   this->update_vectors();
 

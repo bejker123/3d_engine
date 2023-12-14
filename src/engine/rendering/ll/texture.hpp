@@ -1,5 +1,6 @@
 #ifndef TEXTURE_HPP
 #define TEXTURE_HPP
+#include <memory>
 #include <string>
 
 #include <GL/glew.h>
@@ -18,7 +19,7 @@ public:
 
   GLuint get_id() const;
 
-  void bind(const GLuint texture_unit);
+  void bind(const GLuint texture_unit) const;
 
   static void unbind(const uint32_t type = GL_TEXTURE_2D);
 
@@ -33,4 +34,5 @@ private:
 
 } // namespace ll
 } // namespace En
+using pTexture = std::shared_ptr<const En::ll::Texture>;
 #endif // !TEXTURE_HPP

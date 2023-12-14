@@ -24,7 +24,7 @@ public:
 
   void init(float fov, float znear, float zfar, glm::vec3 pos);
 
-  void upload_to_shader(ll::Shader *shader, Window *win);
+  void upload_to_shader(pShader shader, Window *win);
 
   void add_pos(glm::vec3 pos);
 

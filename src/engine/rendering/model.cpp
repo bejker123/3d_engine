@@ -15,13 +15,10 @@ Model::Model() {
   this->rot = glm::vec3(0, 0, 0);
   this->scale = glm::vec3(10);
 }
-Model::Model(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> mat) {
-  this->init(mesh, mat);
-}
+Model::Model(std::shared_ptr<Mesh> mesh) { this->init(mesh); }
 
-void Model::init(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> mat) {
+void Model::init(std::shared_ptr<Mesh> mesh) {
   this->meshes.push_back(mesh);
-  this->mat = mat;
 
   this->origin = glm::vec3(0);
   this->pos = glm::vec3(0);
@@ -40,33 +37,29 @@ void Model::update() {
                               glm::vec3(0.f, 0.f, 1.f));
   this->mmatrix = glm::translate(this->mmatrix, this->pos - this->origin);
   this->mmatrix = glm::scale(this->mmatrix, this->scale);
-  this->mat->get_shader()->set_mat4fv(this->mmatrix, "ModelMatrix");
+
+  for (auto &i : this->meshes)
+    i->get_material()->get_shader()->set_mat4fv(this->mmatrix, "ModelMatrix");
 }
 
 void Model::render() {
   this->update();
-  this->mat->bind();
   for (auto &i : this->meshes) {
     i->render();
   }
-  this->mat->unbind();
+}
+ll::Texture load_texture(aiMaterial *mat, aiTextureType type,
+                         std::string directory) {
+  // for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
+  aiString str;
+  // mat->GetTexture(type, i, &str);
+  mat->GetTexture(type, 0, &str);
+  return ll::Texture(directory + str.C_Str());
+  // }
 }
 
-ll::Texture *tex0;
-bool tex0_loaded = false;
-
-void load_texture(aiMaterial *mat, aiTextureType type, std::string directory) {
-  for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
-    aiString str;
-    mat->GetTexture(type, i, &str);
-    // std::cout << directory << std::endl;
-    tex0 = new ll::Texture(directory + str.C_Str());
-    tex0_loaded = true;
-    return;
-  }
-}
-
-Mesh process_mesh(aiMesh *mesh, const aiScene *scene, const std::string &dir) {
+Mesh process_mesh(pShader shader, aiMesh *mesh, const aiScene *scene,
+                  const std::string &dir) {
   std::vector<ll::VertexC> vertices;
   std::vector<unsigned int> indices;
   // std::vector<ll::Texture> textures;
@@ -97,31 +90,34 @@ Mesh process_mesh(aiMesh *mesh, const aiScene *scene, const std::string &dir) {
       indices.push_back(face.mIndices[j]);
   }
 
+  ll::Texture tex;
   // process material
-  if (mesh->mMaterialIndex >= 0 && !tex0_loaded) {
+  if (mesh->mMaterialIndex >= 0) {
     aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-    load_texture(material, aiTextureType_DIFFUSE, dir);
+    tex = load_texture(material, aiTextureType_DIFFUSE, dir);
   }
 
-  return Mesh(vertices, indices);
+  auto mat =
+      pMaterial(new Material(shader, std::make_shared<ll::Texture>(tex)));
+
+  return Mesh(mat, vertices, indices);
 }
 
-void Model::process_node(aiNode *node, const aiScene *scene,
+void Model::process_node(pShader shader, aiNode *node, const aiScene *scene,
                          const std::string &dir) {
   // process all the node's meshes (if any)
   for (unsigned int i = 0; i < node->mNumMeshes; i++) {
     aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-    meshes.push_back(std::make_shared<Mesh>(process_mesh(mesh, scene, dir)));
+    meshes.push_back(
+        std::make_shared<Mesh>(process_mesh(shader, mesh, scene, dir)));
   }
   // then do the same for each of its children
   for (unsigned int i = 0; i < node->mNumChildren; i++) {
-    process_node(node->mChildren[i], scene, dir);
+    process_node(shader, node->mChildren[i], scene, dir);
   }
 }
 
-std::optional<ll::Texture *> Model::load(std::string path,
-                                         std::shared_ptr<Material> mat) {
-  this->mat = mat;
+bool Model::load(pShader shader, std::string path) {
   this->origin = glm::vec3(0);
   this->pos = glm::vec3(0);
   this->rot = glm::vec3(0, 0, 0);
@@ -135,23 +131,27 @@ std::optional<ll::Texture *> Model::load(std::string path,
       !scene->mRootNode) {
     std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
     // return;
-    return std::nullopt;
+    importer.FreeScene();
+    return false;
   }
   std::string dir = path.substr(0, path.find_last_of('/')) + "/";
-  process_node(scene->mRootNode, scene, dir);
-  return std::optional(tex0);
+  process_node(shader, scene->mRootNode, scene, dir);
+  importer.FreeScene();
+  return true;
 }
 
 void Model::set_pos(glm::vec3 pos) { this->pos = pos; }
+void Model::set_scale(glm::vec3 scale) { this->scale = scale; }
 void Model::set_origin(glm::vec3 origin) {
   this->origin = origin;
   this->pos = origin;
 }
 void Model::set_rot(glm::vec3 rot) { this->rot = rot; }
+
+std::vector<pMesh> Model::get_meshes() { return this->meshes; }
 glm::vec3 *Model::get_rot() { return &this->rot; }
 glm::vec3 *Model::get_pos() { return &this->pos; }
 glm::vec3 *Model::get_origin() { return &this->origin; }
 glm::vec3 *Model::get_scale() { return &this->scale; }
-std::shared_ptr<Material> Model::get_material() { return this->mat; }
 
 } // namespace En

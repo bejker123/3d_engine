@@ -16,11 +16,11 @@ Texture::Texture(const std::string file, const bool transparent,
   this->load_from_file(file);
 }
 
-ll::Texture::~Texture() { glDeleteTextures(1, &this->id); }
+ll::Texture::~Texture() {} // glDeleteTextures(1, &this->id); }
 
 GLuint ll::Texture::get_id() const { return this->id; }
 
-void ll::Texture::bind(const GLuint texture_unit) {
+void ll::Texture::bind(const GLuint texture_unit) const {
   glActiveTexture(GL_TEXTURE0 + texture_unit);
   glBindTexture(this->type, this->id);
 }
@@ -39,7 +39,7 @@ void ll::Texture::load_from_file(std::string file) {
 
   auto idx = hashes.end();
   if ((idx = hashes.find(file)) != hashes.end()) {
-    LOG("Texture Loaded Before: %s\n\t Using Previous.\n", file.c_str());
+    // LOG("Texture Loaded Before: %s\n\t Using Previous.\n", file.c_str());
     this->id = idx->second;
     glBindTexture(this->type, 0);
     return;
@@ -79,7 +79,7 @@ void ll::Texture::load_from_file(std::string file) {
         "\n",
         this->width, this->height, this->id, nrChannels);
   } else {
-    LOG("Failed to load texture: %s", file.c_str());
+    LOG("Failed to load texture: %s\n", file.c_str());
   }
 
   // glActiveTexture(0);

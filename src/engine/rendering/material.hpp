@@ -10,7 +10,7 @@ namespace En {
 class MaterialOptions {
 public:
   MaterialOptions();
-  void bind();
+  void bind() const;
   static void unbind();
   // Valid modes: GL_POINT GL_LINE GL_FILL
   // Return true if set succesfully
@@ -30,21 +30,24 @@ public:
 
 class Material {
 public:
-  void init(std::shared_ptr<const ll::Shader> shader);
-  void bind();
-  void unbind();
+  Material(){};
+  Material(pShader shader, pTexture texture);
+  void init(pShader shader);
+  void bind() const;
+  void unbind() const;
 
-  void set_texture(const std::shared_ptr<ll::Texture> texture);
-  void set_shader(const std::shared_ptr<const ll::Shader> shader);
+  void set_texture(const pTexture texture);
+  void set_shader(const pShader shader);
   std::shared_ptr<const ll::Shader> get_shader() const;
   MaterialOptions *get_options();
-  std::optional<std::shared_ptr<ll::Texture>> get_texture();
+  std::optional<pTexture> get_texture();
 
 private:
-  std::shared_ptr<const ll::Shader> shader;
-  std::optional<std::shared_ptr<ll::Texture>> texture;
+  pShader shader;
+  std::optional<pTexture> texture;
   MaterialOptions options;
   uint32_t texture_bind_idx = 0;
 };
 } // namespace En
+using pMaterial = std::shared_ptr<En::Material>;
 #endif // !MATERIAL_HPP

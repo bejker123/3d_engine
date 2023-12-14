@@ -11,6 +11,7 @@
 #include "../../imgui/backends/imgui_impl_glfw.h"
 #include "../../imgui/backends/imgui_impl_opengl3.h"
 #include "../../imgui/imgui.h"
+#include "rendering/model.hpp"
 
 std::unique_ptr<App> app;
 namespace rv = std::ranges::views;
@@ -48,10 +49,10 @@ Engine::Engine() {
 
 std::vector<int> ms_idxs;
 void Engine::add_shader(const char *v, const char *f, const char *g) {
-  this->shaders.push_back(std::shared_ptr<ll::Shader>(new ll::Shader(v, f, g)));
+  this->shaders.push_back(pShader(new ll::Shader(v, f, g)));
 }
 
-void Engine::add_va(std::shared_ptr<ll::VertexArray> va) {
+void Engine::add_va(pVertexArray va) {
   if (this->vas.contains(va->get_id()))
     return;
   this->vas.insert(std::make_pair(va->get_id(), va));
@@ -62,17 +63,15 @@ void Engine::add_model(Model &model) {
   ms_idxs.push_back(0);
 }
 
-void Engine::add_model(std::shared_ptr<Mesh> mesh,
-                       std::shared_ptr<Material> mat) {
-  this->models.push_back(Model(mesh, mat));
+void Engine::add_model(std::shared_ptr<Mesh> mesh) {
+  this->models.push_back(Model(mesh));
   ms_idxs.push_back(0);
 }
 
 void Engine::add_model(std::vector<ll::Vertex> vertices,
-                       std::vector<unsigned int> indices,
-                       std::shared_ptr<Material> mat) {
-  this->meshes.push_back(std::make_shared<Mesh>(Mesh(vertices, indices)));
-  this->models.push_back(Model(this->meshes.at(this->meshes.size() - 1), mat));
+                       std::vector<unsigned int> indices, pMaterial mat) {
+  this->meshes.push_back(std::make_shared<Mesh>(Mesh(mat, vertices, indices)));
+  this->models.push_back(Model(this->meshes.at(this->meshes.size() - 1)));
   ms_idxs.push_back(0);
 }
 
@@ -94,8 +93,7 @@ std::optional<Model *> Engine::get_last_model() {
 
 const size_t Engine::get_models_count() const { return this->models.size(); }
 
-std::optional<std::shared_ptr<const ll::Shader>>
-Engine::get_shader(const size_t idx) const {
+std::optional<pShader> Engine::get_shader(const size_t idx) const {
   if (this->get_shaders_count() - 1 < idx || this->get_shaders_count() == 0)
     return std::nullopt;
   auto ret = this->shaders.at(idx);
@@ -315,19 +313,45 @@ void Engine::render_imgui() {
       if (ImGui::Button(("Teleport " + std::to_string(i)).data())) {
         *cam.get_pos() = *models[i].get_pos();
       }
-      ImGui::Checkbox(("Cull Backfaces " + std::to_string(i)).data(),
-                      &models[i].get_material()->get_options()->cull_backfaces);
-      ImGui::Checkbox(("Textured " + std::to_string(i)).data(),
-                      &models[i].get_material()->get_options()->texture);
-      ImGui::RadioButton(("Lines " + std::to_string(i)).data(),
-                         &models[i].get_material()->get_options()->polygon_mode,
-                         GL_LINE);
-      ImGui::RadioButton(("Fill " + std::to_string(i)).data(),
-                         &models[i].get_material()->get_options()->polygon_mode,
-                         GL_FILL);
-      ImGui::RadioButton(("Point" + std::to_string(i)).data(),
-                         &models[i].get_material()->get_options()->polygon_mode,
-                         GL_POINT);
+
+      for (auto j : rv::iota((size_t)0, models[i].get_meshes().size())) {
+
+        ImGui::Checkbox(
+            ("Cull Backfaces " + std::to_string(i) + " " + std::to_string(j))
+                .data(),
+            &models[i]
+                 .get_meshes()[j]
+                 ->get_material()
+                 ->get_options()
+                 ->cull_backfaces);
+        ImGui::Checkbox(
+            ("Textured " + std::to_string(i) + " " + std::to_string(j)).data(),
+            &models[i].get_meshes()[j]->get_material()->get_options()->texture);
+        ImGui::RadioButton(
+            ("Lines " + std::to_string(i) + " " + std::to_string(j)).data(),
+            &models[i]
+                 .get_meshes()[j]
+                 ->get_material()
+                 ->get_options()
+                 ->polygon_mode,
+            GL_LINE);
+        ImGui::RadioButton(
+            ("Fill " + std::to_string(i) + " " + std::to_string(j)).data(),
+            &models[i]
+                 .get_meshes()[j]
+                 ->get_material()
+                 ->get_options()
+                 ->polygon_mode,
+            GL_FILL);
+        ImGui::RadioButton(
+            ("Point" + std::to_string(i) + " " + std::to_string(j)).data(),
+            &models[i]
+                 .get_meshes()[j]
+                 ->get_material()
+                 ->get_options()
+                 ->polygon_mode,
+            GL_POINT);
+      }
 
       ImGui::SliderFloat(("Pos X " + std::to_string(i)).data(),
                          &models[i].get_pos()->x, -180, 180);
@@ -355,7 +379,7 @@ int Engine::render() {
   render_imgui();
 
   // TODO: Possibly don't use pointers to bind in the future?
-  cam.upload_to_shader(shaders[0].get(), &window);
+  cam.upload_to_shader(shaders[0], &window);
   // model.render();
   // model1.render();
   for (auto &m : models) {

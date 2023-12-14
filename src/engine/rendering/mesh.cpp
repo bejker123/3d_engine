@@ -1,11 +1,11 @@
 #include "mesh.hpp"
 #include "ll/buffers.hpp"
 #include "ll/vertex_array.hpp"
-#include <iostream>
 
 namespace En {
 
 void Mesh::render() {
+  this->mat->bind();
   for (auto i : this->vas) {
     i->bind();
     if (i->get_elements() >
@@ -15,10 +15,12 @@ void Mesh::render() {
       glDrawArrays(GL_TRIANGLES, 0, i->get_count());
     i->unbind();
   }
+  this->mat->unbind();
 }
 
-Mesh::Mesh(std::vector<ll::Vertex> vertices,
-           std::vector<unsigned int> indices) {
+Mesh::Mesh(pMaterial material, std::vector<ll::Vertex> vertices,
+           std::vector<unsigned int> indices)
+    : mat(material) {
   ll::VertexArray va;
   va.init();
   ll::VertexBuffer vb;
@@ -26,8 +28,9 @@ Mesh::Mesh(std::vector<ll::Vertex> vertices,
   va.add_vertex_buffer(&vb);
   this->vas.push_back(std::make_shared<ll::VertexArray>(va));
 }
-Mesh::Mesh(std::vector<ll::VertexC> vertices,
-           std::vector<unsigned int> indices) {
+Mesh::Mesh(pMaterial material, std::vector<ll::VertexC> vertices,
+           std::vector<unsigned int> indices)
+    : mat(material) {
   ll::VertexArray va;
   va.init();
   ll::VertexBuffer vb;
@@ -35,8 +38,10 @@ Mesh::Mesh(std::vector<ll::VertexC> vertices,
   va.add_vertex_buffer(&vb);
   this->vas.push_back(std::make_shared<ll::VertexArray>(va));
 }
-void Mesh::init(std::shared_ptr<ll::VertexArray> va) {
+void Mesh::init(pMaterial material, std::shared_ptr<ll::VertexArray> va) {
   this->vas.push_back(va);
+  this->mat = material;
 };
 
+pMaterial Mesh::get_material() { return this->mat; }
 } // namespace En
