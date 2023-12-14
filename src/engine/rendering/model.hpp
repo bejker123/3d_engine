@@ -1,22 +1,19 @@
 #ifndef MODEL_HPP
 #define MODEL_HPP
 #include "mesh.hpp"
-#include <assimp/scene.h>
 
 namespace En {
 
 class Model {
 public:
   Model();
-  Model(std::shared_ptr<Mesh> mesh);
+  Model(pMesh mesh);
+  Model(std::vector<pMesh> meshes);
   void init(std::shared_ptr<Mesh> mesh);
 
   void update();
   void render();
   void render_batch();
-
-  // Returns true on success
-  bool load(pShader shader, std::string path);
 
   void set_pos(glm::vec3 pos);
   void set_scale(glm::vec3 scale);
@@ -31,9 +28,6 @@ public:
   glm::vec3 *get_scale();
 
 private:
-  void process_node(pShader shader, aiNode *node, const aiScene *scene,
-                    const std::string &dir);
-
   glm::mat4 mmatrix;
   std::vector<pMesh> meshes;
 

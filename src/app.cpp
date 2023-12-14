@@ -1,7 +1,7 @@
 #include "app.hpp"
+#include "engine/model_loader.hpp"
 #include "engine/rendering/material.hpp"
 #include "engine/shaders.hpp"
-#include <iostream>
 #include <ranges>
 
 namespace rv = std::ranges::views;
@@ -106,14 +106,15 @@ int App::init(EN engine) {
   // Creating the texture "on the fly" makes is appear propely
   mat.set_texture(texture);
 
-  En::Model m;
-  m.load(engine->get_shader(0).value(), "models/sb/sb.obj");
+  En::ModelLoader ml;
+
+  auto m = ml.load(engine->get_shader(0).value(), "models/sb/sb.obj");
   m.set_origin(glm::vec3(-30, 0, 0));
   m.set_scale(glm::vec3(1));
   engine->add_model(m);
 
-  En::Model m1;
-  m1.load(engine->get_shader(0).value(), "models/backpack/backpack.obj");
+  auto m1 =
+      ml.load(engine->get_shader(0).value(), "models/backpack/backpack.obj");
   m1.set_origin(glm::vec3(-50, 0, 0));
   engine->add_model(m1);
 
