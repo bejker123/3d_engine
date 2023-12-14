@@ -28,6 +28,7 @@ public:
   glm::vec3 *get_scale();
 
 private:
+  void set_values();
   glm::mat4 mmatrix;
   std::vector<pMesh> meshes;
 

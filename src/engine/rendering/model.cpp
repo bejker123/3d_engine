@@ -1,33 +1,25 @@
 #include "model.hpp"
-#include "ll/texture.hpp"
 #include <glm/ext/matrix_transform.hpp>
-#include <iostream>
 #include <memory>
-#include <string>
 
 namespace En {
-Model::Model() {
+void Model::set_values() {
   this->origin = glm::vec3(0);
   this->pos = glm::vec3(0);
   this->rot = glm::vec3(0, 0, 0);
   this->scale = glm::vec3(10);
 }
+
+Model::Model() { this->set_values(); }
 Model::Model(pMesh mesh) { this->init(mesh); }
 Model::Model(std::vector<pMesh> meshes) {
+  this->set_values();
   this->meshes = meshes;
-  this->origin = glm::vec3(0);
-  this->pos = glm::vec3(0);
-  this->rot = glm::vec3(0, 0, 0);
-  this->scale = glm::vec3(10);
 }
 
 void Model::init(std::shared_ptr<Mesh> mesh) {
+  this->set_values();
   this->meshes.push_back(mesh);
-
-  this->origin = glm::vec3(0);
-  this->pos = glm::vec3(0);
-  this->rot = glm::vec3(0, 0, 0);
-  this->scale = glm::vec3(10);
 }
 
 void Model::update() {
