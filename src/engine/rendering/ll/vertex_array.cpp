@@ -21,9 +21,6 @@ void VertexArray::add_vertex_buffer(VertexBuffer *vb) {
   this->bind();
   vb->bind();
 
-  // set the vertex attributes pointers
-  //
-
   auto vb_type = vb->get_type();
 
   if (vb_type == VertexType::POSx3F_COLORx4F) {
@@ -89,26 +86,6 @@ void VertexArray::add_vertex_buffer(VertexBuffer *vb) {
     glEnableVertexAttribArray(this->vbi);
     this->vbi++;
   }
-
-  // pos
-  // glVertexAttribPointer(this->vbi, vb->count, GL_FLOAT, GL_FALSE,
-  //                       sizeof(float) * vb->count, (void *)0);
-  // glEnableVertexAttribArray(this->vbi);
-  // this->vbi++;
-
-  // color
-  // glVertexAttribPointer(this->vbi, sizeof(Vertex::color) / sizeof(float),
-  // GL_FLOAT, normalised, sizeof(Vertex), (void*)offsetof(Vertex, color));
-  // glEnableVertexAttribArray(this->vbi);
-  // this->vbi++;
-
-  // texture coords
-  /*glVertexAttribPointer(this->vbi, sizeof(Vertex::tex_coord) / sizeof(float),
-  GL_FLOAT, normalised, sizeof(Vertex), (void*)offsetof(Vertex, tex_coord));
-  glEnableVertexAttribArray(this->vbi);
-  this->vbi++;
-*/
-
   this->unbind();
   vb->unbind();
 

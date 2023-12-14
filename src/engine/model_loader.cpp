@@ -18,7 +18,6 @@ Mesh process_mesh(pShader shader, aiMesh *mesh, const aiScene *scene,
                   const std::string &dir) {
   std::vector<ll::VertexC> vertices;
   std::vector<unsigned int> indices;
-  // std::vector<ll::Texture> textures;
 
   for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
     auto vert = mesh->mVertices[i];
@@ -33,13 +32,8 @@ Mesh process_mesh(pShader shader, aiMesh *mesh, const aiScene *scene,
     vertices.push_back(ll::VertexC(
         glm::vec3(vert.x, vert.y, vert.z), glm::vec3(norm.x, norm.y, norm.z),
         glm::vec2(text.x, text.y), glm::vec4(0.2, 0.2, 0.2, 1)));
-
-    // Vertex vertex;
-    // process vertex positions, normals and texture coordinates
-    // vertices.push_back(vertex);
   }
 
-  // process indices
   for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
     aiFace face = mesh->mFaces[i];
     for (unsigned int j = 0; j < face.mNumIndices; j++)
@@ -47,7 +41,6 @@ Mesh process_mesh(pShader shader, aiMesh *mesh, const aiScene *scene,
   }
 
   ll::Texture tex;
-  // process material
   if (mesh->mMaterialIndex >= 0) {
     aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
     tex = load_texture(material, aiTextureType_DIFFUSE, dir);
@@ -61,13 +54,11 @@ Mesh process_mesh(pShader shader, aiMesh *mesh, const aiScene *scene,
 
 void ModelLoader::process_node(pShader shader, aiNode *node,
                                const aiScene *scene, const std::string &dir) {
-  // process all the node's meshes (if any)
   for (unsigned int i = 0; i < node->mNumMeshes; i++) {
     aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
     meshes.push_back(
         std::make_shared<Mesh>(process_mesh(shader, mesh, scene, dir)));
   }
-  // then do the same for each of its children
   for (unsigned int i = 0; i < node->mNumChildren; i++) {
     process_node(shader, node->mChildren[i], scene, dir);
   }
@@ -83,7 +74,6 @@ Model ModelLoader::load(pShader shader, std::string path) {
   if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE ||
       !scene->mRootNode) {
     std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
-    // return;
     importer.FreeScene();
     return Model();
   }

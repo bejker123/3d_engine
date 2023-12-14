@@ -29,9 +29,6 @@ void Shader::init(const char *vertex_source, const char *fragment_source,
   LOG("[SHADER] INITING STARTED\n");
   LOG("[SHADER] COMPILATION STARTED\n");
 
-  // if((this->success == 1)||(shader->success == 0))
-  //     LOG_END();
-
   this->success = -1;
   this->id = -1;
 

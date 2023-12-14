@@ -25,12 +25,7 @@ void ll::Texture::bind(const GLuint texture_unit) const {
   glBindTexture(this->type, this->id);
 }
 
-void ll::Texture::unbind(const uint32_t type) {
-  // Fix debug info:
-  //  glActiveTexture(0);
-  glBindTexture(type, 0);
-  // glDisable(type);
-}
+void ll::Texture::unbind(const uint32_t type) { glBindTexture(type, 0); }
 void ll::Texture::load_from_file(std::string file) {
   if (this->id != 0) {
     glDeleteTextures(1, &this->id);
@@ -39,7 +34,6 @@ void ll::Texture::load_from_file(std::string file) {
 
   auto idx = hashes.end();
   if ((idx = hashes.find(file)) != hashes.end()) {
-    // LOG("Texture Loaded Before: %s\n\t Using Previous.\n", file.c_str());
     this->id = idx->second;
     glBindTexture(this->type, 0);
     return;
@@ -60,8 +54,6 @@ void ll::Texture::load_from_file(std::string file) {
   glTexParameteri(this->type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
   if (data != nullptr) {
-    // auto format0 = this->alpha ? GL_RGBA : GL_RGB;
-    // auto format = this->alpha && this->transparent ? GL_RGBA : GL_RGB;
     GLenum format = GL_RGB;
     if (nrChannels == 1)
       format = GL_RED;
@@ -73,7 +65,6 @@ void ll::Texture::load_from_file(std::string file) {
     glTexImage2D(this->type, 0, format1, this->width, this->height, 0, format,
                  GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(this->type);
-    // std::cout << "Texture loaded: " << file << std::endl;
     LOG("Texture Loaded, Debug Info:\n\tSize: (%d,%d)\n\tID: %d\n\t# Channels: "
         "%d"
         "\n",
@@ -82,7 +73,6 @@ void ll::Texture::load_from_file(std::string file) {
     LOG("Failed to load texture: %s\n", file.c_str());
   }
 
-  // glActiveTexture(0);
   glBindTexture(this->type, 0);
   stbi_image_free(data);
 }

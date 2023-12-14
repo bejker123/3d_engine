@@ -85,7 +85,6 @@ int App::init(EN engine) {
   // is good enough)
   engine->cam.init(60, 1., 10000, glm::vec3(-40, 20, 30));
   engine->add_shader(camera_vs, basic_fs, "");
-  // engine->add_shader(normal_vs, normal_fs, "");
 
   va.init();
 
@@ -118,21 +117,12 @@ int App::init(EN engine) {
   m1.set_origin(glm::vec3(-50, 0, 0));
   engine->add_model(m1);
 
-  // auto texture1 = std::shared_ptr<En::ll::Texture>(
-  //     new En::ll::Texture("models/sb/textures/suit.png"));
-  // if (tex0) {
-  //   // m.get_material()->set_texture(tex0);
-  // }
-
   for (uint64_t i : rv::iota(0, 10)) {
     engine->add_model(std::make_shared<En::Mesh>(mesh));
     auto lm = engine->get_last_model();
     if (lm.has_value())
       lm.value()->set_origin(glm::vec3((double)i * 21, 0, 0));
   }
-  // auto lm = engine->get_model(1);
-  // if (lm.has_value())
-  //   lm.value()->get_material()->set_texture(texture1);
   return 1;
 }
 
