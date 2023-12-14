@@ -6,8 +6,10 @@
 #include "../../imgui/imgui.h"
 
 #include "../app.hpp"
+#include "rendering/ll/vertex_array.hpp"
 #include <memory>
 #include <ranges>
+#include <stdexcept>
 #include <thread>
 
 std::unique_ptr<App> app;
@@ -48,10 +50,49 @@ std::vector<int> ms_idxs;
 void Engine::add_shader(const char *v, const char *f, const char *g) {
   this->shaders.push_back(std::shared_ptr<ll::Shader>(new ll::Shader(v, f, g)));
 }
+
+void Engine::add_va(std::shared_ptr<ll::VertexArray> va) {
+  if (this->vas.contains(va->get_id()))
+    return;
+  this->vas.insert(std::make_pair(va->get_id(), va));
+}
+
 void Engine::add_model(Model &model) {
   this->models.push_back(model);
   ms_idxs.push_back(0);
 }
+
+void Engine::add_model(std::shared_ptr<Mesh> mesh,
+                       std::shared_ptr<Material> mat) {
+  this->models.push_back(Model(mesh, mat));
+  ms_idxs.push_back(0);
+}
+
+void Engine::add_model(std::vector<ll::Vertex> vertices,
+                       std::vector<unsigned int> indices,
+                       std::shared_ptr<Material> mat) {
+  this->meshes.push_back(std::make_shared<Mesh>(Mesh(vertices, indices)));
+  this->models.push_back(Model(this->meshes.at(this->meshes.size() - 1), mat));
+  ms_idxs.push_back(0);
+}
+
+std::optional<Model *> Engine::get_model(const uint32_t idx) {
+  try {
+    return std::optional(&this->models.at(idx));
+  } catch (std::out_of_range e) {
+    return std::nullopt;
+  }
+}
+
+std::optional<Model *> Engine::get_last_model() {
+  try {
+    return std::optional(&this->models.at(this->models.size() - 1));
+  } catch (std::exception e) {
+    return std::nullopt;
+  }
+}
+
+const size_t Engine::get_models_count() const { return this->models.size(); }
 
 std::optional<std::shared_ptr<const ll::Shader>>
 Engine::get_shader(const size_t idx) const {
@@ -62,6 +103,15 @@ Engine::get_shader(const size_t idx) const {
 }
 
 const size_t Engine::get_shaders_count() const { return this->shaders.size(); }
+
+std::optional<std::shared_ptr<const ll::VertexArray>>
+Engine::get_va(const uint32_t id) const {
+  try {
+    return std::optional(this->vas.at(id));
+  } catch (std::out_of_range e) {
+    return std::nullopt;
+  }
+}
 
 // Parse and init cmd line args
 void Engine::init_command_line_args() {

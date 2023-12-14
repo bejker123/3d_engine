@@ -8,6 +8,10 @@
 #include <string>
 
 namespace En {
+Model::Model() {}
+Model::Model(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> mat) {
+  this->init(mesh, mat);
+}
 
 void Model::init(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> mat) {
   this->meshes.push_back(mesh);

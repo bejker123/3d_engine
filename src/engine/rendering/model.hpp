@@ -9,6 +9,8 @@ namespace En {
 
 class Model {
 public:
+  Model();
+  Model(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> mat);
   void init(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> mat);
 
   void update();

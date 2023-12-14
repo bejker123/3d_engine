@@ -108,11 +108,11 @@ int App::init(EN engine) {
       std::shared_ptr<En::ll::Texture>(new En::ll::Texture("face.png")));
 
   for (uint64_t i : rv::iota(0, 10)) {
-    En::Model m;
-    m.init(std::make_shared<En::Mesh>(mesh),
-           std::make_unique<En::Material>(mat));
-    m.set_origin(glm::vec3((double)i * 21, 0, 0));
-    engine->add_model(m);
+    engine->add_model(std::make_shared<En::Mesh>(mesh),
+                      std::make_shared<En::Material>(mat));
+    auto lm = engine->get_last_model();
+    if (lm.has_value())
+      lm.value()->set_origin(glm::vec3((double)i * 21, 0, 0));
   }
   return 1;
 }
