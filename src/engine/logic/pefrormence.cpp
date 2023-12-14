@@ -1,6 +1,5 @@
 #include "performence.hpp"
 #include <iostream>
-#include <utility>
 
 uint64_t counter = 0;
 const double max_timer = 1000000000.0; // 1 s in nanoseconds

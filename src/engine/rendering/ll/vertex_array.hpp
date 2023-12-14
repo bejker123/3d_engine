@@ -1,7 +1,6 @@
 #ifndef VERTEX_ARRAY_H
 #define VERTEX_ARRAY_H
 #include "buffers.hpp"
-#include <stdbool.h>
 
 namespace En {
 namespace ll {

@@ -1,7 +1,6 @@
 #ifndef PERFORMENCE_HPP
 #define PERFORMENCE_HPP
 #include <chrono>
-#include <cstdint>
 class Performence {
 public:
   ~Performence();

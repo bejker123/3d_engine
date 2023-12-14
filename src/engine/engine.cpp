@@ -1,16 +1,16 @@
 #include "engine.hpp"
 #include "rendering/ll/opengl.hpp"
 
-#include "../../imgui/backends/imgui_impl_glfw.h"
-#include "../../imgui/backends/imgui_impl_opengl3.h"
-#include "../../imgui/imgui.h"
-
 #include "../app.hpp"
+#include "io/logger.hpp"
 #include "rendering/ll/vertex_array.hpp"
-#include <memory>
 #include <ranges>
 #include <stdexcept>
 #include <thread>
+
+#include "../../imgui/backends/imgui_impl_glfw.h"
+#include "../../imgui/backends/imgui_impl_opengl3.h"
+#include "../../imgui/imgui.h"
 
 std::unique_ptr<App> app;
 namespace rv = std::ranges::views;

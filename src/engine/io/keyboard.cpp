@@ -1,6 +1,5 @@
 #include "keyboard.hpp"
 #include <map>
-#include <utility>
 
 namespace En {
 

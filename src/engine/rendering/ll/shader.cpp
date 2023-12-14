@@ -1,4 +1,5 @@
 #include "shader.hpp"
+#include "../../io/logger.hpp"
 #include <assert.h>
 
 namespace En {
