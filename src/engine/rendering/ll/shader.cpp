@@ -1,21 +1,11 @@
 #include "shader.hpp"
 #include "../../io/logger.hpp"
 #include <assert.h>
-#include <iostream>
-#include <ostream>
 
 namespace En {
 namespace ll {
 
-void logEnd(int success, const char *file, int line) {
-  LOG("[SHADER] INITING ENDED, CODE: %d, file: %s: %d\n", success, file, line);
-}
-
-#define LOG_END()                                                              \
-  {                                                                            \
-    logEnd(this->success, __FILE__, __LINE__);                                 \
-    return;                                                                    \
-  }
+void log_end() { LOG("[SHADER] INITING ENDED\n"); }
 
 Shader::Shader(const char *vertex_source, const char *fragment_source,
                const char *geometry_source) {
@@ -36,23 +26,27 @@ void Shader::init(const char *vertex_source, const char *fragment_source,
 
   if (!(vertex = compile_shader(vertex_source, GL_VERTEX_SHADER))) {
     this->success = 0;
-    LOG_END();
+    log_end();
+    return;
   }
 
   if (!(fragment = compile_shader(fragment_source, GL_FRAGMENT_SHADER))) {
     this->success = 0;
-    LOG_END();
+    log_end();
+    return;
   }
 
   if (strlen(geometry_source)) {
     if (!(geometry = compile_shader(geometry_source, GL_GEOMETRY_SHADER))) {
       this->success = 0;
-      LOG_END();
+      log_end();
+      return;
     }
   }
 
   if (this->success == 0) {
-    LOG_END();
+    log_end();
+    return;
   } else
     LOG("[SHADER] COMPILATION SUCCESSFUL\n");
 
@@ -70,14 +64,14 @@ void Shader::init(const char *vertex_source, const char *fragment_source,
 
   GLint success;
 
-  char infoLog[512];
-  memset(infoLog, 0, 512);
+  char info_log[512];
+  memset(info_log, 0, 512);
 
   glGetProgramiv(this->id, GL_LINK_STATUS, &success);
 
   if (!success) {
-    glGetProgramInfoLog(this->id, 512, NULL, infoLog);
-    LOG("[SHADER] Failed to link shader, %s\n", infoLog);
+    glGetProgramInfoLog(this->id, 512, NULL, info_log);
+    LOG("[SHADER] Failed to link shader, %s\n", info_log);
     this->success = 0;
   } else {
     LOG("[SHADER] LINKING SUCCESSFUL\n");
@@ -89,7 +83,7 @@ void Shader::init(const char *vertex_source, const char *fragment_source,
   if (strlen(geometry_source))
     glDeleteShader(geometry);
 
-  LOG_END();
+  log_end();
 }
 
 void Shader::terminate() { glDeleteShader(this->id); }
@@ -102,8 +96,8 @@ GLuint Shader::compile_shader(const char *source, const GLuint shader_type) {
   glCompileShader(id);
 
   int success;
-  char infoLog[512];
-  memset(infoLog, 0, 512);
+  char info_log[512];
+  memset(info_log, 0, 512);
   glGetShaderiv(id, GL_COMPILE_STATUS, &success);
   if (!success) {
     char shader_type_name[32];
@@ -118,9 +112,9 @@ GLuint Shader::compile_shader(const char *source, const GLuint shader_type) {
     else if (shader_type == GL_GEOMETRY_SHADER)
       strcpy(shader_type_name, "GL_GEOMETRY_SHADER");
 
-    glGetShaderInfoLog(id, 512, NULL, infoLog);
+    glGetShaderInfoLog(id, 512, NULL, info_log);
     LOG("[SHADER] %s failed to compile, with error:\n\t %s", shader_type_name,
-        infoLog);
+        info_log);
     glDeleteShader(id);
     id = 0;
   }
@@ -133,7 +127,7 @@ void Shader::bind() const {
 }
 
 void Shader::unbind() { glUseProgram(0); };
-GLuint Shader::get_attrib_loc(char *attrib) {
+GLuint Shader::get_attrib_loc(char *attrib) const {
   return glGetAttribLocation(this->id, attrib);
 }
 

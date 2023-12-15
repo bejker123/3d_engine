@@ -27,7 +27,7 @@ public:
   void bind() const;
   static void unbind();
 
-  GLuint get_attrib_loc(char *attrib);
+  GLuint get_attrib_loc(char *attrib) const;
 
   void set1i(GLint value, const GLchar *name) const;
   void set1f(GLfloat value, const GLchar *name) const;
