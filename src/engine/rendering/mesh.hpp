@@ -21,7 +21,7 @@ public:
   void add_va(pVertexArray va);
   pMaterial get_material();
 
-  void render();
+  void render() const;
 
 private:
   std::vector<pVertexArray> vas;

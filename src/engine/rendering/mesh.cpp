@@ -4,7 +4,7 @@
 
 namespace En {
 
-void Mesh::render() {
+void Mesh::render() const {
   this->mat->bind();
   for (auto i : this->vas) {
     i->bind();
