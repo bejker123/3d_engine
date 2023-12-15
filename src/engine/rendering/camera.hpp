@@ -10,18 +10,7 @@ namespace En {
 
 class Camera {
 public:
-  Camera() {
-    this->world_up = glm::vec3(0, 1, 0);
-    this->right = glm::vec3(0.f);
-    this->up = world_up;
-
-    this->pitch = -20.f;
-    this->yaw = -30.f;
-    this->roll = 0.f;
-
-    this->update_vectors();
-  }
-
+  Camera();
   void init(float fov, float znear, float zfar, glm::vec3 pos);
 
   void upload_to_shader(pShader shader, Window *win);

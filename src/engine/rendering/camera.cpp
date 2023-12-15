@@ -3,6 +3,18 @@
 
 namespace En {
 
+Camera::Camera() {
+  this->world_up = glm::vec3(0, 1, 0);
+  this->right = glm::vec3(0.f);
+  this->up = world_up;
+
+  this->pitch = -20.f;
+  this->yaw = -30.f;
+  this->roll = 0.f;
+
+  this->update_vectors();
+}
+
 void Camera::init(float fov, float znear, float zfar, glm::vec3 pos) {
   this->fov = fov;
   this->znear = znear;
