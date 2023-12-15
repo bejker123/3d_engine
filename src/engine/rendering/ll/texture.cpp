@@ -1,5 +1,4 @@
 #include "texture.hpp"
-#include <cstdint>
 #include <map>
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../../stb/stb_image.h"
@@ -29,6 +28,7 @@ void ll::Texture::bind(const GLuint texture_unit) const {
 }
 
 void ll::Texture::unbind(const uint32_t type) { glBindTexture(type, 0); }
+
 void ll::Texture::load_from_file(std::string file) {
   if (this->id != 0) {
     glDeleteTextures(1, &this->id);
@@ -44,12 +44,10 @@ void ll::Texture::load_from_file(std::string file) {
     hashes.insert(std::make_pair(file, this->id));
   glBindTexture(this->type, this->id);
 
-  // std::cout << x << std::endl;
-
   stbi_set_flip_vertically_on_load(true);
-  int nrChannels;
+  int nr_channels;
   unsigned char *data =
-      stbi_load(file.data(), &this->width, &this->height, &nrChannels, 0);
+      stbi_load(file.data(), &this->width, &this->height, &nr_channels, 0);
 
   glTexParameteri(this->type, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(this->type, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -58,12 +56,12 @@ void ll::Texture::load_from_file(std::string file) {
 
   if (data != nullptr) {
     GLenum format = GL_RGB;
-    if (nrChannels == 1)
+    if (nr_channels == 1)
       format = GL_RED;
-    else if (nrChannels == 4)
+    else if (nr_channels == 4)
       format = GL_RGBA;
 
-    GLenum format1 = this->transparent && nrChannels == 4 ? GL_RGBA : GL_RGB;
+    GLenum format1 = this->transparent && nr_channels == 4 ? GL_RGBA : GL_RGB;
 
     glTexImage2D(this->type, 0, format1, this->width, this->height, 0, format,
                  GL_UNSIGNED_BYTE, data);
@@ -71,7 +69,7 @@ void ll::Texture::load_from_file(std::string file) {
     LOG("Texture Loaded, Debug Info:\n\tSize: (%d,%d)\n\tID: %d\n\t# Channels: "
         "%d"
         "\n",
-        this->width, this->height, this->id, nrChannels);
+        this->width, this->height, this->id, nr_channels);
   } else {
     LOG("Failed to load texture: %s\n", file.c_str());
   }
