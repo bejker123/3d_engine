@@ -3,7 +3,6 @@
 
 #include "../app.hpp"
 #include "io/logger.hpp"
-#include "rendering/ll/vertex_array.hpp"
 #include <ranges>
 #include <stdexcept>
 #include <thread>
@@ -12,6 +11,7 @@
 #include "../../imgui/backends/imgui_impl_opengl3.h"
 #include "../../imgui/imgui.h"
 #include "rendering/model.hpp"
+#include "shader_loader.hpp"
 
 std::unique_ptr<App> app;
 namespace rv = std::ranges::views;
@@ -50,6 +50,11 @@ Engine::Engine() {
 std::vector<int> ms_idxs;
 void Engine::add_shader(const char *v, const char *f, const char *g) {
   this->shaders.push_back(pShader(new ll::Shader(v, f, g)));
+}
+
+void Engine::load_shader(const char *v, const char *f, const char *g) {
+  this->shaders.push_back(
+      std::make_shared<ll::Shader>(ShaderLoader::load(v, f, g).value()));
 }
 
 void Engine::add_va(pVertexArray va) {
@@ -101,6 +106,13 @@ std::optional<pShader> Engine::get_shader(const size_t idx) const {
 }
 
 const size_t Engine::get_shaders_count() const { return this->shaders.size(); }
+
+void Engine::reload_shaders() {
+  for (auto &i : this->shaders) {
+    i->terminate();
+    *i = ShaderLoader::reload(i->get_id()).value();
+  }
+}
 
 std::optional<pVertexArray> Engine::get_va(const uint32_t id) const {
   try {
@@ -304,6 +316,9 @@ void Engine::render_imgui() {
   if (!paused)
     return;
 
+  if (ImGui::Button("Reload Shaders")) {
+    this->reload_shaders();
+  }
   if (ImGui::CollapsingHeader("Camera")) {
     ImGui::BeginGroup();
     ImGui::SliderFloat("Camera X", &cam.get_pos()->x, -10.0f, 10.0f);

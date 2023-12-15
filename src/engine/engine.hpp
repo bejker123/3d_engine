@@ -24,6 +24,7 @@ public:
   // FUNCTIONS
   // init functions
   void add_shader(const char *v, const char *f, const char *g);
+  void load_shader(const char *v, const char *f, const char *g = "");
   void add_va(pVertexArray va);
 
   void add_model(Model &model);
@@ -49,6 +50,8 @@ public:
   Window window;
 
 private:
+  void reload_shaders();
+
   void init_command_line_args();
   bool init_opengl();
   void init_imgui();

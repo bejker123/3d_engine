@@ -113,7 +113,7 @@ GLuint Shader::compile_shader(const char *source, const GLuint shader_type) {
       strcpy(shader_type_name, "GL_GEOMETRY_SHADER");
 
     glGetShaderInfoLog(id, 512, NULL, info_log);
-    LOG("[SHADER] %s failed to compile, with error:\n\t %s", shader_type_name,
+    LOG("[SHADER] %s failed to compile, with error:\n\t %s\n", shader_type_name,
         info_log);
     glDeleteShader(id);
     id = 0;
