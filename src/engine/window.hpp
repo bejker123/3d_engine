@@ -13,15 +13,15 @@ public:
 
   bool should_close() const;
 
-  void set_should_close(bool val);
+  void set_should_close(bool val) const;
 
   void swap_buffers() const;
 
   GLFWwindow *raw() const;
 
-  std::tuple<int, int> get_dimensions();
+  std::tuple<int, int> get_dimensions() const;
 
-  std::tuple<double, double> get_mouse_pos();
+  std::tuple<double, double> get_mouse_pos() const;
 
   void hide_cursor() const;
 

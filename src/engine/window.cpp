@@ -37,12 +37,15 @@ bool Window::init(int width, int height, char *title, bool resizable,
   return true;
 }
 
-void Window::terminate() { glfwDestroyWindow(this->window); }
+void Window::terminate() {
+  glfwSetWindowShouldClose(this->window, GL_TRUE);
+  glfwDestroyWindow(this->window);
+}
 
 bool Window::should_close() const {
   return glfwWindowShouldClose(this->window);
 }
-void Window::set_should_close(bool val) {
+void Window::set_should_close(bool val) const {
   glfwSetWindowShouldClose(this->window, val);
 }
 
@@ -50,14 +53,14 @@ void Window::swap_buffers() const { glfwSwapBuffers(this->window); };
 
 GLFWwindow *Window::raw() const { return this->window; };
 
-std::tuple<int, int> Window::get_dimensions() {
-  int frameBufferWidth, frameBufferHeight;
+std::tuple<int, int> Window::get_dimensions() const {
+  int width, height;
 
-  glfwGetFramebufferSize(window, &frameBufferWidth, &frameBufferHeight);
-  return std::make_tuple(frameBufferWidth, frameBufferHeight);
+  glfwGetFramebufferSize(window, &width, &height);
+  return std::make_tuple(width, height);
 }
 
-std::tuple<double, double> Window::get_mouse_pos() {
+std::tuple<double, double> Window::get_mouse_pos() const {
   double x, y;
   glfwGetCursorPos(this->window, &x, &y);
   return std::make_tuple(x, y);
