@@ -110,6 +110,7 @@ int App::init(EN engine) {
   auto m = ml.load(engine->get_shader(0).value(), "models/sb/sb.obj");
   m.set_origin(glm::vec3(-30, 0, 0));
   m.set_scale(glm::vec3(1));
+  // m.set_rot(glm::vec3(-90, 0, 0));
   engine->add_model(m);
 
   auto m1 =

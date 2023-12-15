@@ -38,7 +38,11 @@ Mesh::Mesh(pMaterial material, std::vector<ll::VertexC> vertices,
   va.add_vertex_buffer(&vb);
   this->vas.push_back(std::make_shared<ll::VertexArray>(va));
 }
-void Mesh::init(pMaterial material, std::shared_ptr<ll::VertexArray> va) {
+Mesh::Mesh(pMaterial material, pVertexArray va) {
+  this->vas.push_back(va);
+  this->mat = material;
+};
+void Mesh::init(pMaterial material, pVertexArray va) {
   this->vas.push_back(va);
   this->mat = material;
 };

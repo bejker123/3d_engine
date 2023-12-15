@@ -63,7 +63,7 @@ void Engine::add_model(Model &model) {
   ms_idxs.push_back(0);
 }
 
-void Engine::add_model(std::shared_ptr<Mesh> mesh) {
+void Engine::add_model(pMesh mesh) {
   this->models.push_back(Model(mesh));
   ms_idxs.push_back(0);
 }
@@ -102,8 +102,7 @@ std::optional<pShader> Engine::get_shader(const size_t idx) const {
 
 const size_t Engine::get_shaders_count() const { return this->shaders.size(); }
 
-std::optional<std::shared_ptr<const ll::VertexArray>>
-Engine::get_va(const uint32_t id) const {
+std::optional<pVertexArray> Engine::get_va(const uint32_t id) const {
   try {
     return std::optional(this->vas.at(id));
   } catch (std::out_of_range e) {
@@ -192,6 +191,16 @@ void Engine::terminate_opengl() {
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
+  for (auto &i : this->shaders) {
+    i->terminate();
+  }
+  for (auto &i : this->models) {
+    for (auto &j : i.get_meshes()) {
+      auto tex = j->get_material()->get_texture();
+      if (tex.has_value())
+        tex.value()->terminate();
+    }
+  }
   ll::opengl::terminate();
 }
 

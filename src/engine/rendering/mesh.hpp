@@ -9,20 +9,22 @@ namespace En {
 
 class Mesh {
 public:
-  void init(pMaterial material, std::shared_ptr<ll::VertexArray> va);
+  void init(pMaterial material, pVertexArray va);
 
   Mesh(pMaterial material, std::vector<ll::Vertex> vertices,
        std::vector<unsigned int> indices);
   Mesh(pMaterial material, std::vector<ll::VertexC> vertices,
        std::vector<unsigned int> indices);
+
+  Mesh(pMaterial material, pVertexArray va);
   Mesh(){};
-  void add_va(std::shared_ptr<ll::VertexArray> va);
+  void add_va(pVertexArray va);
   pMaterial get_material();
 
   void render();
 
 private:
-  std::vector<std::shared_ptr<ll::VertexArray>> vas;
+  std::vector<pVertexArray> vas;
   pMaterial mat;
 };
 

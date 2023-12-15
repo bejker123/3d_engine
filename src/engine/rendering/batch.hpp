@@ -2,12 +2,16 @@
 #define BATCH_HPP
 
 #include "model.hpp"
-#include <memory>
 #include <vector>
+
+namespace En {
+
+class Batch;
+using pBatch = std::shared_ptr<Batch>;
 class Batch {
 public:
-  static std::shared_ptr<Batch> instance() {
-    static std::shared_ptr<Batch> b(new Batch);
+  static pBatch instance() {
+    static pBatch b(new Batch);
     return b;
   }
 
@@ -20,7 +24,9 @@ private:
   };
   unsigned max_vert;
   unsigned used_vert;
-  static std::shared_ptr<Batch> inst;
-  std::vector<std::shared_ptr<Model>> list;
+  static pBatch inst;
+  std::vector<pModel> list;
 };
+
+} // namespace En
 #endif // !BATCH_HPP

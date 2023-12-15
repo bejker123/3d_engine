@@ -112,9 +112,7 @@ void Material::unbind() const {
 void Material::set_texture(const pTexture texture) { this->texture = texture; }
 
 void Material::set_shader(const pShader shader) { this->shader = shader; }
-std::shared_ptr<const ll::Shader> Material::get_shader() const {
-  return this->shader;
-}
+pShader Material::get_shader() const { return this->shader; }
 MaterialOptions *Material::get_options() { return &this->options; }
 std::optional<pTexture> Material::get_texture() { return this->texture; }
 

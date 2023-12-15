@@ -14,7 +14,7 @@ public:
 
   void set_index_buffer(IndexBuffer *ib);
 
-  void bind();
+  void bind() const;
 
   static void unbind();
 

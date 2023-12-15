@@ -41,8 +41,7 @@ public:
   const size_t get_shaders_count() const;
 
   // Ids correspond to opengl ids
-  std::optional<std::shared_ptr<ll::VertexArray const>>
-  get_va(const uint32_t id) const;
+  std::optional<pVertexArray> get_va(const uint32_t id) const;
   // main functions
 
   int run();

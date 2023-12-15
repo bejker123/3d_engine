@@ -9,7 +9,7 @@ public:
   Model();
   Model(pMesh mesh);
   Model(std::vector<pMesh> meshes);
-  void init(std::shared_ptr<Mesh> mesh);
+  void init(pMesh mesh);
 
   void update();
   void render();
@@ -34,5 +34,6 @@ private:
 
   glm::vec3 pos, origin, rot, scale;
 };
+using pModel = std::shared_ptr<Model>;
 } // namespace En
 #endif // !MODEL_HPP

@@ -38,7 +38,7 @@ public:
 
   void set_texture(const pTexture texture);
   void set_shader(const pShader shader);
-  std::shared_ptr<const ll::Shader> get_shader() const;
+  pShader get_shader() const;
   MaterialOptions *get_options();
   std::optional<pTexture> get_texture();
 

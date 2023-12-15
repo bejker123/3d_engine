@@ -22,7 +22,7 @@ public:
 
   GLuint get_id() const { return this->id; }
 
-  ~Shader();
+  void terminate();
 
   void bind() const;
   static void unbind();

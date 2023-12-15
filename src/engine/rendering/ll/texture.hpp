@@ -15,7 +15,7 @@ public:
   Texture(const std::string file, const bool transparent = false,
           const GLenum type = GL_TEXTURE_2D);
 
-  ~Texture();
+  void terminate() const;
 
   GLuint get_id() const;
 

@@ -17,7 +17,7 @@ Model::Model(std::vector<pMesh> meshes) {
   this->meshes = meshes;
 }
 
-void Model::init(std::shared_ptr<Mesh> mesh) {
+void Model::init(pMesh mesh) {
   this->set_values();
   this->meshes.push_back(mesh);
 }

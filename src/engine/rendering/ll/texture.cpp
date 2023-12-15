@@ -16,7 +16,10 @@ Texture::Texture(const std::string file, const bool transparent,
   this->load_from_file(file);
 }
 
-ll::Texture::~Texture() {} // glDeleteTextures(1, &this->id); }
+void Texture::terminate() const {
+  hashes.clear();
+  glDeleteTextures(1, &this->id);
+}
 
 GLuint ll::Texture::get_id() const { return this->id; }
 
