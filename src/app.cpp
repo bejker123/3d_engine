@@ -1,7 +1,6 @@
 #include "app.hpp"
 #include "engine/model_loader.hpp"
 #include "engine/rendering/material.hpp"
-#include "engine/shaders.hpp"
 #include <ranges>
 
 namespace rv = std::ranges::views;
