@@ -109,8 +109,13 @@ const size_t Engine::get_shaders_count() const { return this->shaders.size(); }
 
 void Engine::reload_shaders() {
   for (auto &i : this->shaders) {
-    i->terminate();
-    *i = ShaderLoader::reload(i->get_id()).value();
+    auto new_ = ShaderLoader::reload(i->get_id());
+    if (new_.has_value()) {
+      i->terminate();
+      *i = new_.value();
+    } else {
+      LOG("[ENGINE] Shader %d not reloaded\n", i->get_id());
+    }
   }
 }
 

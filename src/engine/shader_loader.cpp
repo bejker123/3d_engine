@@ -51,6 +51,10 @@ std::optional<ll::Shader> ShaderLoader::load(const char *vs_path,
   }
   auto ret =
       ll::Shader(vs_content.data(), fs_content.data(), gs_content.data());
+
+  if (ret.get_state() != 1)
+    return std::nullopt;
+
   paths.insert(
       std::make_pair(ret.get_id(), std::tuple(vs_path, fs_path, gs_path)));
   return std::optional(ret);
@@ -61,10 +65,15 @@ std::optional<ll::Shader> ShaderLoader::reload(const uint32_t id) {
     return std::nullopt;
 
   auto [vp, fp, gp] = paths.at(id);
-  paths.erase(id);
   LOG("[SHADER_LOADER] Reloading %d:\n", id);
-
-  return std::optional(ShaderLoader::load(vp, fp, gp));
+  auto ret = ShaderLoader::load(vp, fp, gp);
+  if (ret.has_value()) {
+    LOG("[SHADER_LOADER] Success\n");
+    paths.erase(id);
+  } else {
+    LOG("[SHADER_LOADER] Failure\n");
+  }
+  return ret;
 }
 
 } // namespace En

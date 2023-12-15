@@ -5,8 +5,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <memory>
 
-enum ShaderState { NOT_INITED = -1, ERROR = 0, INITED = 1 };
-
 namespace En {
 namespace ll {
 
@@ -20,6 +18,8 @@ public:
             const char *geometry_source);
 
   GLuint get_id() const { return this->id; }
+
+  int get_state() const { return this->success; }
 
   void terminate();
 
