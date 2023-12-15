@@ -1,5 +1,4 @@
-#ifndef __GAME_H
-#define __GAME_H
+#pragma once
 
 #include "engine/engine.hpp"
 using EN = En::Engine *;
@@ -28,5 +27,3 @@ private:
   En::ll::IndexBuffer ib;
   En::ll::VertexArray va;
 };
-
-#endif //__GAME_H

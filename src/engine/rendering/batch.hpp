@@ -1,5 +1,4 @@
-#ifndef BATCH_HPP
-#define BATCH_HPP
+#pragma once
 
 #include "model.hpp"
 #include <vector>
@@ -29,4 +28,3 @@ private:
 };
 
 } // namespace En
-#endif // !BATCH_HPP

@@ -1,6 +1,4 @@
-
-#ifndef ENGINE_HPP
-#define ENGINE_HPP
+#pragma once
 #include "logic/performence.hpp"
 #include "prelude.hpp"
 #include <map>
@@ -81,5 +79,3 @@ private:
   std::map<uint32_t, pVertexArray> vas;
 };
 } // namespace En
-
-#endif //__GAME_H

@@ -1,5 +1,4 @@
-#ifndef PERFORMENCE_HPP
-#define PERFORMENCE_HPP
+#pragma once
 #include <chrono>
 class Performence {
 public:
@@ -16,5 +15,3 @@ private:
   std::chrono::steady_clock::time_point curr_time, last_time;
   std::vector<std::pair<uint64_t, float>> data_points;
 };
-
-#endif // !PERFORMENCE_HPP

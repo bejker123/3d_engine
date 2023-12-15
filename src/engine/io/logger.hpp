@@ -1,5 +1,4 @@
-#ifndef __LOGGER_H
-#define __LOGGER_H
+#pragma once
 #include <stdio.h>
 
 #define LOGGER_PREFIX "[LOGGER] "
@@ -17,5 +16,3 @@
 #define LOG_VAR(...) ((void)0)
 #define SLOG_VAR(...) ((void)0)
 #endif
-
-#endif //__LOGGER_H

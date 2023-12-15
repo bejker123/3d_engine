@@ -1,5 +1,4 @@
-#ifndef VERTEX_ARRAY_H
-#define VERTEX_ARRAY_H
+#pragma once
 #include "buffers.hpp"
 #include <memory>
 
@@ -37,5 +36,3 @@ private:
 } // namespace ll
 } // namespace En
 using pVertexArray = std::shared_ptr<const En::ll::VertexArray>;
-
-#endif

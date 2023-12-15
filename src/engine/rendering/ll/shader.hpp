@@ -1,5 +1,4 @@
-#ifndef __SHADER_H
-#define __SHADER_H
+#pragma once
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -49,4 +48,3 @@ private:
 } // namespace ll
 } // namespace En
 using pShader = std::shared_ptr<En::ll::Shader>;
-#endif //__SHADER_H

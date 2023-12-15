@@ -1,5 +1,4 @@
-#ifndef WINDOW_HPP
-#define WINDOW_HPP
+#pragma once
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <tuple>
@@ -32,4 +31,3 @@ private:
 };
 
 } // namespace En
-#endif // !WINDOW_HPP

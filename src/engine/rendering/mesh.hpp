@@ -1,5 +1,4 @@
-#ifndef MESH_HPP
-#define MESH_HPP
+#pragma once
 #include "ll/vertex_array.hpp"
 #include "material.hpp"
 #include <memory>
@@ -30,4 +29,3 @@ private:
 
 } // namespace En
 using pMesh = std::shared_ptr<En::Mesh>;
-#endif // !MESH_HPP

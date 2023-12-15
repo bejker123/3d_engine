@@ -1,5 +1,4 @@
-#ifndef OPENGL_HPP
-#define OPENGL_HPP
+#pragma once
 #include <optional>
 #include <string>
 
@@ -25,4 +24,3 @@ void terminate();
 
 } // namespace ll
 } // namespace En
-#endif // !OPENGL_HPP

@@ -1,5 +1,4 @@
-#ifndef MATERIAL_HPP
-#define MATERIAL_HPP
+#pragma once
 #include "ll/shader.hpp"
 #include "ll/texture.hpp"
 #include <memory>
@@ -50,4 +49,3 @@ private:
 };
 } // namespace En
 using pMaterial = std::shared_ptr<En::Material>;
-#endif // !MATERIAL_HPP

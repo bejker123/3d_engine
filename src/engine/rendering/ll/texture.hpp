@@ -1,5 +1,4 @@
-#ifndef TEXTURE_HPP
-#define TEXTURE_HPP
+#pragma once
 #include <memory>
 #include <string>
 
@@ -35,4 +34,3 @@ private:
 } // namespace ll
 } // namespace En
 using pTexture = std::shared_ptr<const En::ll::Texture>;
-#endif // !TEXTURE_HPP

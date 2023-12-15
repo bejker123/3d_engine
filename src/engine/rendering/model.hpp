@@ -1,5 +1,4 @@
-#ifndef MODEL_HPP
-#define MODEL_HPP
+#pragma once
 #include "mesh.hpp"
 
 namespace En {
@@ -36,4 +35,3 @@ private:
 };
 using pModel = std::shared_ptr<Model>;
 } // namespace En
-#endif // !MODEL_HPP

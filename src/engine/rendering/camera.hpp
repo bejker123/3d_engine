@@ -1,5 +1,4 @@
-#ifndef CAMERA_HPP
-#define CAMERA_HPP
+#pragma once
 
 #include "../window.hpp"
 #include "ll/shader.hpp"
@@ -57,4 +56,3 @@ private:
   const GLfloat MAX_ROLL = 0.f;
 };
 } // namespace En
-#endif // !CAMERA_HPP
