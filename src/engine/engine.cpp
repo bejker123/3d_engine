@@ -133,8 +133,8 @@ void Engine::init_command_line_args() {
   this->options.window_title = (char *)"test";
   this->options.window_width = 800;
   this->options.window_height = 600;
-  this->options.window_resizable = false;
-  this->options.window_fullscreen = true;
+  this->options.window_resizable = true;
+  this->options.window_fullscreen = false;
 }
 
 // Initialise OpenGL, return true if successful

@@ -41,9 +41,10 @@ void Camera::upload_to_shader(pShader shader, Window *win) {
 
   this->calculate_view_matrix();
 
-  auto [fbw, fbh] = win->get_dimensions();
+  // auto [fbw, fbh] = win->get_dimensions();
 
-  this->calculate_proj_matrix(fbw, fbh);
+  // FIXED SIZE
+  this->calculate_proj_matrix(1920, 1080);
 
   shader->set_mat4fv(this->view_matrix, "ViewMatrix");
   shader->set_mat4fv(this->proj_matrix, "ProjectionMatrix");

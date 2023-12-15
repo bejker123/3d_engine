@@ -6,6 +6,10 @@
 
 namespace En {
 
+void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
+  glViewport(0, 0, width, height);
+}
+
 bool Window::init(int width, int height, char *title, bool resizable,
                   bool fullscreen, bool vsync) {
   glfwWindowHint(GLFW_RESIZABLE, resizable);
@@ -31,6 +35,9 @@ bool Window::init(int width, int height, char *title, bool resizable,
     LOG("FAIELD TO INIT WINDOW\n");
     return false;
   }
+
+  glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
   if (!vsync) // Disable V-Sync
     glfwSwapInterval(0);
 
