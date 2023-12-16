@@ -149,7 +149,10 @@ bool opengl::setup() {
 #endif
   return true;
 }
-bool opengl::setup_glew() { return glewInit() == GLEW_OK; }
+bool opengl::setup_glew() {
+  glewExperimental = GL_TRUE;
+  return glewInit() == GLEW_OK;
+}
 void opengl::terminate() { glfwTerminate(); }
 void opengl::debug_info() {
 

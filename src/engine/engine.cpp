@@ -159,8 +159,6 @@ bool Engine::init_opengl() {
 
   LOG("[ENGINE] INITIALISING GLEW\n");
 
-  glewExperimental = GL_TRUE;
-
   if (!ll::opengl::setup_glew()) {
     LOG("[ENGINE] FAILED TO INIT GLEW\n");
     terminate_opengl();
