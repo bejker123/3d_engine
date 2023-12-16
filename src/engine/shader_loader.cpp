@@ -52,8 +52,12 @@ std::optional<ll::Shader> ShaderLoader::load(const char *vs_path,
   auto ret =
       ll::Shader(vs_content.data(), fs_content.data(), gs_content.data());
 
-  if (ret.get_state() != 1)
+  if (ret.get_state() != 1) {
+    LOG("[SHADER_LOADER] FAILURE\n");
     return std::nullopt;
+  } else {
+    LOG("[SHADER_LOADER] SUCCESS\n");
+  }
 
   paths.insert(
       std::make_pair(ret.get_id(), std::tuple(vs_path, fs_path, gs_path)));
