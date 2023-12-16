@@ -44,6 +44,7 @@ void ll::Texture::load_from_file(std::string file) {
     hashes.insert(std::make_pair(file, this->id));
   glBindTexture(this->type, this->id);
 
+  LOG("[TEXTRURE] LOADING: %s\n", file.data());
   stbi_set_flip_vertically_on_load(true);
   int nr_channels;
   unsigned char *data =
@@ -66,12 +67,13 @@ void ll::Texture::load_from_file(std::string file) {
     glTexImage2D(this->type, 0, format1, this->width, this->height, 0, format,
                  GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(this->type);
-    LOG("Texture Loaded, Debug Info:\n\tSize: (%d,%d)\n\tID: %d\n\t# Channels: "
+    LOG("[TEXTURE] LOADED, Debug Info:\n\tSize: (%d,%d)\n\tID: %d\n\t# "
+        "Channels: "
         "%d"
         "\n",
         this->width, this->height, this->id, nr_channels);
   } else {
-    LOG("Failed to load texture: %s\n", file.c_str());
+    LOG("[TEXTURE] FAILED to load: %s\n", file.c_str());
   }
 
   glBindTexture(this->type, 0);

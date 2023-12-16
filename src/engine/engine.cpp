@@ -19,7 +19,7 @@ namespace En {
 
 // Init Game State, run the main loop
 Engine::Engine() {
-  LOG("INITIALISATION STARTED\n");
+  LOG("[ENGINE] INITIALISATION STARTED\n");
 
   // First set the game state to uninitialised
   this->state = EngineState::UNINITED;
@@ -129,7 +129,7 @@ std::optional<pVertexArray> Engine::get_va(const uint32_t id) const {
 
 // Parse and init cmd line args
 void Engine::init_command_line_args() {
-  LOG("INITIALISING Command Line Arguments\n");
+  LOG("[ENGINE] INITIALISING Command Line Arguments\n");
   this->options.window_title = (char *)"test";
   this->options.window_width = 800;
   this->options.window_height = 600;
@@ -139,15 +139,15 @@ void Engine::init_command_line_args() {
 
 // Initialise OpenGL, return true if successful
 bool Engine::init_opengl() {
-  LOG("INITIALISING OPENGL\n");
-  LOG("INITIALISING GLFW\n");
+  LOG("[ENGINE] INITIALISING OPENGL\n");
+  LOG("[ENGINE] INITIALISING GLFW\n");
   if (!ll::opengl::setup()) {
-    LOG("FAILED TO INIT GLFW\n");
+    LOG("[ENGINE] FAILED TO INIT GLFW\n");
     this->terminate_opengl();
     return false;
   }
 
-  LOG("INITIALISING WINDOW\n");
+  LOG("[ENGINE] INITIALISING WINDOW\n");
 
   if (!this->window.init(
           this->options.window_width, this->options.window_height,
@@ -157,17 +157,17 @@ bool Engine::init_opengl() {
   }
   window.hide_cursor();
 
-  LOG("INITIALISING GLEW\n");
+  LOG("[ENGINE] INITIALISING GLEW\n");
 
   glewExperimental = GL_TRUE;
 
   if (!ll::opengl::setup_glew()) {
-    LOG("FAILED TO INIT GLEW\n");
+    LOG("[ENGINE] FAILED TO INIT GLEW\n");
     terminate_opengl();
     return false;
   }
 
-  LOG("OPENGL INITIALISED\n");
+  LOG("[ENGINE] OPENGL INITIALISED\n");
 
   ll::opengl::debug_info();
   return true;
@@ -193,17 +193,17 @@ void Engine::init_imgui() {
 }
 
 Engine::~Engine() {
-  LOG("TERMINATION STARTED\n");
+  LOG("[ENGINE] TERMINATION STARTED\n");
 
   app->pre_terminate(this);
   terminate_opengl();
   app->terminate(this);
 
-  LOG("TERMINATION COMPELTE\n");
+  LOG("[ENGINE] TERMINATION COMPELTE\n");
 }
 
 void Engine::terminate_opengl() {
-  LOG("TERMINATING OPENGL\n");
+  LOG("[ENGINE] TERMINATING OPENGL\n");
   this->window.~Window();
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();

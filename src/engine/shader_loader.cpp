@@ -9,14 +9,14 @@ std::map<uint32_t, std::tuple<const char *, const char *, const char *>> paths;
 std::optional<ll::Shader> ShaderLoader::load(const char *vs_path,
                                              const char *fs_path,
                                              const char *gs_path) {
-  LOG("[SHADER_LOADER] Loading:\n\tVertex: %s\n\tFragment: %s\n", vs_path,
+  LOG("[SHADER_LOADER] LOADING:\n\tVertex: %s\n\tFragment: %s\n", vs_path,
       fs_path);
   if (strlen(gs_path))
     printf("\tGeometry: %s\n", gs_path);
   std::ifstream vs_file, fs_file, gs_file;
   vs_file.open(vs_path);
   if (!vs_file.is_open()) {
-    LOG("Failed to load vs: %s\n", vs_path);
+    LOG("FAILED to load vs: %s\n", vs_path);
     return std::nullopt;
   }
 
@@ -28,7 +28,7 @@ std::optional<ll::Shader> ShaderLoader::load(const char *vs_path,
 
   fs_file.open(fs_path);
   if (!fs_file.is_open()) {
-    LOG("Failed to load fs: %s\n", fs_path);
+    LOG("FAILED to load fs: %s\n", fs_path);
     return std::nullopt;
   }
 
@@ -42,7 +42,7 @@ std::optional<ll::Shader> ShaderLoader::load(const char *vs_path,
   if (strlen(gs_path))
     gs_file.open(gs_path);
   if (!gs_file.is_open() && strlen(gs_path)) {
-    LOG("Failed to load gs: %s\n", gs_path);
+    LOG("FAILED to load gs: %s\n", gs_path);
     // return std::nullopt;
   } else {
 
@@ -65,13 +65,13 @@ std::optional<ll::Shader> ShaderLoader::reload(const uint32_t id) {
     return std::nullopt;
 
   auto [vp, fp, gp] = paths.at(id);
-  LOG("[SHADER_LOADER] Reloading %d:\n", id);
+  LOG("[SHADER_LOADER] RELOADING %d:\n", id);
   auto ret = ShaderLoader::load(vp, fp, gp);
   if (ret.has_value()) {
-    LOG("[SHADER_LOADER] Success\n");
+    LOG("[SHADER_LOADER] SUCCESS\n");
     paths.erase(id);
   } else {
-    LOG("[SHADER_LOADER] Failure\n");
+    LOG("[SHADER_LOADER] FAILURE\n");
   }
   return ret;
 }

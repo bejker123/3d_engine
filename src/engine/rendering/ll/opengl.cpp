@@ -19,7 +19,7 @@ std::optional<std::string> opengl::get_error() {
   auto ret = glfwGetError((const char **)&desc);
 
   if (ret != GL_NO_ERROR) { // Returns GL_NO_ERROR (0) if no error is present
-    LOG("GLFW ERROR: %d\n\t%s\n", ret, desc);
+    LOG("[OPENGL] GLFW ERROR: %d\n\t%s\n", ret, desc);
     return desc;
   }
 
@@ -121,18 +121,18 @@ void gl_debug_handler(GLenum source, GLenum type, GLuint id, GLenum severity,
     break;
   }
 
-  LOG("[GL_DEBUG_MESSAGE] %s::%s::%s::ID: %d:\n\t%s\n", _source.c_str(),
-      _type.c_str(), _severity.c_str(), id, message);
+  LOG("[OPENGL] [GL_DEBUG_MESSAGE] %s::%s::%s::ID: %d:\n\t%s\n",
+      _source.c_str(), _type.c_str(), _severity.c_str(), id, message);
 #endif
 }
 
 void glfw_error_handler(int code, const char *desc) {
-  LOG("GLFW ERROR: %d\n\t%s\n", code, desc);
+  LOG("[OPENGL] GLFW ERROR: %d\n\t%s\n", code, desc);
 }
 
 bool opengl::setup() {
   if (!glfwInit()) {
-    LOG("GLFW INIT ERROR: \n\t%s\n", opengl::get_error()->c_str());
+    LOG("[OPENGL] GLFW INIT ERROR: \n\t%s\n", opengl::get_error()->c_str());
     return false;
   }
 
@@ -153,13 +153,12 @@ bool opengl::setup_glew() { return glewInit() == GLEW_OK; }
 void opengl::terminate() { glfwTerminate(); }
 void opengl::debug_info() {
 
-  LOG("OPENGL DEBUG INFO:\n");
   const GLubyte *vendor = glGetString(GL_VENDOR);
   const GLubyte *renderer = glGetString(GL_RENDERER);
   const GLubyte *version = glGetString(GL_VERSION);
-  LOG("\tGraphics card vendor: %s\n", vendor);
-  LOG("\tGraphics card: %s\n", renderer);
-  LOG("\tOpenGL version: %s\n", version);
+  LOG("[OPENGL] OPENGL DEBUG INFO:\n\tGraphics Card Vendor: %s\n\tGraphics "
+      "Card: %s\n\tOpenGL Version: %s\n",
+      vendor, renderer, version);
   glEnable(GL_DEBUG_OUTPUT);
   glDebugMessageCallback(gl_debug_handler, nullptr);
 }
