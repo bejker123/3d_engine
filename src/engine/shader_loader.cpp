@@ -71,12 +71,10 @@ std::optional<ll::Shader> ShaderLoader::reload(const uint32_t id) {
   auto [vp, fp, gp] = paths.at(id);
   LOG("[SHADER_LOADER] RELOADING %d:\n", id);
   auto ret = ShaderLoader::load(vp, fp, gp);
-  if (ret.has_value()) {
-    LOG("[SHADER_LOADER] SUCCESS\n");
+
+  if (ret.has_value())
     paths.erase(id);
-  } else {
-    LOG("[SHADER_LOADER] FAILURE\n");
-  }
+
   return ret;
 }
 
