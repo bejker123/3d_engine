@@ -5,7 +5,6 @@
 #include "../../io/logger.hpp"
 
 namespace En {
-namespace ll {
 
 static std::map<std::string, uint32_t> hashes;
 
@@ -20,16 +19,16 @@ void Texture::terminate() const {
   glDeleteTextures(1, &this->id);
 }
 
-GLuint ll::Texture::get_id() const { return this->id; }
+GLuint Texture::get_id() const { return this->id; }
 
-void ll::Texture::bind(const GLuint texture_unit) const {
+void Texture::bind(const GLuint texture_unit) const {
   glActiveTexture(GL_TEXTURE0 + texture_unit);
   glBindTexture(this->type, this->id);
 }
 
-void ll::Texture::unbind(const uint32_t type) { glBindTexture(type, 0); }
+void Texture::unbind(const uint32_t type) { glBindTexture(type, 0); }
 
-void ll::Texture::load_from_file(std::string file) {
+void Texture::load_from_file(std::string file) {
   if (this->id != 0) {
     glDeleteTextures(1, &this->id);
   }
@@ -80,5 +79,4 @@ void ll::Texture::load_from_file(std::string file) {
   stbi_image_free(data);
 }
 
-} // namespace ll
 } // namespace En

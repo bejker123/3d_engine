@@ -6,7 +6,6 @@
 #include <GLFW/glfw3.h>
 
 namespace En {
-namespace ll {
 
 class Texture {
 public:
@@ -31,6 +30,5 @@ private:
   void load_from_file(std::string file);
 };
 
-} // namespace ll
 } // namespace En
-using pTexture = std::shared_ptr<const En::ll::Texture>;
+using pTexture = std::shared_ptr<const En::Texture>;

@@ -2,7 +2,6 @@
 #include <vector>
 
 namespace En {
-namespace ll {
 
 void VertexBuffer::init(void *vertices, uint32_t size, uint32_t elements,
                         VertexType type) {
@@ -67,5 +66,4 @@ void IndexBuffer::unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
 void IndexBuffer::terminate() { glDeleteBuffers(1, &this->id); }
 
-} // namespace ll
 } // namespace En

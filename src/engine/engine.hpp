@@ -29,7 +29,7 @@ public:
 
   void add_model(Model &model);
   void add_model(pMesh mesh);
-  void add_model(std::vector<ll::Vertex> vertices,
+  void add_model(std::vector<Vertex> vertices,
                  std::vector<unsigned int> indices, pMaterial mat);
 
   std::optional<Model *> get_model(const uint32_t idx);

@@ -5,7 +5,6 @@
 #include <cstring>
 
 namespace En {
-namespace ll {
 
 void opengl::clear_buffer() {
   glClearColor(1.f, 1.f, 1.f, 1.f);
@@ -165,5 +164,4 @@ void opengl::debug_info() {
   glDebugMessageCallback(gl_debug_handler, nullptr);
 }
 
-} // namespace ll
 } // namespace En

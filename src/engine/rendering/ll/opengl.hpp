@@ -3,7 +3,6 @@
 #include <string>
 
 namespace En {
-namespace ll {
 
 #define OPENGL_VER_MAJ 4
 #define OPENGL_VER_MIN 6
@@ -22,5 +21,4 @@ void terminate();
 
 }; // namespace opengl
 
-} // namespace ll
 } // namespace En

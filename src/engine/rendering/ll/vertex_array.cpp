@@ -4,7 +4,6 @@
 #include <cstdio>
 
 namespace En {
-namespace ll {
 
 void VertexArray::init() {
   glGenVertexArrays(1, &this->id);
@@ -108,5 +107,4 @@ GLuint VertexArray::get_id() const { return this->id; }
 uint32_t VertexArray::get_elements() const { return this->elements; }
 uint32_t VertexArray::get_count() const { return this->count; }
 
-} // namespace ll
 } // namespace En

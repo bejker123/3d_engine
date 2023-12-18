@@ -18,25 +18,25 @@ void Mesh::render() const {
   this->mat->unbind();
 }
 
-Mesh::Mesh(pMaterial material, std::vector<ll::Vertex> vertices,
+Mesh::Mesh(pMaterial material, std::vector<Vertex> vertices,
            std::vector<unsigned int> indices)
     : mat(material) {
-  ll::VertexArray va;
+  VertexArray va;
   va.init();
-  ll::VertexBuffer vb;
+  VertexBuffer vb;
   vb.init(vertices);
   va.add_vertex_buffer(&vb);
-  this->vas.push_back(std::make_shared<ll::VertexArray>(va));
+  this->vas.push_back(std::make_shared<VertexArray>(va));
 }
-Mesh::Mesh(pMaterial material, std::vector<ll::VertexC> vertices,
+Mesh::Mesh(pMaterial material, std::vector<VertexC> vertices,
            std::vector<unsigned int> indices)
     : mat(material) {
-  ll::VertexArray va;
+  VertexArray va;
   va.init();
-  ll::VertexBuffer vb;
+  VertexBuffer vb;
   vb.init(vertices);
   va.add_vertex_buffer(&vb);
-  this->vas.push_back(std::make_shared<ll::VertexArray>(va));
+  this->vas.push_back(std::make_shared<VertexArray>(va));
 }
 Mesh::Mesh(pMaterial material, pVertexArray va) {
   this->vas.push_back(va);

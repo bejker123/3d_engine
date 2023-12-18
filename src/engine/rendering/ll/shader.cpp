@@ -3,7 +3,6 @@
 #include <assert.h>
 
 namespace En {
-namespace ll {
 
 void log_end() { LOG("[SHADER] INITING ENDED\n"); }
 
@@ -177,5 +176,4 @@ void Shader::set_mat4fv(glm::mat4 value, const GLchar *name,
   Shader::unbind();
 }
 
-} // namespace ll
 } // namespace En

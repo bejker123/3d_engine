@@ -4,19 +4,19 @@ namespace En {
 
 ModelLoader::ModelLoader() {}
 
-ll::Texture load_texture(aiMaterial *mat, aiTextureType type,
-                         std::string directory) {
+Texture load_texture(aiMaterial *mat, aiTextureType type,
+                     std::string directory) {
   // for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
   aiString str;
   // mat->GetTexture(type, i, &str);
   mat->GetTexture(type, 0, &str);
-  return ll::Texture(directory + str.C_Str());
+  return Texture(directory + str.C_Str());
   // }
 }
 
 Mesh process_mesh(pShader shader, aiMesh *mesh, const aiScene *scene,
                   const std::string &dir) {
-  std::vector<ll::VertexC> vertices;
+  std::vector<VertexC> vertices;
   std::vector<unsigned int> indices;
 
   for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
@@ -29,7 +29,7 @@ Mesh process_mesh(pShader shader, aiMesh *mesh, const aiScene *scene,
     if (_text)
       text = _text[i];
 
-    vertices.push_back(ll::VertexC(
+    vertices.push_back(VertexC(
         glm::vec3(vert.x, vert.y, vert.z), glm::vec3(norm.x, norm.y, norm.z),
         glm::vec2(text.x, text.y), glm::vec4(0.2, 0.2, 0.2, 1)));
   }
@@ -40,14 +40,13 @@ Mesh process_mesh(pShader shader, aiMesh *mesh, const aiScene *scene,
       indices.push_back(face.mIndices[j]);
   }
 
-  ll::Texture tex;
+  Texture tex;
   if (mesh->mMaterialIndex >= 0) {
     aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
     tex = load_texture(material, aiTextureType_DIFFUSE, dir);
   }
 
-  auto mat =
-      pMaterial(new Material(shader, std::make_shared<ll::Texture>(tex)));
+  auto mat = pMaterial(new Material(shader, std::make_shared<Texture>(tex)));
 
   return Mesh(mat, vertices, indices);
 }

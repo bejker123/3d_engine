@@ -10,9 +10,9 @@ class Mesh {
 public:
   void init(pMaterial material, pVertexArray va);
 
-  Mesh(pMaterial material, std::vector<ll::Vertex> vertices,
+  Mesh(pMaterial material, std::vector<Vertex> vertices,
        std::vector<unsigned int> indices);
-  Mesh(pMaterial material, std::vector<ll::VertexC> vertices,
+  Mesh(pMaterial material, std::vector<VertexC> vertices,
        std::vector<unsigned int> indices);
 
   Mesh(pMaterial material, pVertexArray va);

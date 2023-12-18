@@ -3,7 +3,6 @@
 #include <memory>
 
 namespace En {
-namespace ll {
 
 class VertexArray {
 public:
@@ -33,6 +32,5 @@ private:
 
   // VertexBuffer* vbs;
 };
-} // namespace ll
 } // namespace En
-using pVertexArray = std::shared_ptr<const En::ll::VertexArray>;
+using pVertexArray = std::shared_ptr<const En::VertexArray>;

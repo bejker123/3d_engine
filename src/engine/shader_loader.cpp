@@ -6,9 +6,9 @@
 
 namespace En {
 std::map<uint32_t, std::tuple<const char *, const char *, const char *>> paths;
-std::optional<ll::Shader> ShaderLoader::load(const char *vs_path,
-                                             const char *fs_path,
-                                             const char *gs_path) {
+std::optional<Shader> ShaderLoader::load(const char *vs_path,
+                                         const char *fs_path,
+                                         const char *gs_path) {
   LOG("[SHADER_LOADER] LOADING:\n\tVertex: %s\n\tFragment: %s\n", vs_path,
       fs_path);
   if (strlen(gs_path))
@@ -49,8 +49,7 @@ std::optional<ll::Shader> ShaderLoader::load(const char *vs_path,
     while (std::getline(gs_file, line))
       gs_content += line + '\n';
   }
-  auto ret =
-      ll::Shader(vs_content.data(), fs_content.data(), gs_content.data());
+  auto ret = Shader(vs_content.data(), fs_content.data(), gs_content.data());
 
   if (ret.get_state() != 1) {
     LOG("[SHADER_LOADER] FAILURE\n");
@@ -64,7 +63,7 @@ std::optional<ll::Shader> ShaderLoader::load(const char *vs_path,
   return std::optional(ret);
 }
 
-std::optional<ll::Shader> ShaderLoader::reload(const uint32_t id) {
+std::optional<Shader> ShaderLoader::reload(const uint32_t id) {
   if (!paths.contains(id))
     return std::nullopt;
 

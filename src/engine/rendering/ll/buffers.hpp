@@ -5,7 +5,6 @@
 #include <vector>
 
 namespace En {
-namespace ll {
 
 struct VertexPC {
 public:
@@ -75,5 +74,4 @@ public:
   uint32_t elements;
 };
 
-} // namespace ll
 } // namespace En

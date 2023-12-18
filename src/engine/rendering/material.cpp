@@ -105,8 +105,8 @@ void Material::bind() const {
 }
 void Material::unbind() const {
   MaterialOptions::unbind();
-  ll::Shader::unbind();
-  ll::Texture::unbind();
+  Shader::unbind();
+  Texture::unbind();
 }
 
 void Material::set_texture(const pTexture texture) { this->texture = texture; }

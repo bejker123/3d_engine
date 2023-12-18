@@ -23,7 +23,7 @@ public:
   void terminate(EN engine);
 
 private:
-  En::ll::VertexBuffer vb;
-  En::ll::IndexBuffer ib;
-  En::ll::VertexArray va;
+  En::VertexBuffer vb;
+  En::IndexBuffer ib;
+  En::VertexArray va;
 };

@@ -5,66 +5,66 @@
 
 namespace rv = std::ranges::views;
 
-std::vector<En::ll::VertexC> vertices{
+std::vector<En::VertexC> vertices{
     // Front Face 0
-    En::ll::VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(0.0f, 1.0f),
-                    glm::vec4(1, 1, 0, 1)),
-    En::ll::VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(0.0f, 0),
-                    glm::vec4(1, 1, 0, 1)),
-    En::ll::VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(1, 0),
-                    glm::vec4(1, 1, 0, 1)),
-    En::ll::VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(1, 1),
-                    glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(0.0f, 1.0f),
+                glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(0.0f, 0),
+                glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(1, 0),
+                glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(1, 1),
+                glm::vec4(1, 1, 0, 1)),
 
     // Top Fglm::vec3(ace 4
-    En::ll::VertexC(glm::vec3(-1, 1, -1), glm::vec3(1), glm::vec2(0.0f, 1.0f),
-                    glm::vec4(1, 1, 0, 1)),
-    En::ll::VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(1, 1.0f),
-                    glm::vec4(1, 1, 0, 1)),
-    En::ll::VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(0.0f, 0),
-                    glm::vec4(1, 1, 0, 1)),
-    En::ll::VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(1, 0),
-                    glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(-1, 1, -1), glm::vec3(1), glm::vec2(0.0f, 1.0f),
+                glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(1, 1.0f),
+                glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(0.0f, 0),
+                glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(1, 0),
+                glm::vec4(1, 1, 0, 1)),
 
     // Rightglm::vec3( Face 8
-    En::ll::VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(0, 1),
-                    glm::vec4(1, 1, 0, 1)),
-    En::ll::VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(0, 0),
-                    glm::vec4(1, 1, 0, 1)),
-    En::ll::VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(1.0f, 0.0f),
-                    glm::vec4(1, 1, 0, 1)),
-    En::ll::VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(1, 1.0f),
-                    glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(1, 1, 1), glm::vec3(1), glm::vec2(0, 1),
+                glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(0, 0),
+                glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(1.0f, 0.0f),
+                glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(1, 1.0f),
+                glm::vec4(1, 1, 0, 1)),
 
     // Left glm::vec3(Face 12
-    En::ll::VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(1.0f, 1.0f),
-                    glm::vec4(1, 1, 0, 1)),
-    En::ll::VertexC(glm::vec3(-1, 1, -1), glm::vec3(1), glm::vec2(0.0f, 1),
-                    glm::vec4(1, 1, 0, 1)),
-    En::ll::VertexC(glm::vec3(-1, -1, -1), glm::vec3(1), glm::vec2(0, 0),
-                    glm::vec4(1, 1, 0, 1)),
-    En::ll::VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(1, 0.0f),
-                    glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(-1, 1, 1), glm::vec3(1), glm::vec2(1.0f, 1.0f),
+                glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(-1, 1, -1), glm::vec3(1), glm::vec2(0.0f, 1),
+                glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(-1, -1, -1), glm::vec3(1), glm::vec2(0, 0),
+                glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(1, 0.0f),
+                glm::vec4(1, 1, 0, 1)),
 
     // Bottoglm::vec3(m Face 16
-    En::ll::VertexC(glm::vec3(-1, -1, -1), glm::vec3(1), glm::vec2(1.0f, 0.0f),
-                    glm::vec4(1, 1, 0, 1)),
-    En::ll::VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(1.0f, 1),
-                    glm::vec4(1, 1, 0, 1)),
-    En::ll::VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(0, 0),
-                    glm::vec4(1, 1, 0, 1)),
-    En::ll::VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(0, 1.0f),
-                    glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(-1, -1, -1), glm::vec3(1), glm::vec2(1.0f, 0.0f),
+                glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(-1, -1, 1), glm::vec3(1), glm::vec2(1.0f, 1),
+                glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(0, 0),
+                glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(1, -1, 1), glm::vec3(1), glm::vec2(0, 1.0f),
+                glm::vec4(1, 1, 0, 1)),
 
     // Back glm::vec3(Face 20
-    En::ll::VertexC(glm::vec3(-1, 1, -1), glm::vec3(1), glm::vec2(1, 1.0f),
-                    glm::vec4(1, 1, 0, 1)),
-    En::ll::VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(0.0f, 1.0f),
-                    glm::vec4(1, 1, 0, 1)),
-    En::ll::VertexC(glm::vec3(-1, -1, -1), glm::vec3(1), glm::vec2(1, 0),
-                    glm::vec4(1, 1, 0, 1)),
-    En::ll::VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(0.0f, 0),
-                    glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(-1, 1, -1), glm::vec3(1), glm::vec2(1, 1.0f),
+                glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(1, 1, -1), glm::vec3(1), glm::vec2(0.0f, 1.0f),
+                glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(-1, -1, -1), glm::vec3(1), glm::vec2(1, 0),
+                glm::vec4(1, 1, 0, 1)),
+    En::VertexC(glm::vec3(1, -1, -1), glm::vec3(1), glm::vec2(0.0f, 0),
+                glm::vec4(1, 1, 0, 1)),
 };
 
 unsigned int indices[] = {
@@ -95,11 +95,11 @@ int App::init(EN engine) {
   // va.addVertexBuffer(&vb1);
   va.set_index_buffer(&ib);
 
-  auto texture = pTexture(new En::ll::Texture("face.png"));
+  auto texture = pTexture(new En::Texture("face.png"));
   En::Material mat(engine->get_shader(0).value(), texture);
   En::Mesh mesh;
   mesh.init(std::make_shared<En::Material>(mat),
-            std::make_shared<En::ll::VertexArray>(va));
+            std::make_shared<En::VertexArray>(va));
   // TODO: Change this texture
   // Creating the texture "on the fly" makes is appear propely
   mat.set_texture(texture);

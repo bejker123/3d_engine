@@ -49,12 +49,12 @@ Engine::Engine() {
 
 std::vector<int> ms_idxs;
 void Engine::add_shader(const char *v, const char *f, const char *g) {
-  this->shaders.push_back(pShader(new ll::Shader(v, f, g)));
+  this->shaders.push_back(pShader(new Shader(v, f, g)));
 }
 
 void Engine::load_shader(const char *v, const char *f, const char *g) {
   this->shaders.push_back(
-      std::make_shared<ll::Shader>(ShaderLoader::load(v, f, g).value()));
+      std::make_shared<Shader>(ShaderLoader::load(v, f, g).value()));
 }
 
 void Engine::add_va(pVertexArray va) {
@@ -73,7 +73,7 @@ void Engine::add_model(pMesh mesh) {
   ms_idxs.push_back(0);
 }
 
-void Engine::add_model(std::vector<ll::Vertex> vertices,
+void Engine::add_model(std::vector<Vertex> vertices,
                        std::vector<unsigned int> indices, pMaterial mat) {
   this->meshes.push_back(std::make_shared<Mesh>(Mesh(mat, vertices, indices)));
   this->models.push_back(Model(this->meshes.at(this->meshes.size() - 1)));
@@ -141,7 +141,7 @@ void Engine::init_command_line_args() {
 bool Engine::init_opengl() {
   LOG("[ENGINE] INITIALISING OPENGL\n");
   LOG("[ENGINE] INITIALISING GLFW\n");
-  if (!ll::opengl::setup()) {
+  if (!opengl::setup()) {
     LOG("[ENGINE] FAILED TO INIT GLFW\n");
     this->terminate_opengl();
     return false;
@@ -159,7 +159,7 @@ bool Engine::init_opengl() {
 
   LOG("[ENGINE] INITIALISING GLEW\n");
 
-  if (!ll::opengl::setup_glew()) {
+  if (!opengl::setup_glew()) {
     LOG("[ENGINE] FAILED TO INIT GLEW\n");
     terminate_opengl();
     return false;
@@ -167,7 +167,7 @@ bool Engine::init_opengl() {
 
   LOG("[ENGINE] OPENGL INITIALISED\n");
 
-  ll::opengl::debug_info();
+  opengl::debug_info();
   return true;
 }
 
@@ -216,7 +216,7 @@ void Engine::terminate_opengl() {
         tex.value()->terminate();
     }
   }
-  ll::opengl::terminate();
+  opengl::terminate();
 }
 
 // Handles keyboard user input
@@ -401,7 +401,7 @@ void Engine::render_imgui() {
 // Rendering function running every frame, after update
 int Engine::render() {
   app->pre_render(this);
-  ll::opengl::clear_buffer();
+  opengl::clear_buffer();
 
   render_imgui();
 

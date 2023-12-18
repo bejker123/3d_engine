@@ -6,7 +6,6 @@
 #include <memory>
 
 namespace En {
-namespace ll {
 
 class Shader {
 public:
@@ -45,6 +44,5 @@ private:
   int success;
 };
 
-} // namespace ll
 } // namespace En
-using pShader = std::shared_ptr<En::ll::Shader>;
+using pShader = std::shared_ptr<En::Shader>;
