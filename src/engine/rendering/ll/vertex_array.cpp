@@ -20,71 +20,16 @@ void VertexArray::add_vertex_buffer(VertexBuffer *vb) {
   this->bind();
   vb->bind();
 
-  auto vb_type = vb->get_type();
+  auto vb_desc = vb->get_desc();
+  auto size = vb->get_vertex_size();
 
-  if (vb_type == VertexType::POSx3F_COLORx4F) {
-    // position
-    glVertexAttribPointer(this->vbi, sizeof(VertexPC::pos) / sizeof(float),
-                          GL_FLOAT, GL_FALSE, sizeof(VertexPC),
-                          (void *)offsetof(VertexPC, pos));
-    glEnableVertexAttribArray(this->vbi);
-    this->vbi++;
-
-    // color
-    glVertexAttribPointer(this->vbi, sizeof(VertexPC::color) / sizeof(float),
-                          GL_FLOAT, false, sizeof(VertexPC),
-                          (void *)offsetof(VertexPC, color));
-    glEnableVertexAttribArray(this->vbi);
-    this->vbi++;
-  } else if (vb_type == POSx3F_NORMx3F_TEXx2F) {
-    // position
-    glVertexAttribPointer(this->vbi, sizeof(Vertex::pos) / sizeof(float),
-                          GL_FLOAT, GL_FALSE, sizeof(Vertex),
-                          (void *)offsetof(Vertex, pos));
-    glEnableVertexAttribArray(this->vbi);
-    this->vbi++;
-
-    // normal
-    glVertexAttribPointer(this->vbi, sizeof(Vertex::normal) / sizeof(float),
-                          GL_FLOAT, false, sizeof(Vertex),
-                          (void *)offsetof(Vertex, normal));
-    glEnableVertexAttribArray(this->vbi);
-    this->vbi++;
-
-    // tex coord
-    glVertexAttribPointer(this->vbi, sizeof(Vertex::tex_coord) / sizeof(float),
-                          GL_FLOAT, false, sizeof(Vertex),
-                          (void *)offsetof(Vertex, tex_coord));
-    glEnableVertexAttribArray(this->vbi);
-    this->vbi++;
-  } else if (vb_type == POSx3F_NORMx3F_TEXx2F_COLx4F) {
-    // position
-    glVertexAttribPointer(this->vbi, sizeof(VertexC::pos) / sizeof(float),
-                          GL_FLOAT, GL_FALSE, sizeof(VertexC),
-                          (void *)offsetof(VertexC, pos));
-    glEnableVertexAttribArray(this->vbi);
-    this->vbi++;
-
-    // normal
-    glVertexAttribPointer(this->vbi, sizeof(VertexC::normal) / sizeof(float),
-                          GL_FLOAT, false, sizeof(VertexC),
-                          (void *)offsetof(VertexC, normal));
-    glEnableVertexAttribArray(this->vbi);
-    this->vbi++;
-
-    // tex coord
-    glVertexAttribPointer(this->vbi, sizeof(VertexC::tex_coord) / sizeof(float),
-                          GL_FLOAT, false, sizeof(VertexC),
-                          (void *)offsetof(VertexC, tex_coord));
-    glEnableVertexAttribArray(this->vbi);
-    this->vbi++;
-
-    glVertexAttribPointer(this->vbi, sizeof(VertexC::color) / sizeof(float),
-                          GL_FLOAT, false, sizeof(VertexC),
-                          (void *)offsetof(VertexC, color));
+  for (auto &i : vb_desc) {
+    glVertexAttribPointer(this->vbi, i.count, GL_FLOAT, GL_FALSE, size,
+                          i.offset);
     glEnableVertexAttribArray(this->vbi);
     this->vbi++;
   }
+
   this->unbind();
   vb->unbind();
 

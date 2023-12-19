@@ -20,51 +20,11 @@ void Mesh::render() const {
   this->mat->unbind();
 }
 
-Mesh::Mesh(pMaterial material, std::vector<Vertex> vertices,
-           std::vector<unsigned int> indices)
-    : mat(material) {
-  VertexArray va;
-  VertexBuffer vb;
-  IndexBuffer ib;
-  va.init();
-  vb.init(vertices);
-  ib.init(indices.data(), indices.size() * sizeof(uint32_t));
-  va.add_vertex_buffer(&vb);
-  va.set_index_buffer(&ib);
-  this->vas.push_back(std::make_shared<VertexArray>(va));
-}
-Mesh::Mesh(pMaterial material, std::vector<VertexC> vertices,
-           std::vector<unsigned int> indices)
-    : mat(material) {
-  VertexArray va;
-  VertexBuffer vb;
-  IndexBuffer ib;
-  va.init();
-  vb.init(vertices);
-  ib.init(indices.data(), indices.size() * sizeof(uint32_t));
-  va.add_vertex_buffer(&vb);
-  va.set_index_buffer(&ib);
-  this->vas.push_back(std::make_shared<VertexArray>(va));
-}
-
-Mesh::Mesh(pMaterial material, std::vector<VertexC> vertices, uint32_t *indices,
-           uint32_t size)
-    : mat(material) {
-  VertexArray va;
-  VertexBuffer vb;
-  IndexBuffer ib;
-  va.init();
-  vb.init(vertices);
-  ib.init(indices, size);
-  va.add_vertex_buffer(&vb);
-  va.set_index_buffer(&ib);
-  this->vas.push_back(std::make_shared<VertexArray>(va));
-}
-
 Mesh::Mesh(pMaterial material, pVertexArray va) {
   this->vas.push_back(va);
   this->mat = material;
 };
+
 void Mesh::init(pMaterial material, pVertexArray va) {
   this->vas.push_back(va);
   this->mat = material;

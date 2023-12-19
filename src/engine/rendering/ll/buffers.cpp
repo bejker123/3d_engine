@@ -4,8 +4,9 @@
 namespace En {
 
 void VertexBuffer::init(void *vertices, uint32_t size, uint32_t elements,
-                        VertexType type) {
-  this->type = type;
+                        VertexDesc desc, uint32_t vertex_size) {
+  this->desc = desc;
+  this->vertex_size = vertex_size;
   glGenBuffers(1, &this->id);
 
   this->bind();
@@ -14,41 +15,14 @@ void VertexBuffer::init(void *vertices, uint32_t size, uint32_t elements,
   //    unbindVertexBuffer();
   this->count = elements / sizeof(float);
 }
-void VertexBuffer::init(std::vector<Vertex> vertices) {
-  this->type = VertexType::POSx3F_NORMx3F_TEXx2F;
-  glGenBuffers(1, &this->id);
 
-  this->bind();
-  glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex),
-               vertices.data(), GL_STATIC_DRAW);
-  this->count = vertices.size();
-}
-
-void VertexBuffer::init(std::vector<VertexPC> vertices) {
-  this->type = VertexType::POSx3F_COLORx4F;
-  glGenBuffers(1, &this->id);
-
-  this->bind();
-  glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(VertexPC),
-               vertices.data(), GL_STATIC_DRAW);
-  this->count = vertices.size();
-}
-void VertexBuffer::init(std::vector<VertexC> vertices) {
-  this->type = VertexType::POSx3F_NORMx3F_TEXx2F_COLx4F;
-  glGenBuffers(1, &this->id);
-
-  this->bind();
-  glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(VertexC),
-               vertices.data(), GL_STATIC_DRAW);
-  this->count = vertices.size();
-}
-
-void VertexBuffer::bind() { glBindBuffer(GL_ARRAY_BUFFER, this->id); }
+void VertexBuffer::bind() const { glBindBuffer(GL_ARRAY_BUFFER, this->id); }
 void VertexBuffer::unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
 void VertexBuffer::terminate() { glDeleteBuffers(1, &this->id); }
 
-const VertexType VertexBuffer::get_type() const { return this->type; }
+const VertexDesc VertexBuffer::get_desc() const { return this->desc; }
+uint32_t VertexBuffer::get_vertex_size() const { return this->vertex_size; }
 
 void IndexBuffer::init(uint32_t *indices, uint32_t size) {
   glCreateBuffers(1, &this->id);
@@ -61,7 +35,7 @@ void IndexBuffer::init(uint32_t *indices, uint32_t size) {
   this->elements = size / sizeof(uint32_t);
 }
 
-void IndexBuffer::bind() { glBindBuffer(GL_ARRAY_BUFFER, this->id); }
+void IndexBuffer::bind() const { glBindBuffer(GL_ARRAY_BUFFER, this->id); }
 void IndexBuffer::unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
 void IndexBuffer::terminate() { glDeleteBuffers(1, &this->id); }

@@ -1,72 +1,47 @@
 #pragma once
+#include "vertex.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include <vector>
 
 namespace En {
 
-struct VertexPC {
-public:
-  VertexPC(glm::vec3 pos, glm::vec4 color) : pos(pos), color(color) {}
-  VertexPC(float x, float y, float z, float r, float g, float b, float a)
-      : pos(glm::vec3(x, y, z)), color(glm::vec4(r, g, b, a)) {}
-
-  glm::vec3 pos;
-  glm::vec4 color;
-};
-
-struct Vertex {
-public:
-  Vertex(glm::vec3 pos, glm::vec3 normal, glm::vec2 tex_coord)
-      : pos(pos), normal(normal), tex_coord(tex_coord) {}
-  glm::vec3 pos;
-  glm::vec3 normal;
-  glm::vec2 tex_coord;
-};
-
-struct VertexC {
-public:
-  VertexC(glm::vec3 pos, glm::vec3 normal, glm::vec2 tex_coord, glm::vec4 color)
-      : pos(pos), normal(normal), tex_coord(tex_coord), color(color) {}
-  glm::vec3 pos;
-  glm::vec3 normal;
-  glm::vec2 tex_coord;
-  glm::vec4 color;
-};
-
-enum VertexType {
-  POSx3F_NORMx3F_TEXx2F,        // vec3 pos; vec3 normal; vec2 tex_coord
-  POSx3F_COLORx4F,              // vec3 pos; vec4 color
-  POSx3F_NORMx3F_TEXx2F_COLx4F, // vec3 pos; vec3 normal; vec2 tex_coord;
-                                // vec4 color
-};
-
 class VertexBuffer {
 public:
-  void init(void *vertices, uint32_t size, uint32_t elements, VertexType type);
-  void init(std::vector<Vertex> vertices);
-  void init(std::vector<VertexPC> vertices);
-  void init(std::vector<VertexC> vertices);
+  // Implementation has to be in header
+  void init(void *vertices, uint32_t size, uint32_t elements, VertexDesc desc,
+            uint32_t vertex_size);
+  template <class T> void init(std::vector<T> vertices) {
+    this->desc = T::get_desc();
+    this->vertex_size = sizeof(T);
+    glGenBuffers(1, &this->id);
 
-  void bind();
+    this->bind();
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(T), vertices.data(),
+                 GL_STATIC_DRAW);
+    this->count = vertices.size();
+  }
+
+  void bind() const;
   static void unbind();
 
   void terminate();
 
-  const VertexType get_type() const;
+  const VertexDesc get_desc() const;
+  uint32_t get_vertex_size() const;
 
 public:
-  VertexType type;
+  VertexDesc desc;
   uint32_t id;
   uint32_t count;
+  uint32_t vertex_size;
 };
 
 class IndexBuffer {
 public:
   void init(uint32_t *indices, uint32_t size);
 
-  void bind();
+  void bind() const;
   static void unbind();
 
   void terminate();

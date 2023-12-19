@@ -10,13 +10,21 @@ class Mesh {
 public:
   void init(pMaterial material, pVertexArray va);
 
-  Mesh(pMaterial material, std::vector<Vertex> vertices,
-       std::vector<unsigned int> indices);
-  Mesh(pMaterial material, std::vector<VertexC> vertices,
-       std::vector<unsigned int> indices);
-
-  Mesh(pMaterial material, std::vector<VertexC> vertices, uint32_t *indices,
-       uint32_t size);
+  // Implementation has to be in header
+  template <class T>
+  Mesh(pMaterial material, std::vector<T> vertices,
+       std::vector<unsigned int> indices)
+      : mat(material) {
+    VertexArray va;
+    VertexBuffer vb;
+    IndexBuffer ib;
+    va.init();
+    vb.init(vertices);
+    ib.init(indices.data(), indices.size() * sizeof(uint32_t));
+    va.add_vertex_buffer(&vb);
+    va.set_index_buffer(&ib);
+    this->vas.push_back(std::make_shared<VertexArray>(va));
+  }
 
   Mesh(pMaterial material, pVertexArray va);
   Mesh(){};
