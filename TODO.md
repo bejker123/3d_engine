@@ -1,6 +1,6 @@
 - [ ] Modular Vertexes
 - [ ] Text Rendering
-- [ ] Fix mesh init
+- [x] Fix mesh init
 - [ ] Multiple cameras
 - [ ] multiple shaders
 - [ ] batch rendering
