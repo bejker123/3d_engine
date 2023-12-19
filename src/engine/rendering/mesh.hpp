@@ -15,6 +15,9 @@ public:
   Mesh(pMaterial material, std::vector<VertexC> vertices,
        std::vector<unsigned int> indices);
 
+  Mesh(pMaterial material, std::vector<VertexC> vertices, uint32_t *indices,
+       uint32_t size);
+
   Mesh(pMaterial material, pVertexArray va);
   Mesh(){};
   void add_va(pVertexArray va);

@@ -67,7 +67,7 @@ std::vector<En::VertexC> vertices{
                 glm::vec4(1, 1, 0, 1)),
 };
 
-unsigned int indices[] = {
+std::vector<uint32_t> indices = {
     0,  1,  3,  3,  1,  2,  // Front face
     7,  5,  6,  6,  5,  4,  // Top Face
     8,  9,  11, 11, 9,  10, // Right face
@@ -85,21 +85,9 @@ int App::init(EN engine) {
   engine->cam.init(60, 1., 10000, glm::vec3(-40, 20, 30));
   engine->load_shader("shaders/vertex.glsl", "shaders/fragment.glsl");
 
-  va.init();
-
-  vb.init(vertices);
-
-  ib.init(indices, sizeof(indices));
-
-  va.add_vertex_buffer(&vb);
-  // va.addVertexBuffer(&vb1);
-  va.set_index_buffer(&ib);
-
   auto texture = pTexture(new En::Texture("face.png"));
   En::Material mat(engine->get_shader(0).value(), texture);
-  En::Mesh mesh;
-  mesh.init(std::make_shared<En::Material>(mat),
-            std::make_shared<En::VertexArray>(va));
+  En::Mesh mesh(std::make_shared<En::Material>(mat), vertices, indices);
   // TODO: Change this texture
   // Creating the texture "on the fly" makes is appear propely
   mat.set_texture(texture);
