@@ -1,4 +1,4 @@
-- [ ] Modular Vertexes
+- [x] Modular Vertexes
 - [ ] Text Rendering
 - [x] Fix mesh init
 - [ ] Multiple cameras
