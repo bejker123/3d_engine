@@ -100,10 +100,16 @@ int App::init(EN engine) {
   // m.set_rot(glm::vec3(-90, 0, 0));
   engine->add_model(m);
 
-  auto m1 =
-      ml.load(engine->get_shader(0).value(), "models/backpack/backpack.obj");
-  m1.set_origin(glm::vec3(-50, 0, 0));
+  auto m1 = ml.load(engine->get_shader(0).value(), "models/sk/sk.obj");
+  m1.set_origin(glm::vec3(-85, 0, 0));
+  m1.set_scale(glm::vec3(1));
+  // m.set_rot(glm::vec3(-90, 0, 0));
   engine->add_model(m1);
+
+  auto m_ = ml.load(engine->get_shader(0).value(),
+                    "models/backpack/backpack.obj", true);
+  m_.set_origin(glm::vec3(-50, 0, 0));
+  engine->add_model(m_);
 
   for (uint64_t i : rv::iota(0, 10)) {
     engine->add_model(std::make_shared<En::Mesh>(mesh));

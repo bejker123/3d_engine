@@ -10,7 +10,7 @@ class ModelLoader {
 public:
   ModelLoader();
 
-  Model load(pShader shader, std::string path);
+  Model load(pShader shader, std::string path, bool flip_uvs = false);
 
 private:
   void process_node(pShader shader, aiNode *node, const aiScene *scene,

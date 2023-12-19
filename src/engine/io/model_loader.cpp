@@ -63,13 +63,15 @@ void ModelLoader::process_node(pShader shader, aiNode *node,
   }
 }
 
-Model ModelLoader::load(pShader shader, std::string path) {
+Model ModelLoader::load(pShader shader, std::string path, bool flip_uvs) {
   this->meshes.clear();
   Assimp::Importer importer;
 
-  const aiScene *scene = importer.ReadFile(
-      path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |
-                aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+  auto flags = aiProcess_Triangulate | aiProcess_GenSmoothNormals |
+               aiProcess_CalcTangentSpace;
+  if (flip_uvs)
+    flags |= aiProcess_FlipUVs;
+  const aiScene *scene = importer.ReadFile(path, flags);
   if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE ||
       !scene->mRootNode) {
     std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
