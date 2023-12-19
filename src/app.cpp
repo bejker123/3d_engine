@@ -1,5 +1,5 @@
 #include "app.hpp"
-#include "engine/model_loader.hpp"
+#include "engine/io/model_loader.hpp"
 #include "engine/rendering/material.hpp"
 #include <ranges>
 

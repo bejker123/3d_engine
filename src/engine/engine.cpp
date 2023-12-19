@@ -10,8 +10,8 @@
 #include "../../imgui/backends/imgui_impl_glfw.h"
 #include "../../imgui/backends/imgui_impl_opengl3.h"
 #include "../../imgui/imgui.h"
+#include "io/shader_loader.hpp"
 #include "rendering/model.hpp"
-#include "shader_loader.hpp"
 
 std::unique_ptr<App> app;
 namespace rv = std::ranges::views;

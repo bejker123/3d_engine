@@ -1,5 +1,5 @@
 #include "shader_loader.hpp"
-#include "io/logger.hpp"
+#include "logger.hpp"
 #include <fstream>
 #include <map>
 #include <string>

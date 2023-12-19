@@ -3,7 +3,7 @@
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 
-#include "rendering/model.hpp"
+#include "../rendering/model.hpp"
 
 namespace En {
 class ModelLoader {
