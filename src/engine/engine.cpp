@@ -349,6 +349,19 @@ void Engine::render_imgui() {
         *cam.get_pos() = *models[i].get_pos();
       }
 
+      ImGui::SliderFloat(("Pos X " + std::to_string(i)).data(),
+                         &models[i].get_pos()->x, -180, 180);
+      ImGui::SliderFloat(("Pos Y " + std::to_string(i)).data(),
+                         &models[i].get_pos()->y, -180, 180);
+      ImGui::SliderFloat(("Pos Z " + std::to_string(i)).data(),
+                         &models[i].get_pos()->z, -180, 180);
+
+      ImGui::SliderFloat(("Rotation X " + std::to_string(i)).data(),
+                         &models[i].get_rot()->x, -180, 180);
+      ImGui::SliderFloat(("Rotation Y " + std::to_string(i)).data(),
+                         &models[i].get_rot()->y, -180, 180);
+      ImGui::SliderFloat(("Rotation Z " + std::to_string(i)).data(),
+                         &models[i].get_rot()->z, -180, 180);
       for (auto j : rv::iota((size_t)0, models[i].get_meshes().size())) {
 
         ImGui::Checkbox(
@@ -387,20 +400,6 @@ void Engine::render_imgui() {
                  ->polygon_mode,
             GL_POINT);
       }
-
-      ImGui::SliderFloat(("Pos X " + std::to_string(i)).data(),
-                         &models[i].get_pos()->x, -180, 180);
-      ImGui::SliderFloat(("Pos Y " + std::to_string(i)).data(),
-                         &models[i].get_pos()->y, -180, 180);
-      ImGui::SliderFloat(("Pos Z " + std::to_string(i)).data(),
-                         &models[i].get_pos()->z, -180, 180);
-
-      ImGui::SliderFloat(("Rotation X " + std::to_string(i)).data(),
-                         &models[i].get_rot()->x, -180, 180);
-      ImGui::SliderFloat(("Rotation Y " + std::to_string(i)).data(),
-                         &models[i].get_rot()->y, -180, 180);
-      ImGui::SliderFloat(("Rotation Z " + std::to_string(i)).data(),
-                         &models[i].get_rot()->z, -180, 180);
     }
     ImGui::EndGroup();
   }
