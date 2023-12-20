@@ -11,7 +11,7 @@ public:
         Material(shader, std::make_shared<Texture>(Texture(textures))));
     material->get_options()->depth = false;
     material->get_options()->cull_backfaces = false;
-    this->mesh = Mesh(material, this->skyboxVertices, std::vector<uint32_t>());
+    this->mesh = Mesh(material, this->skybox_vertices, std::vector<uint32_t>());
   }
 
   void render() { this->mesh.render(); }
@@ -20,24 +20,24 @@ public:
 private:
   Mesh mesh;
 
-  const std::vector<VertexC> skyboxVertices = {
-      VertexC(-1.0f, 1.0f, -1.0f),  VertexC(-1.0f, -1.0f, -1.0f),
-      VertexC(1.0f, -1.0f, -1.0f),  VertexC(1.0f, -1.0f, -1.0f),
-      VertexC(1.0f, 1.0f, -1.0f),   VertexC(-1.0f, 1.0f, -1.0f),
-      VertexC(-1.0f, -1.0f, 1.0f),  VertexC(-1.0f, -1.0f, -1.0f),
-      VertexC(-1.0f, 1.0f, -1.0f),  VertexC(-1.0f, 1.0f, -1.0f),
-      VertexC(-1.0f, 1.0f, 1.0f),   VertexC(-1.0f, -1.0f, 1.0f),
-      VertexC(1.0f, -1.0f, -1.0f),  VertexC(1.0f, -1.0f, 1.0f),
-      VertexC(1.0f, 1.0f, 1.0f),    VertexC(1.0f, 1.0f, 1.0f),
-      VertexC(1.0f, 1.0f, -1.0f),   VertexC(1.0f, -1.0f, -1.0f),
-      VertexC(-1.0f, -1.0f, 1.0f),  VertexC(-1.0f, 1.0f, 1.0f),
-      VertexC(1.0f, 1.0f, 1.0f),    VertexC(1.0f, 1.0f, 1.0f),
-      VertexC(1.0f, -1.0f, 1.0f),   VertexC(-1.0f, -1.0f, 1.0f),
-      VertexC(-1.0f, 1.0f, -1.0f),  VertexC(1.0f, 1.0f, -1.0f),
-      VertexC(1.0f, 1.0f, 1.0f),    VertexC(1.0f, 1.0f, 1.0f),
-      VertexC(-1.0f, 1.0f, 1.0f),   VertexC(-1.0f, 1.0f, -1.0f),
-      VertexC(-1.0f, -1.0f, -1.0f), VertexC(-1.0f, -1.0f, 1.0f),
-      VertexC(1.0f, -1.0f, -1.0f),  VertexC(1.0f, -1.0f, -1.0f),
-      VertexC(-1.0f, -1.0f, 1.0f),  VertexC(1.0f, -1.0f, 1.0f)};
+  const std::vector<VertexSkyBox> skybox_vertices = {
+      VertexSkyBox(-1.0f, 1.0f, -1.0f),  VertexSkyBox(-1.0f, -1.0f, -1.0f),
+      VertexSkyBox(1.0f, -1.0f, -1.0f),  VertexSkyBox(1.0f, -1.0f, -1.0f),
+      VertexSkyBox(1.0f, 1.0f, -1.0f),   VertexSkyBox(-1.0f, 1.0f, -1.0f),
+      VertexSkyBox(-1.0f, -1.0f, 1.0f),  VertexSkyBox(-1.0f, -1.0f, -1.0f),
+      VertexSkyBox(-1.0f, 1.0f, -1.0f),  VertexSkyBox(-1.0f, 1.0f, -1.0f),
+      VertexSkyBox(-1.0f, 1.0f, 1.0f),   VertexSkyBox(-1.0f, -1.0f, 1.0f),
+      VertexSkyBox(1.0f, -1.0f, -1.0f),  VertexSkyBox(1.0f, -1.0f, 1.0f),
+      VertexSkyBox(1.0f, 1.0f, 1.0f),    VertexSkyBox(1.0f, 1.0f, 1.0f),
+      VertexSkyBox(1.0f, 1.0f, -1.0f),   VertexSkyBox(1.0f, -1.0f, -1.0f),
+      VertexSkyBox(-1.0f, -1.0f, 1.0f),  VertexSkyBox(-1.0f, 1.0f, 1.0f),
+      VertexSkyBox(1.0f, 1.0f, 1.0f),    VertexSkyBox(1.0f, 1.0f, 1.0f),
+      VertexSkyBox(1.0f, -1.0f, 1.0f),   VertexSkyBox(-1.0f, -1.0f, 1.0f),
+      VertexSkyBox(-1.0f, 1.0f, -1.0f),  VertexSkyBox(1.0f, 1.0f, -1.0f),
+      VertexSkyBox(1.0f, 1.0f, 1.0f),    VertexSkyBox(1.0f, 1.0f, 1.0f),
+      VertexSkyBox(-1.0f, 1.0f, 1.0f),   VertexSkyBox(-1.0f, 1.0f, -1.0f),
+      VertexSkyBox(-1.0f, -1.0f, -1.0f), VertexSkyBox(-1.0f, -1.0f, 1.0f),
+      VertexSkyBox(1.0f, -1.0f, -1.0f),  VertexSkyBox(1.0f, -1.0f, -1.0f),
+      VertexSkyBox(-1.0f, -1.0f, 1.0f),  VertexSkyBox(1.0f, -1.0f, 1.0f)};
 };
 } // namespace En

@@ -60,4 +60,17 @@ struct VertexPC {
   glm::vec4 color;
 };
 
+struct VertexSkyBox {
+  VertexSkyBox(glm::vec3 pos) : pos(pos) {}
+  VertexSkyBox(float x, float y, float z) : pos(x, y, z) {}
+
+  static VertexDesc get_desc() {
+    return {
+        DataType{3, (void *)offsetof(VertexSkyBox, pos)},
+    };
+  }
+
+  glm::vec3 pos;
+};
+
 } // namespace En
