@@ -4,6 +4,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <vector>
 
 namespace En {
 
@@ -12,6 +13,7 @@ public:
   Texture(){};
   Texture(const std::string file, const bool transparent = false,
           const GLenum type = GL_TEXTURE_2D);
+  Texture(std::vector<std::string> faces);
 
   void terminate() const;
 
@@ -28,6 +30,7 @@ private:
   bool transparent;
 
   void load_from_file(std::string file);
+  void load_cubemap(std::vector<std::string> faces);
 };
 
 } // namespace En

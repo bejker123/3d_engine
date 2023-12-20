@@ -7,8 +7,12 @@
 namespace En {
 
 void opengl::clear_buffer() {
+  glDepthMask(GL_TRUE);
+  glStencilMask(GL_TRUE);
   glClearColor(1.f, 1.f, 1.f, 1.f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+  glDepthMask(GL_FALSE);
+  glStencilMask(GL_FALSE);
 }
 
 std::optional<std::string> opengl::get_error() {
@@ -119,8 +123,10 @@ void gl_debug_handler(GLenum source, GLenum type, GLuint id, GLenum severity,
     break;
   }
 
-  LOG("[OPENGL] [GL_DEBUG_MESSAGE] %s::%s::%s::ID: %d:\n\t%s\n",
-      _source.c_str(), _type.c_str(), _severity.c_str(), id, message);
+  if (severity == GL_DEBUG_SEVERITY_HIGH) {
+    LOG("[OPENGL] [GL_DEBUG_MESSAGE] %s::%s::%s::%d:\n\t%s\n", _source.c_str(),
+        _type.c_str(), _severity.c_str(), id, message);
+  }
 #endif
 }
 

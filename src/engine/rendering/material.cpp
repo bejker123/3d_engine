@@ -34,7 +34,6 @@ void MaterialOptions::bind() const {
   // Set Front Face
   glFrontFace(GL_CCW);
 
-  glDepthMask(GL_TRUE);
   // Set Backface Culling
   if (this->cull_backfaces) {
     glEnable(GL_CULL_FACE);
@@ -47,6 +46,7 @@ void MaterialOptions::bind() const {
 
   // Set Depth Drawing Mode
   if (this->depth) {
+    glDepthMask(GL_TRUE);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
   } else
@@ -81,13 +81,21 @@ void MaterialOptions::unbind() {
   glDisable(GL_MULTISAMPLE);
 
   glDisable(GL_STENCIL_TEST);
+  glDepthMask(GL_FALSE);
 }
 
 Material::Material(pShader shader, const pTexture texture) {
-
   this->shader = shader;
   this->options = MaterialOptions();
   this->texture = texture;
+}
+
+Material::Material(pShader shader, const pTexture texture,
+                   const pTexture specular) {
+  this->shader = shader;
+  this->options = MaterialOptions();
+  this->texture = texture;
+  this->specular = specular;
 }
 
 void Material::init(pShader shader) {
@@ -100,6 +108,10 @@ void Material::bind() const {
   if (this->texture.has_value() && this->options.texture) {
     this->texture.value()->bind(texture_bind_idx);
     this->shader->set1i(texture_bind_idx, "tex");
+  }
+  if (this->specular.has_value() && this->options.texture) {
+    this->specular.value()->bind(texture_bind_idx + 1);
+    this->shader->set1i(texture_bind_idx + 1, "specular");
   }
   this->shader->bind();
 }

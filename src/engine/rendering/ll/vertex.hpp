@@ -16,8 +16,8 @@ struct Vertex {
   static VertexDesc get_desc() {
     return {
         DataType{3, (void *)offsetof(Vertex, pos)},
-        DataType{2, (void *)offsetof(Vertex, normal)},
-        DataType{3, (void *)offsetof(Vertex, tex_coord)},
+        DataType{3, (void *)offsetof(Vertex, normal)},
+        DataType{2, (void *)offsetof(Vertex, tex_coord)},
     };
   }
   glm::vec3 pos;
@@ -28,11 +28,13 @@ struct Vertex {
 struct VertexC {
   VertexC(glm::vec3 pos, glm::vec3 normal, glm::vec2 tex_coord, glm::vec4 color)
       : pos(pos), normal(normal), tex_coord(tex_coord), color(color) {}
+  VertexC(float x, float y, float z)
+      : pos(x, y, z), normal(), tex_coord(), color(glm::vec4(1)) {}
   static VertexDesc get_desc() {
     return {
         DataType{3, (void *)offsetof(VertexC, pos)},
-        DataType{2, (void *)offsetof(VertexC, normal)},
-        DataType{3, (void *)offsetof(VertexC, tex_coord)},
+        DataType{3, (void *)offsetof(VertexC, normal)},
+        DataType{2, (void *)offsetof(VertexC, tex_coord)},
         DataType{4, (void *)offsetof(VertexC, color)},
     };
   }

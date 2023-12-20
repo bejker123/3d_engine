@@ -82,10 +82,10 @@ int App::pre_init(EN engine) { return 1; }
 int App::init(EN engine) {
   // Reamember to set the camera's 'z-near' (near plane) as far as possible (1
   // is good enough)
-  engine->cam.init(60, 1., 10000, glm::vec3(-40, 20, 30));
+  engine->cam.init(60, 0.1, 10000, glm::vec3(-40, 20, 30));
   engine->load_shader("shaders/vertex.glsl", "shaders/fragment.glsl");
 
-  auto texture = pTexture(new En::Texture("face.png"));
+  auto texture = pTexture(new En::Texture("textures/face.png"));
   En::Material mat(engine->get_shader(0).value(), texture);
   En::Mesh mesh(std::make_shared<En::Material>(mat), vertices, indices);
   // TODO: Change this texture

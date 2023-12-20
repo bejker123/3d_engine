@@ -14,6 +14,11 @@ Texture::Texture(const std::string file, const bool transparent,
   this->load_from_file(file);
 }
 
+Texture::Texture(std::vector<std::string> faces)
+    : type(GL_TEXTURE_CUBE_MAP), transparent(false) {
+  this->load_cubemap(faces);
+}
+
 void Texture::terminate() const {
   hashes.clear();
   glDeleteTextures(1, &this->id);
@@ -49,11 +54,6 @@ void Texture::load_from_file(std::string file) {
   unsigned char *data =
       stbi_load(file.data(), &this->width, &this->height, &nr_channels, 0);
 
-  glTexParameteri(this->type, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(this->type, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameteri(this->type, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-  glTexParameteri(this->type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
   if (data != nullptr) {
     GLenum format = GL_RGB;
     if (nr_channels == 1)
@@ -65,6 +65,10 @@ void Texture::load_from_file(std::string file) {
 
     glTexImage2D(this->type, 0, format1, this->width, this->height, 0, format,
                  GL_UNSIGNED_BYTE, data);
+    glTexParameteri(this->type, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(this->type, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(this->type, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(this->type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glGenerateMipmap(this->type);
     LOG("[TEXTURE] LOADED, Debug Info:\n\tSize: (%d,%d)\n\tID: %d\n\t# "
         "Channels: "
@@ -79,4 +83,28 @@ void Texture::load_from_file(std::string file) {
   stbi_image_free(data);
 }
 
+void Texture::load_cubemap(std::vector<std::string> faces) {
+  glGenTextures(1, &id);
+  glBindTexture(GL_TEXTURE_CUBE_MAP, id);
+
+  int nr_channels;
+  for (unsigned int i = 0; i < faces.size(); i++) {
+    unsigned char *data =
+        stbi_load(faces[i].c_str(), &width, &height, &nr_channels, 0);
+    if (data) {
+      glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height,
+                   0, GL_RGB, GL_UNSIGNED_BYTE, data);
+      stbi_image_free(data);
+    } else {
+      LOG("Cubemap tex failed to load at path: %s\n", faces[i].c_str());
+      stbi_image_free(data);
+    }
+  }
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+  // Texture::unbind(GL_TEXTURE_CUBE_MAP);
+}
 } // namespace En

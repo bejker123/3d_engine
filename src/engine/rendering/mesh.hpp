@@ -20,9 +20,11 @@ public:
     IndexBuffer ib;
     va.init();
     vb.init(vertices);
-    ib.init(indices.data(), indices.size() * sizeof(uint32_t));
+    if (indices.size() > 0)
+      ib.init(indices.data(), indices.size() * sizeof(uint32_t));
     va.add_vertex_buffer(&vb);
-    va.set_index_buffer(&ib);
+    if (indices.size() > 0)
+      va.set_index_buffer(&ib);
     this->vas.push_back(std::make_shared<VertexArray>(va));
   }
 

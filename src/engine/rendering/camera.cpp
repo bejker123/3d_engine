@@ -50,6 +50,22 @@ void Camera::upload_to_shader(pShader shader, Window *win) {
   shader->set_mat4fv(this->proj_matrix, "ProjectionMatrix");
   shader->set_vec3f(this->pos, "cameraPos");
 }
+
+void Camera::upload_to_sb_shader(pShader shader, Window *win) {
+
+  this->update_vectors();
+
+  this->calculate_view_matrix();
+
+  // auto [fbw, fbh] = win->get_dimensions();
+
+  // FIXED SIZE
+  this->calculate_proj_matrix(1920, 1080);
+  glm::mat4 view = glm::mat4(glm::mat3(this->view_matrix));
+
+  shader->set_mat4fv(view, "ViewMatrix");
+  shader->set_mat4fv(this->proj_matrix, "ProjectionMatrix");
+}
 void Camera::add_pos(glm::vec3 pos) { this->pos += pos; }
 
 void Camera::update_mosue_input(const float &dt, const double &offsetX,

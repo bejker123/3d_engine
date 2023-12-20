@@ -31,19 +31,23 @@ class Material {
 public:
   Material(){};
   Material(pShader shader, pTexture texture);
+  Material(pShader shader, pTexture texture, pTexture specular);
   void init(pShader shader);
   void bind() const;
   void unbind() const;
 
   void set_texture(const pTexture texture);
+  void set_specular(const pTexture texture);
   void set_shader(const pShader shader);
   pShader get_shader() const;
   MaterialOptions *get_options();
   std::optional<pTexture> get_texture();
+  std::optional<pTexture> get_specular();
 
 private:
   pShader shader;
   std::optional<pTexture> texture;
+  std::optional<pTexture> specular;
   MaterialOptions options;
   uint32_t texture_bind_idx = 0;
 };

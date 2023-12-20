@@ -1,6 +1,7 @@
 #pragma once
 #include "logic/performence.hpp"
 #include "prelude.hpp"
+#include "rendering/skybox.hpp"
 #include <map>
 
 namespace En {
@@ -80,5 +81,6 @@ private:
   std::vector<pMesh> meshes;
   std::vector<pShader> shaders;
   std::map<uint32_t, pVertexArray> vas;
+  SkyBox skybox;
 };
 } // namespace En

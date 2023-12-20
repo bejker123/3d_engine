@@ -39,7 +39,16 @@ Engine::Engine() {
   this->paused = false;
 
   this->init_imgui();
+  auto x = std::make_shared<Shader>(
+      ShaderLoader::load("shaders/sb_vertex.glsl", "shaders/sb_fragment.glsl")
+          .value());
 
+  std::vector<std::string> faces = {
+      "textures/skybox/right.jpg", "textures/skybox/left.jpg",
+      "textures/skybox/top.jpg",   "textures/skybox/bottom.jpg",
+      "textures/skybox/front.jpg", "textures/skybox/back.jpg"};
+  this->skybox.init(x, faces);
+  //
   // Run the main loop
   // return run();
   app->init(this);
@@ -406,6 +415,8 @@ int Engine::render() {
 
   // TODO: Possibly don't use pointers to bind in the future?
   cam.upload_to_shader(shaders[0], &window);
+  cam.upload_to_sb_shader(this->skybox.get_shader(), &window);
+  this->skybox.render();
   // model.render();
   // model1.render();
   for (auto &m : models) {
