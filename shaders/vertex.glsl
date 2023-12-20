@@ -1,20 +1,25 @@
 #version 460
-layout(location = 0) in vec3 vs_position;
-layout(location = 1) in vec3 vs_normal;
-layout(location = 2) in vec2 vs_texcoord;
-layout(location = 3) in vec4 vs_color;
+layout(location = 0) in vec3 in_pos;
+layout(location = 1) in vec3 in_normal;
+layout(location = 2) in vec2 in_tex;
+layout(location = 3) in vec4 in_color;
 
-out vec3 _vs_position;
-out vec2 _vs_texcoord;
-out vec4 _vs_color;
+out VS_OUT{
+  vec3 pos;
+  vec3 normal;
+  vec2 tex;
+  vec4 color;
+} vs_out;
 
-uniform mat4 ModelMatrix;
-uniform mat4 ViewMatrix;
-uniform mat4 ProjectionMatrix;
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 proj;
 
 void main() {
-  _vs_color = vs_color;
-  _vs_texcoord = vs_texcoord;
+  vs_out.pos = in_pos;
+  vs_out.normal = in_normal;
+  vs_out.tex = in_tex;
+  vs_out.color = in_color;
 
-  gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(vs_position, 1.f);
+  gl_Position = proj * view * model * vec4(in_pos, 1.f);
 }

@@ -46,8 +46,8 @@ void Camera::upload_to_shader(pShader shader, Window *win) {
   // FIXED SIZE
   this->calculate_proj_matrix(1920, 1080);
 
-  shader->set_mat4fv(this->view_matrix, "ViewMatrix");
-  shader->set_mat4fv(this->proj_matrix, "ProjectionMatrix");
+  shader->set_mat4fv(this->view_matrix, "view");
+  shader->set_mat4fv(this->proj_matrix, "proj");
   shader->set_vec3f(this->pos, "cameraPos");
 }
 
@@ -61,10 +61,11 @@ void Camera::upload_to_sb_shader(pShader shader, Window *win) {
 
   // FIXED SIZE
   this->calculate_proj_matrix(1920, 1080);
+  // Ignore translations, keep rotations
   glm::mat4 view = glm::mat4(glm::mat3(this->view_matrix));
 
-  shader->set_mat4fv(view, "ViewMatrix");
-  shader->set_mat4fv(this->proj_matrix, "ProjectionMatrix");
+  shader->set_mat4fv(view, "view");
+  shader->set_mat4fv(this->proj_matrix, "proj");
 }
 void Camera::add_pos(glm::vec3 pos) { this->pos += pos; }
 

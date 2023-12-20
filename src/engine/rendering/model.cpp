@@ -1,6 +1,5 @@
 #include "model.hpp"
 #include <glm/ext/matrix_transform.hpp>
-#include <memory>
 
 namespace En {
 void Model::set_values() {
@@ -35,7 +34,7 @@ void Model::update() {
   this->mmatrix = glm::scale(this->mmatrix, this->scale);
 
   for (auto &i : this->meshes)
-    i->get_material()->get_shader()->set_mat4fv(this->mmatrix, "ModelMatrix");
+    i->get_material()->get_shader()->set_mat4fv(this->mmatrix, "model");
 }
 
 void Model::render() {
