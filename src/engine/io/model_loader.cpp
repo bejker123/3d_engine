@@ -1,4 +1,5 @@
 #include "model_loader.hpp"
+#include <assimp/postprocess.h>
 #include <iostream>
 namespace En {
 
@@ -68,7 +69,8 @@ Model ModelLoader::load(pShader shader, std::string path, bool flip_uvs) {
   Assimp::Importer importer;
 
   auto flags = aiProcess_Triangulate | aiProcess_GenSmoothNormals |
-               aiProcess_CalcTangentSpace;
+               aiProcess_CalcTangentSpace | aiProcess_OptimizeMeshes |
+               aiProcess_OptimizeGraph;
   if (flip_uvs)
     flags |= aiProcess_FlipUVs;
   const aiScene *scene = importer.ReadFile(path, flags);
