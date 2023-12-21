@@ -48,47 +48,58 @@ Engine::Engine() {
       "textures/skybox/top.jpg",   "textures/skybox/bottom.jpg",
       "textures/skybox/front.jpg", "textures/skybox/back.jpg"};
   this->skybox.init(x, faces);
-  //
   // Run the main loop
   // return run();
   app->init(this);
   // return this->state;
 }
 
-std::vector<int> ms_idxs;
-void Engine::add_shader(const char *v, const char *f, const char *g) {
-  this->shaders.push_back(pShader(new Shader(v, f, g)));
+UUID Engine::add_shader(const char *v, const char *f, const char *g) {
+  auto uuid = UUID();
+  this->shaders.insert(std::make_pair(uuid, pShader(new Shader(v, f, g))));
+  return uuid;
 }
 
-void Engine::load_shader(const char *v, const char *f, const char *g) {
-  this->shaders.push_back(
-      std::make_shared<Shader>(ShaderLoader::load(v, f, g).value()));
+UUID Engine::load_shader(const char *v, const char *f, const char *g) {
+  auto uuid = UUID();
+  this->shaders.insert(std::make_pair(
+      uuid, std::make_shared<Shader>(ShaderLoader::load(v, f, g).value())));
+  this->active_shader_id = uuid;
+  return uuid;
 }
 
-void Engine::add_va(pVertexArray va) {
-  if (this->vas.contains(va->get_id()))
-    return;
-  this->vas.insert(std::make_pair(va->get_id(), va));
+UUID Engine::add_va(pVertexArray va) {
+  auto uuid = UUID();
+  this->vas.insert(std::make_pair(uuid, va));
+  return uuid;
 }
 
-void Engine::add_model(Model &model) {
-  this->models.push_back(model);
-  ms_idxs.push_back(0);
+UUID Engine::add_model(Model &model) {
+  auto uuid = UUID();
+  this->models.insert(std::make_pair(uuid, model));
+  this->model_uuids.push_back(uuid);
+  return uuid;
 }
 
-void Engine::add_model(pMesh mesh) {
-  this->models.push_back(Model(mesh));
-  ms_idxs.push_back(0);
+UUID Engine::add_model(pMesh mesh) {
+  auto uuid = UUID();
+  this->models.insert(std::make_pair(uuid, Model(mesh)));
+  this->model_uuids.push_back(uuid);
+  return uuid;
 }
 
-void Engine::add_model(std::vector<Vertex> vertices,
+UUID Engine::add_model(std::vector<Vertex> vertices,
                        std::vector<unsigned int> indices, pMaterial mat) {
-  this->meshes.push_back(std::make_shared<Mesh>(Mesh(mat, vertices, indices)));
-  this->models.push_back(Model(this->meshes.at(this->meshes.size() - 1)));
-  ms_idxs.push_back(0);
+  // this->meshes.push_back(std::make_shared<Mesh>(Mesh(mat, vertices,
+  // indices)));
+  auto uuid = UUID();
+  this->models.insert(std::make_pair(
+      uuid, Model(std::make_shared<Mesh>(Mesh(mat, vertices, indices)))));
+  this->model_uuids.push_back(uuid);
+  return uuid;
 }
 
-std::optional<Model *> Engine::get_model(const uint32_t idx) {
+std::optional<Model *> Engine::get_model(const UUID idx) {
   try {
     return std::optional(&this->models.at(idx));
   } catch (std::out_of_range e) {
@@ -96,19 +107,9 @@ std::optional<Model *> Engine::get_model(const uint32_t idx) {
   }
 }
 
-std::optional<Model *> Engine::get_last_model() {
-  try {
-    return std::optional(&this->models.at(this->models.size() - 1));
-  } catch (std::exception e) {
-    return std::nullopt;
-  }
-}
-
 const size_t Engine::get_models_count() const { return this->models.size(); }
 
-std::optional<pShader> Engine::get_shader(const size_t idx) const {
-  if (this->get_shaders_count() - 1 < idx || this->get_shaders_count() == 0)
-    return std::nullopt;
+std::optional<pShader> Engine::get_shader(const UUID idx) const {
   auto ret = this->shaders.at(idx);
   return std::optional(ret);
 }
@@ -117,17 +118,17 @@ const size_t Engine::get_shaders_count() const { return this->shaders.size(); }
 
 void Engine::reload_shaders() {
   for (auto &i : this->shaders) {
-    auto new_ = ShaderLoader::reload(i->get_id());
+    auto new_ = ShaderLoader::reload(i.second->get_id());
     if (new_.has_value()) {
-      i->terminate();
-      *i = new_.value();
+      i.second->terminate();
+      *i.second = new_.value();
     } else {
-      LOG("[ENGINE] Shader %d not reloaded\n", i->get_id());
+      LOG("[ENGINE] Shader %d not reloaded\n", i.second->get_id());
     }
   }
 }
 
-std::optional<pVertexArray> Engine::get_va(const uint32_t id) const {
+std::optional<pVertexArray> Engine::get_va(const UUID id) const {
   try {
     return std::optional(this->vas.at(id));
   } catch (std::out_of_range e) {
@@ -215,9 +216,9 @@ void Engine::terminate_opengl() {
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
   for (auto &i : this->shaders) {
-    i->terminate();
+    i.second->terminate();
   }
-  for (auto &i : this->models) {
+  for (auto &[_i, i] : this->models) {
     for (auto &j : i.get_meshes()) {
       auto tex = j->get_material()->get_texture();
       if (tex.has_value())
@@ -308,7 +309,7 @@ int Engine::update() {
 
   app->update(this);
 
-  for (auto &m : models)
+  for (auto &[u, m] : models)
     m.update();
 
   app->post_update(this);
@@ -342,62 +343,47 @@ void Engine::render_imgui() {
     ImGui::EndGroup();
   }
 
-  for (auto i : rv::iota((uint64_t)0, models.size())) {
+  for (auto &u : this->model_uuids) {
+    auto m = this->models.at(u);
     ImGui::BeginGroup();
-    if (ImGui::CollapsingHeader(("models[" + std::to_string(i) + "]").data())) {
-      if (ImGui::Button(("Teleport " + std::to_string(i)).data())) {
-        *cam.get_pos() = *models[i].get_pos();
+    if (ImGui::CollapsingHeader(("models[" + u.to_string() + "]").data())) {
+      if (ImGui::Button(("Teleport " + u.to_string()).data())) {
+        *cam.get_pos() = *m.get_pos();
       }
 
-      ImGui::SliderFloat(("Pos X " + std::to_string(i)).data(),
-                         &models[i].get_pos()->x, -180, 180);
-      ImGui::SliderFloat(("Pos Y " + std::to_string(i)).data(),
-                         &models[i].get_pos()->y, -180, 180);
-      ImGui::SliderFloat(("Pos Z " + std::to_string(i)).data(),
-                         &models[i].get_pos()->z, -180, 180);
+      ImGui::SliderFloat(("Pos X " + u.to_string()).data(), &m.get_pos()->x,
+                         -180, 180);
+      ImGui::SliderFloat(("Pos Y " + u.to_string()).data(), &m.get_pos()->y,
+                         -180, 180);
+      ImGui::SliderFloat(("Pos Z " + u.to_string()).data(), &m.get_pos()->z,
+                         -180, 180);
 
-      ImGui::SliderFloat(("Rotation X " + std::to_string(i)).data(),
-                         &models[i].get_rot()->x, -180, 180);
-      ImGui::SliderFloat(("Rotation Y " + std::to_string(i)).data(),
-                         &models[i].get_rot()->y, -180, 180);
-      ImGui::SliderFloat(("Rotation Z " + std::to_string(i)).data(),
-                         &models[i].get_rot()->z, -180, 180);
-      for (auto j : rv::iota((size_t)0, models[i].get_meshes().size())) {
+      ImGui::SliderFloat(("Rotation X " + u.to_string()).data(),
+                         &m.get_rot()->x, -180, 180);
+      ImGui::SliderFloat(("Rotation Y " + u.to_string()).data(),
+                         &m.get_rot()->y, -180, 180);
+      ImGui::SliderFloat(("Rotation Z " + u.to_string()).data(),
+                         &m.get_rot()->z, -180, 180);
+      for (auto j : rv::iota((size_t)0, m.get_meshes().size())) {
 
         ImGui::Checkbox(
-            ("Cull Backfaces " + std::to_string(i) + " " + std::to_string(j))
+            ("Cull Backfaces " + u.to_string() + " " + std::to_string(j))
                 .data(),
-            &models[i]
-                 .get_meshes()[j]
-                 ->get_material()
-                 ->get_options()
-                 ->cull_backfaces);
+            &m.get_meshes()[j]->get_material()->get_options()->cull_backfaces);
         ImGui::Checkbox(
-            ("Textured " + std::to_string(i) + " " + std::to_string(j)).data(),
-            &models[i].get_meshes()[j]->get_material()->get_options()->texture);
+            ("Textured " + u.to_string() + " " + std::to_string(j)).data(),
+            &m.get_meshes()[j]->get_material()->get_options()->texture);
         ImGui::RadioButton(
-            ("Lines " + std::to_string(i) + " " + std::to_string(j)).data(),
-            &models[i]
-                 .get_meshes()[j]
-                 ->get_material()
-                 ->get_options()
-                 ->polygon_mode,
+            ("Lines " + u.to_string() + " " + std::to_string(j)).data(),
+            &m.get_meshes()[j]->get_material()->get_options()->polygon_mode,
             GL_LINE);
         ImGui::RadioButton(
-            ("Fill " + std::to_string(i) + " " + std::to_string(j)).data(),
-            &models[i]
-                 .get_meshes()[j]
-                 ->get_material()
-                 ->get_options()
-                 ->polygon_mode,
+            ("Fill " + u.to_string() + " " + std::to_string(j)).data(),
+            &m.get_meshes()[j]->get_material()->get_options()->polygon_mode,
             GL_FILL);
         ImGui::RadioButton(
-            ("Point" + std::to_string(i) + " " + std::to_string(j)).data(),
-            &models[i]
-                 .get_meshes()[j]
-                 ->get_material()
-                 ->get_options()
-                 ->polygon_mode,
+            ("Point" + u.to_string() + " " + std::to_string(j)).data(),
+            &m.get_meshes()[j]->get_material()->get_options()->polygon_mode,
             GL_POINT);
       }
     }
@@ -413,12 +399,12 @@ int Engine::render() {
   render_imgui();
 
   // TODO: Possibly don't use pointers to bind in the future?
-  cam.upload_to_shader(shaders[0], &window);
+  cam.upload_to_shader(shaders.at(this->active_shader_id), &window);
   cam.upload_to_sb_shader(this->skybox.get_shader(), &window);
   this->skybox.render();
   // model.render();
   // model1.render();
-  for (auto &m : models) {
+  for (auto &[u, m] : models) {
     m.render();
   }
 

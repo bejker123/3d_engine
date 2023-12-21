@@ -83,10 +83,11 @@ int App::init(EN engine) {
   // Reamember to set the camera's 'z-near' (near plane) as far as possible (1
   // is good enough)
   engine->cam.init(60, 0.1, 10000, glm::vec3(-40, 20, 30));
-  engine->load_shader("shaders/vertex.glsl", "shaders/fragment.glsl");
+  auto shader_id =
+      engine->load_shader("shaders/vertex.glsl", "shaders/fragment.glsl");
 
   auto texture = pTexture(new En::Texture("textures/face.png"));
-  En::Material mat(engine->get_shader(0).value(), texture);
+  En::Material mat(engine->get_shader(shader_id).value(), texture);
   En::Mesh mesh(std::make_shared<En::Material>(mat), vertices, indices);
   // TODO: Change this texture
   // Creating the texture "on the fly" makes is appear propely
@@ -94,31 +95,31 @@ int App::init(EN engine) {
 
   En::ModelLoader ml;
 
-  auto m = ml.load(engine->get_shader(0).value(), "models/sb/sb.obj");
+  auto m = ml.load(engine->get_shader(shader_id).value(), "models/sb/sb.obj");
   m.set_origin(glm::vec3(-30, 0, 0));
   m.set_scale(glm::vec3(1));
   engine->add_model(m);
 
-  auto m1 = ml.load(engine->get_shader(0).value(), "models/sk/sk.obj");
+  auto m1 = ml.load(engine->get_shader(shader_id).value(), "models/sk/sk.obj");
   m1.set_origin(glm::vec3(-85, 0, 0));
   m1.set_scale(glm::vec3(1));
   engine->add_model(m1);
 
-  auto m2 = ml.load(engine->get_shader(0).value(), "models/mf/mf.obj", true);
+  auto m2 =
+      ml.load(engine->get_shader(shader_id).value(), "models/mf/mf.obj", true);
   m2.set_origin(glm::vec3(-105, 0, 0));
   m2.set_scale(glm::vec3(0.1));
   engine->add_model(m2);
 
-  auto m_ = ml.load(engine->get_shader(0).value(),
+  auto m_ = ml.load(engine->get_shader(shader_id).value(),
                     "models/backpack/backpack.obj", true);
   m_.set_origin(glm::vec3(-50, 0, 0));
   engine->add_model(m_);
 
   for (uint64_t i : rv::iota(0, 10)) {
-    engine->add_model(std::make_shared<En::Mesh>(mesh));
-    auto lm = engine->get_last_model();
-    if (lm.has_value())
-      lm.value()->set_origin(glm::vec3((double)i * 21, 0, 0));
+    auto m = En::Model(std::make_shared<En::Mesh>(mesh));
+    m.set_origin(glm::vec3((double)i * 21, 0, 0));
+    engine->add_model(m);
   }
   return 1;
 }

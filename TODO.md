@@ -5,7 +5,7 @@
 - [ ] multiple shaders
 - [ ] batch rendering
 - [ ] only engine side object creation
-- [ ] UUIDs
+- [x] UUIDs
 - [ ] Scenes
 - [ ] Vulkan
 

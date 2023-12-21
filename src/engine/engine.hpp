@@ -5,6 +5,8 @@
 #include <map>
 
 namespace En {
+
+template <class T> using UUIDmap = std::map<UUID, T>;
 class WindowOptions {
 public:
   int window_width, window_height;
@@ -24,24 +26,23 @@ public:
   ~Engine();
   // FUNCTIONS
   // init functions
-  void add_shader(const char *v, const char *f, const char *g);
-  void load_shader(const char *v, const char *f, const char *g = "");
-  void add_va(pVertexArray va);
+  UUID add_shader(const char *v, const char *f, const char *g);
+  UUID load_shader(const char *v, const char *f, const char *g = "");
+  UUID add_va(pVertexArray va);
 
-  void add_model(Model &model);
-  void add_model(pMesh mesh);
-  void add_model(std::vector<Vertex> vertices,
+  UUID add_model(Model &model);
+  UUID add_model(pMesh mesh);
+  UUID add_model(std::vector<Vertex> vertices,
                  std::vector<unsigned int> indices, pMaterial mat);
 
-  std::optional<Model *> get_model(const uint32_t idx);
-  std::optional<Model *> get_last_model();
+  std::optional<Model *> get_model(const UUID idx);
   const size_t get_models_count() const;
 
-  std::optional<pShader> get_shader(const size_t idx) const;
+  std::optional<pShader> get_shader(const UUID idx) const;
   const size_t get_shaders_count() const;
 
   // Ids correspond to opengl ids
-  std::optional<pVertexArray> get_va(const uint32_t id) const;
+  std::optional<pVertexArray> get_va(const UUID id) const;
   // main functions
 
   int run();
@@ -77,10 +78,17 @@ private:
   float last_mouse_x = 0, last_mouse_y = 0;
   int last_tab_pressed = 0;
 
-  std::vector<Model> models;
-  std::vector<pMesh> meshes;
-  std::vector<pShader> shaders;
-  std::map<uint32_t, pVertexArray> vas;
+  UUIDmap<Model> models;
+
+  // To keep the order in debug ui;
+  std::vector<UUID> model_uuids;
+
+  UUIDmap<pMesh> meshes;
+  UUIDmap<pShader> shaders;
+
+  UUID active_shader_id;
+
+  UUIDmap<pVertexArray> vas;
   SkyBox skybox;
 };
 } // namespace En
