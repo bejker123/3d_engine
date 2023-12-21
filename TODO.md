@@ -6,6 +6,7 @@
 - [ ] Only Engine Side Object Creation
 - [ ] Text Rendering
 - [ ] Scenes
+- [ ] Frustum Culling Or Better
 - [ ] Batch Rendering
 - [ ] Vulkan
 
