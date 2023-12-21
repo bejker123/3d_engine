@@ -70,7 +70,7 @@ Model ModelLoader::load(pShader shader, std::string path, bool flip_uvs) {
 
   auto flags = aiProcess_Triangulate | aiProcess_GenSmoothNormals |
                aiProcess_CalcTangentSpace | aiProcess_OptimizeMeshes |
-               aiProcess_OptimizeGraph;
+               aiProcess_OptimizeGraph | aiProcess_ValidateDataStructure;
   if (flip_uvs)
     flags |= aiProcess_FlipUVs;
   const aiScene *scene = importer.ReadFile(path, flags);

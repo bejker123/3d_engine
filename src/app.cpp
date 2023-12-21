@@ -97,14 +97,17 @@ int App::init(EN engine) {
   auto m = ml.load(engine->get_shader(0).value(), "models/sb/sb.obj");
   m.set_origin(glm::vec3(-30, 0, 0));
   m.set_scale(glm::vec3(1));
-  // m.set_rot(glm::vec3(-90, 0, 0));
   engine->add_model(m);
 
   auto m1 = ml.load(engine->get_shader(0).value(), "models/sk/sk.obj");
   m1.set_origin(glm::vec3(-85, 0, 0));
   m1.set_scale(glm::vec3(1));
-  // m.set_rot(glm::vec3(-90, 0, 0));
   engine->add_model(m1);
+
+  auto m2 = ml.load(engine->get_shader(0).value(), "models/mf/mf.obj", true);
+  m2.set_origin(glm::vec3(-105, 0, 0));
+  m2.set_scale(glm::vec3(0.1));
+  engine->add_model(m2);
 
   auto m_ = ml.load(engine->get_shader(0).value(),
                     "models/backpack/backpack.obj", true);
