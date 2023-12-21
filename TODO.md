@@ -1,11 +1,11 @@
+- [x] Fix Mesh Init
 - [x] Modular Vertexes
-- [ ] Text Rendering
-- [x] Fix mesh init
-- [ ] Multiple cameras
-- [ ] multiple shaders
-- [ ] batch rendering
-- [ ] only engine side object creation
 - [x] UUIDs
+- [ ] Multiple Cameras
+- [ ] Multiple Shaders
+- [ ] Only Engine Side Object Creation
+- [ ] Text Rendering
 - [ ] Scenes
+- [ ] Batch Rendering
 - [ ] Vulkan
 
