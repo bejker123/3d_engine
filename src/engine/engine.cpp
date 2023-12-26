@@ -344,46 +344,46 @@ void Engine::render_imgui() {
   }
 
   for (auto &u : this->model_uuids) {
-    auto m = this->models.at(u);
+    auto m = &this->models.at(u);
     ImGui::BeginGroup();
     if (ImGui::CollapsingHeader(("models[" + u.to_string() + "]").data())) {
       if (ImGui::Button(("Teleport " + u.to_string()).data())) {
-        *cam.get_pos() = *m.get_pos();
+        *cam.get_pos() = *m->get_pos();
       }
 
-      ImGui::SliderFloat(("Pos X " + u.to_string()).data(), &m.get_pos()->x,
+      ImGui::SliderFloat(("Pos X " + u.to_string()).data(), &m->get_pos()->x,
                          -180, 180);
-      ImGui::SliderFloat(("Pos Y " + u.to_string()).data(), &m.get_pos()->y,
+      ImGui::SliderFloat(("Pos Y " + u.to_string()).data(), &m->get_pos()->y,
                          -180, 180);
-      ImGui::SliderFloat(("Pos Z " + u.to_string()).data(), &m.get_pos()->z,
+      ImGui::SliderFloat(("Pos Z " + u.to_string()).data(), &m->get_pos()->z,
                          -180, 180);
 
       ImGui::SliderFloat(("Rotation X " + u.to_string()).data(),
-                         &m.get_rot()->x, -180, 180);
+                         &m->get_rot()->x, -180, 180);
       ImGui::SliderFloat(("Rotation Y " + u.to_string()).data(),
-                         &m.get_rot()->y, -180, 180);
+                         &m->get_rot()->y, -180, 180);
       ImGui::SliderFloat(("Rotation Z " + u.to_string()).data(),
-                         &m.get_rot()->z, -180, 180);
-      for (auto j : rv::iota((size_t)0, m.get_meshes().size())) {
+                         &m->get_rot()->z, -180, 180);
+      for (auto j : rv::iota((size_t)0, m->get_meshes().size())) {
 
         ImGui::Checkbox(
             ("Cull Backfaces " + u.to_string() + " " + std::to_string(j))
                 .data(),
-            &m.get_meshes()[j]->get_material()->get_options()->cull_backfaces);
+            &m->get_meshes()[j]->get_material()->get_options()->cull_backfaces);
         ImGui::Checkbox(
             ("Textured " + u.to_string() + " " + std::to_string(j)).data(),
-            &m.get_meshes()[j]->get_material()->get_options()->texture);
+            &m->get_meshes()[j]->get_material()->get_options()->texture);
         ImGui::RadioButton(
             ("Lines " + u.to_string() + " " + std::to_string(j)).data(),
-            &m.get_meshes()[j]->get_material()->get_options()->polygon_mode,
+            &m->get_meshes()[j]->get_material()->get_options()->polygon_mode,
             GL_LINE);
         ImGui::RadioButton(
             ("Fill " + u.to_string() + " " + std::to_string(j)).data(),
-            &m.get_meshes()[j]->get_material()->get_options()->polygon_mode,
+            &m->get_meshes()[j]->get_material()->get_options()->polygon_mode,
             GL_FILL);
         ImGui::RadioButton(
             ("Point" + u.to_string() + " " + std::to_string(j)).data(),
-            &m.get_meshes()[j]->get_material()->get_options()->polygon_mode,
+            &m->get_meshes()[j]->get_material()->get_options()->polygon_mode,
             GL_POINT);
       }
     }
