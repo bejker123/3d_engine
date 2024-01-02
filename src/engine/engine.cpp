@@ -272,8 +272,8 @@ int Engine::run() {
 // before render function,
 // handles user input, updates phisics, logic, etc.
 int Engine::update() {
+  this->perf.begin_update();
   app->pre_update(this);
-  this->perf.update();
   glfwPollEvents();
   bool cancel_mouse_delta = false;
 
@@ -292,11 +292,15 @@ int Engine::update() {
     if (last_tab_pressed > 0)
       last_tab_pressed--;
   }
-  if (paused)
+  if (paused) {
+    this->perf.end_update();
     return 1;
+  }
 
-  if (!handle_keyboard())
+  if (!handle_keyboard()) {
+    this->perf.end_update();
     return 0;
+  }
 
   auto [mouse_x, mouse_y] = this->window.get_mouse_pos();
 
@@ -314,6 +318,7 @@ int Engine::update() {
 
   app->post_update(this);
 
+  this->perf.end_update();
   return 1;
 }
 
@@ -325,6 +330,8 @@ void Engine::render_imgui() {
 
   ImGui::Text("Delta: %fms FPS: %ld", this->perf.get_delta() * 1000,
               this->perf.get_fps());
+  ImGui::Text("CPU: %fms GPU: %fms", this->perf.get_cpu_time() * 1000,
+              this->perf.get_gpu_time() * 1000);
   if (!paused)
     return;
 
@@ -393,6 +400,7 @@ void Engine::render_imgui() {
 
 // Rendering function running every frame, after update
 int Engine::render() {
+  this->perf.begin_render();
   app->pre_render(this);
   opengl::clear_buffer();
 
@@ -414,7 +422,10 @@ int Engine::render() {
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
   // (Your code calls glfwSwapBuffers() etc.)
+  this->perf.end_render();
+  this->perf.begin_vsync();
   this->window.swap_buffers();
+  this->perf.end_vsync();
   app->post_render(this);
   return 1;
 }
