@@ -26,7 +26,7 @@ INC_FLAGS := $(addprefix -I ,$(INC_DIRS))
 # The -MMD and -MP flags together generate Makefiles for us!
 # These files will have .d instead of .o as the output.
 CPPFLAGS := -Wall -std=c++2b -MMD -MP -g -Og
-LDFLAGS := -Wall -std=c++2b -g -Og -lassimp -lcglm -lglfw -lGLEW -lGL -lm -lX11 -lpthread -lXrandr -ldl $(INC_FLAGS)# -O3 -fvisibility=hidden -s -static
+LDFLAGS := -Wall -std=c++2b -g -Og -lvulkan -lassimp -lcglm -lglfw -lGLEW -lGL -lm -lX11 -lpthread -lXrandr -ldl $(INC_FLAGS)# -O3 -fvisibility=hidden -s -static
 
 # The final build step.
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)

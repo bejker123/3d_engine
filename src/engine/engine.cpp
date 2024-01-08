@@ -3,6 +3,7 @@
 
 #include "../app.hpp"
 #include "io/logger.hpp"
+#include "rendering/ll/vulkan.hpp"
 #include <ranges>
 #include <stdexcept>
 #include <thread>
@@ -150,6 +151,7 @@ void Engine::init_command_line_args() {
 bool Engine::init_opengl() {
   LOG("[ENGINE] INITIALISING OPENGL\n");
   LOG("[ENGINE] INITIALISING GLFW\n");
+  Vulkan::init();
   if (!opengl::setup()) {
     LOG("[ENGINE] FAILED TO INIT GLFW\n");
     this->terminate_opengl();
