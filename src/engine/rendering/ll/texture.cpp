@@ -1,7 +1,7 @@
 #include "texture.hpp"
 #include <map>
 #define STB_IMAGE_IMPLEMENTATION
-#include "../../../stb/stb_image.h"
+#include "../../../../stb/stb_image.h"
 #include "../../io/logger.hpp"
 
 namespace En {
