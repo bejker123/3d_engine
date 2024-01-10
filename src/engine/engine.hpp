@@ -49,7 +49,7 @@ public:
   int update();
   int render();
   Camera cam;
-  Window window;
+  std::shared_ptr<Window> window;
 
 private:
   void reload_shaders();

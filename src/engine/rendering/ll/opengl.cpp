@@ -1,9 +1,6 @@
 #include "opengl.hpp"
 #include "../../io/logger.hpp"
-#include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <cstring>
-
 namespace En {
 
 void opengl::clear_buffer() {
@@ -14,21 +11,12 @@ void opengl::clear_buffer() {
   glDepthMask(GL_FALSE);
   glStencilMask(GL_FALSE);
 }
-
-std::optional<std::string> opengl::get_error() {
-  char *desc = (char *)malloc(1024);
-  memset(desc, 0, 1024);
-  auto ret = glfwGetError((const char **)&desc);
-
-  if (ret != GL_NO_ERROR) { // Returns GL_NO_ERROR (0) if no error is present
-    LOG("[OPENGL] GLFW ERROR: %d\n\t%s\n", ret, desc);
-    return desc;
-  }
-
-  free(desc);
-  return std::nullopt;
+bool opengl::setup_glew() {
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_VER_MAJ);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VER_MIN);
+  glewExperimental = GL_TRUE;
+  return glewInit() == GLEW_OK;
 }
-
 void gl_debug_handler(GLenum source, GLenum type, GLuint id, GLenum severity,
                       GLsizei length, const GLchar *message,
                       const void *userParam) {
@@ -129,35 +117,6 @@ void gl_debug_handler(GLenum source, GLenum type, GLuint id, GLenum severity,
   }
 #endif
 }
-
-void glfw_error_handler(int code, const char *desc) {
-  LOG("[OPENGL] GLFW ERROR: %d\n\t%s\n", code, desc);
-}
-
-bool opengl::setup() {
-  if (!glfwInit()) {
-    LOG("[OPENGL] GLFW INIT ERROR: \n\t%s\n", opengl::get_error()->c_str());
-    return false;
-  }
-
-  glfwSetErrorCallback(glfw_error_handler);
-
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_VER_MAJ);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VER_MIN);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  glfwWindowHint(GLFW_SAMPLES, 4);
-  glEnable(GL_LINE_SMOOTH);
-  // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#ifdef __APPLE__
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
-  return true;
-}
-bool opengl::setup_glew() {
-  glewExperimental = GL_TRUE;
-  return glewInit() == GLEW_OK;
-}
-void opengl::terminate() { glfwTerminate(); }
 void opengl::debug_info() {
 
   const GLubyte *vendor = glGetString(GL_VENDOR);

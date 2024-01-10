@@ -1,19 +1,18 @@
+#include "../../io/window.hpp"
 #include <memory>
-#include <vulkan/vulkan.h>
+#include <optional>
+#include <string>
 namespace En {
 class Vulkan {
 public:
-  static bool init();
+  static std::optional<std::shared_ptr<Window>> init();
 
   static std::shared_ptr<Vulkan> instance();
 
   static void terminate();
-
-  Vulkan(){};
+  ~Vulkan();
 
 private:
-  static std::shared_ptr<Vulkan> _instance;
-
-  static VkInstance vk_instance;
+  Vulkan();
 };
 } // namespace En

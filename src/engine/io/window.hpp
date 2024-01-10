@@ -6,7 +6,7 @@ namespace En {
 class Window {
 public:
   bool init(int width, int height, char *title, bool resizable, bool fullscreen,
-            bool vsync = false);
+            bool vsync = false, bool vulkan = false);
 
   void terminate();
 

@@ -11,13 +11,17 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
 }
 
 bool Window::init(int width, int height, char *title, bool resizable,
-                  bool fullscreen, bool vsync) {
+                  bool fullscreen, bool vsync, bool vulkan) {
+  glfwDefaultWindowHints();
   glfwWindowHint(GLFW_RESIZABLE, resizable);
   GLFWmonitor *monitor = nullptr;
   if (fullscreen) {
     monitor = glfwGetPrimaryMonitor();
     glfwGetMonitorWorkarea(monitor, 0, 0, &width, &height);
   }
+  if (vulkan)
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+
   this->window = glfwCreateWindow(width, height, title, monitor, NULL);
 
   if (this->window == NULL) {
@@ -30,10 +34,12 @@ bool Window::init(int width, int height, char *title, bool resizable,
     return false;
   }
 
-  glfwMakeContextCurrent(this->window);
-  if (glfwGetCurrentContext() != this->window) {
-    LOG("FAIELD TO INIT WINDOW\n");
-    return false;
+  if (!vulkan) {
+    glfwMakeContextCurrent(this->window);
+    if (glfwGetCurrentContext() != this->window) {
+      LOG("FAIELD TO INIT WINDOW\n");
+      return false;
+    }
   }
 
   glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);

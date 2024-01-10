@@ -1,4 +1,5 @@
 #include "engine.hpp"
+#include "rendering/ll/glfw.hpp"
 #include "rendering/ll/opengl.hpp"
 
 #include "../app.hpp"
@@ -32,7 +33,7 @@ Engine::Engine() {
   if (!init_opengl())
     return; // EXIT_FAILURE
 
-  this->keyboard = Keyboard(this->window.raw());
+  this->keyboard = Keyboard(this->window->raw());
 
   // If all initialisation functions run succesfully
   // set game state to inited
@@ -151,22 +152,23 @@ void Engine::init_command_line_args() {
 bool Engine::init_opengl() {
   LOG("[ENGINE] INITIALISING OPENGL\n");
   LOG("[ENGINE] INITIALISING GLFW\n");
-  Vulkan::init();
-  if (!opengl::setup()) {
+  if (!GLFW::setup()) {
     LOG("[ENGINE] FAILED TO INIT GLFW\n");
     this->terminate_opengl();
     return false;
   }
+  Vulkan::init();
 
   LOG("[ENGINE] INITIALISING WINDOW\n");
 
-  if (!this->window.init(
+  window = std::make_shared<Window>(Window());
+  if (!this->window->init(
           this->options.window_width, this->options.window_height,
           this->options.window_title, this->options.window_resizable,
           this->options.window_fullscreen, true)) {
     this->terminate_opengl();
   }
-  window.hide_cursor();
+  window->hide_cursor();
 
   LOG("[ENGINE] INITIALISING GLEW\n");
 
@@ -195,7 +197,7 @@ void Engine::init_imgui() {
 
   // Setup Platform/Renderer backends
   ImGui_ImplGlfw_InitForOpenGL(
-      this->window.raw(),
+      this->window->raw(),
       true); // Second param install_callback=true will install
              // GLFW callbacks and chain to existing ones.
   ImGui_ImplOpenGL3_Init();
@@ -213,7 +215,7 @@ Engine::~Engine() {
 
 void Engine::terminate_opengl() {
   LOG("[ENGINE] TERMINATING OPENGL\n");
-  this->window.~Window();
+  this->window->terminate();
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
@@ -227,14 +229,15 @@ void Engine::terminate_opengl() {
         tex.value()->terminate();
     }
   }
-  opengl::terminate();
+  Vulkan::terminate();
+  GLFW::terminate();
 }
 
 // Handles keyboard user input
 // runs every frame
 int Engine::handle_keyboard() {
   if (this->keyboard.get_key_pressed(Key::Code::KEY_ESCAPE))
-    this->window.set_should_close(true);
+    this->window->set_should_close(true);
 
   float cam_speed = 20;
 
@@ -265,7 +268,7 @@ int Engine::handle_keyboard() {
 }
 
 int Engine::run() {
-  while (this->update() && !this->window.should_close())
+  while (this->update() && !this->window->should_close())
     this->render();
   return 0;
 }
@@ -283,10 +286,10 @@ int Engine::update() {
       last_tab_pressed == 0) {
     this->paused = !paused;
     if (this->paused) {
-      this->window.show_cursor();
+      this->window->show_cursor();
     } else {
       ImGui::SetWindowFocus(nullptr);
-      this->window.hide_cursor();
+      this->window->hide_cursor();
       cancel_mouse_delta = true;
     }
     last_tab_pressed = 0.1 / this->perf.get_delta();
@@ -304,7 +307,7 @@ int Engine::update() {
     return 0;
   }
 
-  auto [mouse_x, mouse_y] = this->window.get_mouse_pos();
+  auto [mouse_x, mouse_y] = this->window->get_mouse_pos();
 
   if (!paused)
     cam.update_mosue_input(1, cancel_mouse_delta ? 0 : mouse_x - last_mouse_x,
@@ -409,8 +412,8 @@ int Engine::render() {
   render_imgui();
 
   // TODO: Possibly don't use pointers to bind in the future?
-  cam.upload_to_shader(shaders.at(this->active_shader_id), &window);
-  cam.upload_to_sb_shader(this->skybox.get_shader(), &window);
+  cam.upload_to_shader(shaders.at(this->active_shader_id), window.get());
+  cam.upload_to_sb_shader(this->skybox.get_shader(), window.get());
   this->skybox.render();
   // model.render();
   // model1.render();
@@ -426,7 +429,7 @@ int Engine::render() {
   // (Your code calls glfwSwapBuffers() etc.)
   this->perf.end_render();
   this->perf.begin_vsync();
-  this->window.swap_buffers();
+  this->window->swap_buffers();
   this->perf.end_vsync();
   app->post_render(this);
   return 1;
