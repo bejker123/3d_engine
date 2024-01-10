@@ -5,6 +5,7 @@ namespace En {
 
 #define OPENGL_VER_MAJ 4
 #define OPENGL_VER_MIN 6
+#define DEBUG_INFO 0
 
 namespace opengl {
 
