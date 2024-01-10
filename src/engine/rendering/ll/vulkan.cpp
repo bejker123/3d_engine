@@ -1,23 +1,16 @@
 #include "vulkan.hpp"
 #include "../../io/logger.hpp"
-#include <iostream>
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
-#include <cassert>
 #include <vector>
 #include <vulkan/vulkan.h>
 
 namespace En {
 
-static std::shared_ptr<Vulkan> _instance;
 static VkInstance vk_instance;
 static std::shared_ptr<Window> window;
 
-Vulkan::Vulkan() {}
-Vulkan::~Vulkan() {}
-
 std::optional<std::shared_ptr<Window>> Vulkan::init() {
-  _instance = std::shared_ptr<Vulkan>(new Vulkan());
   VkApplicationInfo appinfo{};
   appinfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
   appinfo.pApplicationName = "3d_engine";
@@ -65,11 +58,6 @@ std::optional<std::shared_ptr<Window>> Vulkan::init() {
   window = std::make_shared<Window>(Window());
   window->init(1920, 1080, (char *)"3d_engine", false, true, true, true);
   return window;
-}
-
-std::shared_ptr<Vulkan> Vulkan::instance() {
-  assert(_instance != nullptr);
-  return _instance;
 }
 
 void Vulkan::terminate() {
