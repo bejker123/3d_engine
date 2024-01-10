@@ -1,19 +1,16 @@
 #include "glfw.hpp"
 #include "../../io/logger.hpp"
-#include <cstring>
 namespace En {
 
 std::optional<std::string> GLFW::get_error() {
-  char *desc = (char *)malloc(1024);
-  memset(desc, 0, 1024);
-  auto ret = glfwGetError((const char **)&desc);
+  std::string desc;
+  auto ret = glfwGetError((const char **)desc.data());
 
   if (ret != GL_NO_ERROR) { // Returns GL_NO_ERROR (0) if no error is present
-    LOG("[OPENGL] GLFW ERROR: %d\n\t%s\n", ret, desc);
+    LOG("[OPENGL] GLFW ERROR: %d\n\t%s\n", ret, desc.data());
     return desc;
   }
 
-  free(desc);
   return std::nullopt;
 }
 
@@ -32,7 +29,6 @@ bool GLFW::setup() {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_SAMPLES, 4);
   glEnable(GL_LINE_SMOOTH);
-  // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #ifdef __APPLE__
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
