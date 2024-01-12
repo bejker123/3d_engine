@@ -1,6 +1,10 @@
 #include "opengl.hpp"
-#include "../../io/logger.hpp"
+#include "../../../io/logger.hpp"
+#include "../../../io/logger.hpp"
 #include <GLFW/glfw3.h>
+
+#define LOGGER_PREFIX "[OPENGL] "
+
 namespace En {
 
 void opengl::clear_buffer() {
@@ -122,7 +126,7 @@ void opengl::debug_info() {
   const GLubyte *vendor = glGetString(GL_VENDOR);
   const GLubyte *renderer = glGetString(GL_RENDERER);
   const GLubyte *version = glGetString(GL_VERSION);
-  LOG("[OPENGL] OPENGL DEBUG INFO:\n\tGraphics Card Vendor: %s\n\tGraphics "
+  LOG("OPENGL DEBUG INFO:\n\tGraphics Card Vendor: %s\n\tGraphics "
       "Card: %s\n\tOpenGL Version: %s\n",
       vendor, renderer, version);
   glEnable(GL_DEBUG_OUTPUT);

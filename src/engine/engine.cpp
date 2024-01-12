@@ -1,10 +1,10 @@
 #include "engine.hpp"
-#include "rendering/ll/glfw.hpp"
-#include "rendering/ll/opengl.hpp"
+#include "rendering/ll/backend/glfw.hpp"
+#include "rendering/ll/backend/opengl.hpp"
 
 #include "../app.hpp"
 #include "io/logger.hpp"
-#include "rendering/ll/vulkan.hpp"
+#include "rendering/ll/backend/vulkan.hpp"
 #include <ranges>
 #include <stdexcept>
 #include <thread>
@@ -16,11 +16,14 @@
 
 std::unique_ptr<App> app;
 namespace rv = std::ranges::views;
+
+#define LOGGER_PREFIX "[ENGINE] "
+
 namespace En {
 
 // Init Game State, run the main loop
 Engine::Engine() {
-  LOG("[ENGINE] INITIALISATION STARTED\n");
+  LOG("INITIALISATION STARTED\n");
 
   // First set the game state to uninitialised
   this->state = EngineState::UNINITED;
@@ -125,7 +128,7 @@ void Engine::reload_shaders() {
       i.second->terminate();
       *i.second = new_.value();
     } else {
-      LOG("[ENGINE] Shader %d not reloaded\n", i.second->get_id());
+      LOG("Shader %d not reloaded\n", i.second->get_id());
     }
   }
 }
@@ -140,7 +143,7 @@ std::optional<pVertexArray> Engine::get_va(const UUID id) const {
 
 // Parse and init cmd line args
 void Engine::init_command_line_args() {
-  LOG("[ENGINE] INITIALISING Command Line Arguments\n");
+  LOG("INITIALISING Command Line Arguments\n");
   this->options.window_title = (char *)"test";
   this->options.window_width = 800;
   this->options.window_height = 600;
@@ -150,16 +153,16 @@ void Engine::init_command_line_args() {
 
 // Initialise OpenGL, return true if successful
 bool Engine::init_opengl() {
-  LOG("[ENGINE] INITIALISING OPENGL\n");
-  LOG("[ENGINE] INITIALISING GLFW\n");
+  LOG("INITIALISING OPENGL\n");
+  LOG("INITIALISING GLFW\n");
   if (!GLFW::setup()) {
-    LOG("[ENGINE] FAILED TO INIT GLFW\n");
+    LOG("FAILED TO INIT GLFW\n");
     this->terminate_opengl();
     return false;
   }
   Vulkan::init();
 
-  LOG("[ENGINE] INITIALISING WINDOW\n");
+  LOG("INITIALISING WINDOW\n");
 
   window = std::make_shared<Window>(Window());
   if (!this->window->init(
@@ -170,15 +173,15 @@ bool Engine::init_opengl() {
   }
   window->hide_cursor();
 
-  LOG("[ENGINE] INITIALISING GLEW\n");
+  LOG("INITIALISING GLEW\n");
 
   if (!opengl::setup_glew()) {
-    LOG("[ENGINE] FAILED TO INIT GLEW\n");
+    LOG("FAILED TO INIT GLEW\n");
     terminate_opengl();
     return false;
   }
 
-  LOG("[ENGINE] OPENGL INITIALISED\n");
+  LOG("OPENGL INITIALISED\n");
 
   opengl::debug_info();
   return true;
@@ -204,17 +207,17 @@ void Engine::init_imgui() {
 }
 
 Engine::~Engine() {
-  LOG("[ENGINE] TERMINATION STARTED\n");
+  LOG("TERMINATION STARTED\n");
 
   app->pre_terminate(this);
   terminate_opengl();
   app->terminate(this);
 
-  LOG("[ENGINE] TERMINATION COMPELTE\n");
+  LOG("TERMINATION COMPELTE\n");
 }
 
 void Engine::terminate_opengl() {
-  LOG("[ENGINE] TERMINATING OPENGL\n");
+  LOG("TERMINATING OPENGL\n");
   this->window->terminate();
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();

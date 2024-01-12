@@ -4,6 +4,8 @@
 #include "../../../../stb/stb_image.h"
 #include "../../io/logger.hpp"
 
+#define LOGGER_PREFIX "[TEXTURE] "
+
 namespace En {
 
 static std::map<std::string, uint32_t> hashes;
@@ -48,7 +50,7 @@ void Texture::load_from_file(std::string file) {
     hashes.insert(std::make_pair(file, this->id));
   glBindTexture(this->type, this->id);
 
-  LOG("[TEXTRURE] LOADING: %s\n", file.data());
+  LOG("LOADING: %s\n", file.data());
   stbi_set_flip_vertically_on_load(true);
   int nr_channels;
   unsigned char *data =
@@ -70,13 +72,13 @@ void Texture::load_from_file(std::string file) {
     glTexParameteri(this->type, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(this->type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glGenerateMipmap(this->type);
-    LOG("[TEXTURE] LOADED, Debug Info:\n\tSize: (%d,%d)\n\tID: %d\n\t# "
+    LOG("LOADED, Debug Info:\n\tSize: (%d,%d)\n\tID: %d\n\t# "
         "Channels: "
         "%d"
         "\n",
         this->width, this->height, this->id, nr_channels);
   } else {
-    LOG("[TEXTURE] FAILED to load: %s\n", file.c_str());
+    LOG("FAILED to load: %s\n", file.c_str());
   }
 
   glBindTexture(this->type, 0);

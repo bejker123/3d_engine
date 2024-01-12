@@ -4,13 +4,14 @@
 #include <map>
 #include <string>
 
+#define LOGGER_PREFIX "[SHADER_LOADER] "
+
 namespace En {
 std::map<uint32_t, std::tuple<const char *, const char *, const char *>> paths;
 std::optional<Shader> ShaderLoader::load(const char *vs_path,
                                          const char *fs_path,
                                          const char *gs_path) {
-  LOG("[SHADER_LOADER] LOADING:\n\tVertex: %s\n\tFragment: %s\n", vs_path,
-      fs_path);
+  LOG("LOADING:\n\tVertex: %s\n\tFragment: %s\n", vs_path, fs_path);
   if (strlen(gs_path))
     printf("\tGeometry: %s\n", gs_path);
   std::ifstream vs_file, fs_file, gs_file;
@@ -52,10 +53,10 @@ std::optional<Shader> ShaderLoader::load(const char *vs_path,
   auto ret = Shader(vs_content.data(), fs_content.data(), gs_content.data());
 
   if (ret.get_state() != 1) {
-    LOG("[SHADER_LOADER] FAILURE\n");
+    LOG("FAILURE\n");
     return std::nullopt;
   } else {
-    LOG("[SHADER_LOADER] SUCCESS\n");
+    LOG("SUCCESS\n");
   }
 
   paths.insert(
@@ -68,7 +69,7 @@ std::optional<Shader> ShaderLoader::reload(const uint32_t id) {
     return std::nullopt;
 
   auto [vp, fp, gp] = paths.at(id);
-  LOG("[SHADER_LOADER] RELOADING %d:\n", id);
+  LOG("RELOADING %d:\n", id);
   auto ret = ShaderLoader::load(vp, fp, gp);
 
   if (ret.has_value())

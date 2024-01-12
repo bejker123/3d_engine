@@ -2,9 +2,11 @@
 #include "../../io/logger.hpp"
 #include <assert.h>
 
+#define LOGGER_PREFIX "[SHADER] "
+
 namespace En {
 
-void log_end() { LOG("[SHADER] INITING ENDED\n"); }
+void log_end() { LOG("INITING ENDED\n"); }
 
 Shader::Shader(const char *vertex_source, const char *fragment_source,
                const char *geometry_source) {
@@ -15,8 +17,8 @@ Shader::Shader(const char *vertex_source, const char *fragment_source,
 void Shader::init(const char *vertex_source, const char *fragment_source,
                   const char *geometry_source) {
 
-  LOG("[SHADER] INITING STARTED\n");
-  LOG("[SHADER] COMPILATION STARTED\n");
+  LOG("INITING STARTED\n");
+  LOG("COMPILATION STARTED\n");
 
   this->success = -1;
   this->id = -1;
@@ -47,9 +49,9 @@ void Shader::init(const char *vertex_source, const char *fragment_source,
     log_end();
     return;
   } else
-    LOG("[SHADER] COMPILATION SUCCESSFUL\n");
+    LOG("COMPILATION SUCCESSFUL\n");
 
-  LOG("[SHADER] LINKING STARTED\n");
+  LOG("LINKING STARTED\n");
 
   this->id = glCreateProgram();
 
@@ -70,10 +72,10 @@ void Shader::init(const char *vertex_source, const char *fragment_source,
 
   if (!success) {
     glGetProgramInfoLog(this->id, 512, NULL, info_log);
-    LOG("[SHADER] Failed to link shader, %s\n", info_log);
+    LOG("Failed to link shader, %s\n", info_log);
     this->success = 0;
   } else {
-    LOG("[SHADER] LINKING SUCCESSFUL\n");
+    LOG("LINKING SUCCESSFUL\n");
     this->success = 1;
   }
 
@@ -112,7 +114,7 @@ GLuint Shader::compile_shader(const char *source, const GLuint shader_type) {
       strcpy(shader_type_name, "GL_GEOMETRY_SHADER");
 
     glGetShaderInfoLog(id, 512, NULL, info_log);
-    LOG("[SHADER] %s failed to compile, with error:\n\t %s\n", shader_type_name,
+    LOG("%s failed to compile, with error:\n\t %s\n", shader_type_name,
         info_log);
     glDeleteShader(id);
     id = 0;
