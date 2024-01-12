@@ -3,7 +3,6 @@
 #include <iostream>
 #include <map>
 #include <vector>
-#include <vulkan/vulkan_core.h>
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 #include <vulkan/vulkan.hpp>
@@ -11,10 +10,11 @@
 #define LOGGER_PREFIX "[VULKAN] "
 
 namespace En {
+namespace Vulkan {
 constexpr bool ENABLE_VALIDATION_LAYERS = true;
 
 static VkInstance vk_instance;
-static std::shared_ptr<Window> window;
+// static std::shared_ptr<Window> window;
 VkDebugUtilsMessengerEXT dbg_messenger;
 
 VkPhysicalDevice physical_dev;
@@ -80,9 +80,9 @@ void populate_dbg_messenger(VkDebugUtilsMessengerCreateInfoEXT &createinfo) {
   createinfo.pfnUserCallback = debug_callback;
   createinfo.pUserData = nullptr; // This is optional
 }
-void setup_dbg_messenger() {
+std::optional<VulkanError> setup_dbg_messenger() {
   if (!ENABLE_VALIDATION_LAYERS) {
-    return;
+    return std::nullopt;
   }
 
   VkDebugUtilsMessengerCreateInfoEXT createinfo;
@@ -91,13 +91,15 @@ void setup_dbg_messenger() {
   if (CreateDebugUtilsMessengerEXT(vk_instance, &createinfo, nullptr,
                                    &dbg_messenger) != VK_SUCCESS) {
     LOG("Failed to set up debug messenger.\n");
+    return VulkanError::SETUP_DBG_MESSENGER;
   }
+  return std::nullopt;
 }
 
-bool create_vk_instance() {
+std::optional<VulkanError> create_vk_instance() {
   if (ENABLE_VALIDATION_LAYERS && !check_vl_support()) {
     LOG("No validation layers available.\n");
-    return false;
+    return VulkanError::NO_VALIDATION_LAYERS;
   }
 
   VkApplicationInfo appinfo{};
@@ -132,7 +134,7 @@ bool create_vk_instance() {
   VkResult result = vkCreateInstance(&createinfo, nullptr, &vk_instance);
   if (result != VK_SUCCESS) {
     LOG("Failed to create instance with result: %d\n", result);
-    return false;
+    return VulkanError::CREATE_INSTANCE;
   }
 
   uint32_t extensionCount = 0;
@@ -149,7 +151,7 @@ bool create_vk_instance() {
   }
   LOG("%s\n", out.data());
 
-  return true;
+  return std::nullopt;
 }
 
 uint32_t rate_device(VkPhysicalDevice dev) {
@@ -184,14 +186,14 @@ void dev_debug_info(VkPhysicalDevice &dev) {
       mem_prop.memoryHeaps[0].size / 1024 / 1024 / 1024);
 }
 
-bool pick_phisical_dev() {
+std::optional<VulkanError> pick_phisical_dev() {
 
   uint32_t devs_count = 0;
   vkEnumeratePhysicalDevices(vk_instance, &devs_count, nullptr);
 
   if (devs_count == 0) {
     LOG("Failed to find any GPUs with Vulkan support.");
-    return false;
+    return VulkanError::NO_VULKAN_DEVICE;
   }
 
   std::vector<VkPhysicalDevice> devices(devs_count);
@@ -209,31 +211,37 @@ bool pick_phisical_dev() {
     dev_debug_info(physical_dev);
   } else {
     LOG("Failed to find any suitable device.");
-    return false;
+    return VulkanError::NO_SUITABLE_DEVICE;
   }
 
-  return true;
+  return std::nullopt;
 }
 
-std::optional<std::shared_ptr<Window>> Vulkan::init() {
+std::optional<VulkanError> init() {
 
-  if (!create_vk_instance()) {
-    return std::nullopt;
+  std::optional<VulkanError> ret = create_vk_instance();
+  if (ret.has_value()) {
+    return ret;
   }
 
-  setup_dbg_messenger();
-
-  if (!pick_phisical_dev()) {
-    return std::nullopt;
+  ret = setup_dbg_messenger();
+  if (ret.has_value()) {
+    return ret;
   }
 
-  window = std::make_shared<Window>(Window());
-  window->init(1920, 1080, (char *)"3d_engine", false, true, true, true);
-  window->terminate();
-  return window;
+  ret = pick_phisical_dev();
+  if (ret.has_value()) {
+    return ret;
+  }
+
+  // window = std::make_shared<Window>(Window());
+  // window->init(1920, 1080, (char *)"3d_engine", false, true, true, true);
+  // window->terminate();
+  // return window;
+  return std::nullopt;
 }
 
-void Vulkan::terminate() {
+void terminate() {
 
   // window->terminate();
   if (ENABLE_VALIDATION_LAYERS) {
@@ -252,7 +260,7 @@ bool check_vl_support() {
 
   vkEnumerateInstanceLayerProperties(&layer_count, aval_layers.data());
 
-  for (const char *name : En::validation_layers) {
+  for (const char *name : validation_layers) {
     bool found = false;
 
     for (const auto &prop : aval_layers) {
@@ -270,4 +278,5 @@ bool check_vl_support() {
 
   return true;
 }
+} // namespace Vulkan
 } // namespace En

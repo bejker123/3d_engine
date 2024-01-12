@@ -5,6 +5,7 @@
 #include "../app.hpp"
 #include "io/logger.hpp"
 #include "rendering/ll/backend/vulkan.hpp"
+#include <iostream>
 #include <ranges>
 #include <stdexcept>
 #include <thread>
@@ -160,7 +161,11 @@ bool Engine::init_opengl() {
     this->terminate_opengl();
     return false;
   }
-  Vulkan::init();
+  auto ret = Vulkan::init();
+  if (ret.has_value()) {
+    std::cout << "[ENGINE] Failed to init Vulkan with error: " << ret.value()
+              << std::endl;
+  }
 
   LOG("INITIALISING WINDOW\n");
 
