@@ -80,7 +80,7 @@ void populate_dbg_messenger(VkDebugUtilsMessengerCreateInfoEXT &createinfo) {
   createinfo.pfnUserCallback = debug_callback;
   createinfo.pUserData = nullptr; // This is optional
 }
-std::optional<VulkanError> setup_dbg_messenger() {
+VulkanErr setup_dbg_messenger() {
   if (!ENABLE_VALIDATION_LAYERS) {
     return std::nullopt;
   }
@@ -96,7 +96,7 @@ std::optional<VulkanError> setup_dbg_messenger() {
   return std::nullopt;
 }
 
-std::optional<VulkanError> create_vk_instance() {
+VulkanErr create_vk_instance() {
   if (ENABLE_VALIDATION_LAYERS && !check_vl_support()) {
     LOG("No validation layers available.\n");
     return VulkanError::NO_VALIDATION_LAYERS;
@@ -225,7 +225,7 @@ void dev_debug_info(VkPhysicalDevice &dev) {
       mem_prop.memoryHeaps[0].size / 1024 / 1024 / 1024);
 }
 
-std::optional<VulkanError> pick_phisical_dev() {
+VulkanErr pick_phisical_dev() {
 
   uint32_t devs_count = 0;
   vkEnumeratePhysicalDevices(vk_instance, &devs_count, nullptr);
@@ -256,9 +256,9 @@ std::optional<VulkanError> pick_phisical_dev() {
   return std::nullopt;
 }
 
-std::optional<VulkanError> init() {
+VulkanErr init() {
 
-  std::optional<VulkanError> ret = create_vk_instance();
+  VulkanErr ret = create_vk_instance();
   if (ret.has_value()) {
     return ret;
   }
