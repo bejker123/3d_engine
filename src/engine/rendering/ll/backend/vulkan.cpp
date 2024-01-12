@@ -154,6 +154,45 @@ std::optional<VulkanError> create_vk_instance() {
   return std::nullopt;
 }
 
+struct QueueFamilyIndices {
+  std::optional<uint32_t> graphics_family;
+
+  bool is_complete() { return graphics_family.has_value(); }
+};
+
+QueueFamilyIndices find_queue_families(VkPhysicalDevice dev) {
+  QueueFamilyIndices indices;
+
+  uint32_t queue_family_count = 0;
+  vkGetPhysicalDeviceQueueFamilyProperties(dev, &queue_family_count, nullptr);
+
+  std::vector<VkQueueFamilyProperties> queue_families(queue_family_count);
+  vkGetPhysicalDeviceQueueFamilyProperties(dev, &queue_family_count,
+                                           queue_families.data());
+
+  size_t i = 0;
+  for (const auto &family : queue_families) {
+    if (family.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
+      indices.graphics_family = i;
+      if (indices.is_complete()) {
+        break;
+      }
+    }
+    i++;
+  }
+
+  return indices;
+}
+
+bool is_dev_suitable(VkPhysicalDevice dev) {
+  VkPhysicalDeviceFeatures features;
+  vkGetPhysicalDeviceFeatures(dev, &features);
+
+  auto indices = find_queue_families(dev);
+
+  return features.geometryShader && indices.is_complete();
+}
+
 uint32_t rate_device(VkPhysicalDevice dev) {
   VkPhysicalDeviceProperties prop;
   vkGetPhysicalDeviceProperties(dev, &prop);
@@ -161,7 +200,7 @@ uint32_t rate_device(VkPhysicalDevice dev) {
   VkPhysicalDeviceFeatures features;
   vkGetPhysicalDeviceFeatures(dev, &features);
 
-  if (!features.geometryShader) {
+  if (!is_dev_suitable(dev)) {
     return 0;
   }
 
