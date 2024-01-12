@@ -165,6 +165,8 @@ bool Engine::init_opengl() {
   if (ret.has_value()) {
     std::cout << "[ENGINE] Failed to init Vulkan with error: " << ret.value()
               << std::endl;
+  } else {
+    LOG("Vulkan initialised\n");
   }
 
   LOG("INITIALISING WINDOW\n");
