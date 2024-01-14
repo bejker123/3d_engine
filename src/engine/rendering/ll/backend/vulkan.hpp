@@ -29,7 +29,8 @@ namespace Vulkan {
   }
 
 MAKE_ENUM(VulkanError, NO_VALIDATION_LAYERS, CREATE_INSTANCE,
-          SETUP_DBG_MESSENGER, NO_VULKAN_DEVICE, NO_SUITABLE_DEVICE);
+          SETUP_DBG_MESSENGER, NO_VULKAN_DEVICE, NO_SUITABLE_DEVICE,
+          CREATE_DEVICE);
 
 using VulkanErr = std::optional<VulkanError>;
 VulkanErr init();

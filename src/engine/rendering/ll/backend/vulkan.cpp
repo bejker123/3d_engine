@@ -18,6 +18,9 @@ static VkInstance vk_instance;
 VkDebugUtilsMessengerEXT dbg_messenger;
 
 VkPhysicalDevice physical_dev;
+VkDevice device;
+VkQueue graphics_queue;
+VkSurfaceKHR surface;
 
 bool check_vl_support();
 const std::vector<const char *> validation_layers = {
@@ -256,6 +259,42 @@ VulkanErr pick_phisical_dev() {
   return std::nullopt;
 }
 
+VulkanErr create_logical_device() {
+  QueueFamilyIndices indices = find_queue_families(physical_dev);
+  VkDeviceQueueCreateInfo queue_createinfo{};
+  queue_createinfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+  queue_createinfo.queueFamilyIndex = indices.graphics_family.value();
+  queue_createinfo.queueCount = 1;
+
+  float queue_priority = 1.0;
+  queue_createinfo.pQueuePriorities = &queue_priority;
+
+  VkPhysicalDeviceFeatures features{};
+  VkDeviceCreateInfo createinfo{};
+  createinfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+  createinfo.pQueueCreateInfos = &queue_createinfo;
+  createinfo.queueCreateInfoCount = 1;
+
+  createinfo.pEnabledFeatures = &features;
+
+  if (ENABLE_VALIDATION_LAYERS) {
+    createinfo.enabledLayerCount =
+        static_cast<uint32_t>(validation_layers.size());
+    createinfo.ppEnabledLayerNames = validation_layers.data();
+  } else {
+    createinfo.enabledExtensionCount = 0;
+  }
+
+  if (vkCreateDevice(physical_dev, &createinfo, nullptr, &device) !=
+      VK_SUCCESS) {
+    return VulkanError::CREATE_DEVICE;
+  }
+
+  vkGetDeviceQueue(device, indices.graphics_family.value(), 0, &graphics_queue);
+
+  return std::nullopt;
+}
+
 VulkanErr init() {
 
   VulkanErr ret = create_vk_instance();
@@ -273,6 +312,11 @@ VulkanErr init() {
     return ret;
   }
 
+  ret = create_logical_device();
+  if (ret.has_value()) {
+    return ret;
+  }
+
   // window = std::make_shared<Window>(Window());
   // window->init(1920, 1080, (char *)"3d_engine", false, true, true, true);
   // window->terminate();
@@ -283,6 +327,8 @@ VulkanErr init() {
 void terminate() {
 
   // window->terminate();
+
+  vkDestroyDevice(device, nullptr);
   if (ENABLE_VALIDATION_LAYERS) {
     DestroyDebugUtilsMessengerEXT(vk_instance, dbg_messenger, nullptr);
   }
