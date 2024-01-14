@@ -2,10 +2,12 @@
 #include "../../../../io/logger.hpp"
 #include "config.hpp"
 #include <map>
+#include <vulkan/vulkan_handles.hpp>
 
 namespace En {
 namespace Vulkan {
-QueueFamilyIndices find_queue_families(VkPhysicalDevice dev) {
+QueueFamilyIndices find_queue_families(VkPhysicalDevice dev,
+                                       vk::SurfaceKHR surface) {
   QueueFamilyIndices indices;
 
   uint32_t queue_family_count = 0;
@@ -19,9 +21,14 @@ QueueFamilyIndices find_queue_families(VkPhysicalDevice dev) {
   for (const auto &family : queue_families) {
     if (family.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
       indices.graphics_family = i;
-      if (indices.is_complete()) {
-        break;
-      }
+    }
+    VkBool32 present_support;
+    vkGetPhysicalDeviceSurfaceSupportKHR(dev, i, surface, &present_support);
+    if (present_support) {
+      indices.present_family = i;
+    }
+    if (indices.is_complete()) {
+      break;
     }
     i++;
   }
@@ -29,23 +36,23 @@ QueueFamilyIndices find_queue_families(VkPhysicalDevice dev) {
   return indices;
 }
 
-bool is_dev_suitable(VkPhysicalDevice dev) {
+bool is_dev_suitable(VkPhysicalDevice dev, vk::SurfaceKHR surface) {
   VkPhysicalDeviceFeatures features;
   vkGetPhysicalDeviceFeatures(dev, &features);
 
-  auto indices = find_queue_families(dev);
+  auto indices = find_queue_families(dev, surface);
 
   return features.geometryShader && indices.is_complete();
 }
 
-uint32_t rate_device(VkPhysicalDevice dev) {
+uint32_t rate_device(VkPhysicalDevice dev, vk::SurfaceKHR surface) {
   VkPhysicalDeviceProperties prop;
   vkGetPhysicalDeviceProperties(dev, &prop);
 
   VkPhysicalDeviceFeatures features;
   vkGetPhysicalDeviceFeatures(dev, &features);
 
-  if (!is_dev_suitable(dev)) {
+  if (!is_dev_suitable(dev, surface)) {
     return 0;
   }
 
@@ -71,7 +78,8 @@ void dev_debug_info(VkPhysicalDevice &dev) {
 }
 
 VulkanErr pick_phisical_dev(VkInstance &vk_instance,
-                            VkPhysicalDevice &physical_dev) {
+                            VkPhysicalDevice &physical_dev,
+                            vk::SurfaceKHR surface) {
 
   uint32_t devs_count = 0;
   vkEnumeratePhysicalDevices(vk_instance, &devs_count, nullptr);
@@ -88,7 +96,7 @@ VulkanErr pick_phisical_dev(VkInstance &vk_instance,
   std::multimap<uint32_t, VkPhysicalDevice> candidates;
 
   for (const auto &dev : devices) {
-    candidates.insert(std::make_pair(rate_device(dev), dev));
+    candidates.insert(std::make_pair(rate_device(dev, surface), dev));
   }
 
   if (candidates.rbegin()->first > 0) {
@@ -103,8 +111,9 @@ VulkanErr pick_phisical_dev(VkInstance &vk_instance,
 }
 
 VulkanErr create_logical_device(VkPhysicalDevice &physical_dev,
-                                VkDevice &device, VkQueue &graphics_queue) {
-  QueueFamilyIndices indices = find_queue_families(physical_dev);
+                                VkDevice &device, VkQueue &graphics_queue,
+                                vk::SurfaceKHR surface) {
+  QueueFamilyIndices indices = find_queue_families(physical_dev, surface);
   VkDeviceQueueCreateInfo queue_createinfo{};
   queue_createinfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
   queue_createinfo.queueFamilyIndex = indices.graphics_family.value();

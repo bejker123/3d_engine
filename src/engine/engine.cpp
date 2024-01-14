@@ -161,7 +161,10 @@ bool Engine::init_opengl() {
     this->terminate_opengl();
     return false;
   }
-  auto ret = Vulkan::init();
+  Window vulkan_window;
+  vulkan_window.init(1920, 1080, "Vulkan Window", false, false, false, true);
+  auto ret = Vulkan::init(vulkan_window.raw());
+  vulkan_window.terminate();
   if (ret.has_value()) {
     std::cout << "[ENGINE] Failed to init Vulkan with error: " << ret.value()
               << std::endl;

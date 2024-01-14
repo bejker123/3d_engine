@@ -5,9 +5,6 @@
 #include "vulkan/config.hpp"
 #include "vulkan/device.hpp"
 
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
-
 #define LOGGER_PREFIX "[VULKAN] "
 
 namespace En {
@@ -145,17 +142,25 @@ VulkanErr create_vk_instance() {
   vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount,
                                          extensions.data());
 
-  std::string out = "extentions:";
-
-  for (const auto &extension : extensions) {
-    out += std::string("\n\t") + extension.extensionName;
-  }
-  LOG("%s\n", out.data());
+  // Log extentions
+  //  std::string out = "extentions:";
+  //
+  //  for (const auto &extension : extensions) {
+  //    out += std::string("\n\t") + extension.extensionName;
+  //  }
+  //  LOG("%s\n", out.data());
 
   return std::nullopt;
 }
 
-VulkanErr init() {
+VulkanErr init_surface(GLFWwindow *window, VkSurfaceKHR &surface) {
+  return glfwCreateWindowSurface(vk_instance, window, nullptr, &surface) !=
+                 VK_SUCCESS
+             ? std::optional(VulkanError::CREATE_SURFACE)
+             : std::nullopt;
+}
+
+VulkanErr init(GLFWwindow *window) {
 
   VulkanErr ret = create_vk_instance();
   if (ret.has_value()) {
@@ -167,12 +172,17 @@ VulkanErr init() {
     return ret;
   }
 
-  ret = pick_phisical_dev(vk_instance, physical_dev);
+  ret = init_surface(window, surface);
   if (ret.has_value()) {
     return ret;
   }
 
-  ret = create_logical_device(physical_dev, device, graphics_queue);
+  ret = pick_phisical_dev(vk_instance, physical_dev, surface);
+  if (ret.has_value()) {
+    return ret;
+  }
+
+  ret = create_logical_device(physical_dev, device, graphics_queue, surface);
   if (ret.has_value()) {
     return ret;
   }
@@ -193,6 +203,7 @@ void terminate() {
     DestroyDebugUtilsMessengerEXT(vk_instance, dbg_messenger, nullptr);
   }
 
+  vkDestroySurfaceKHR(vk_instance, surface, nullptr);
   vkDestroyInstance(vk_instance, nullptr);
 }
 
