@@ -2,6 +2,7 @@
 #include "../../../io/logger.hpp"
 #include <iostream>
 
+#include "vulkan/config.hpp"
 #include "vulkan/pdevice.hpp"
 
 #define GLFW_INCLUDE_VULKAN

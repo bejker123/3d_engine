@@ -1,11 +1,8 @@
 #pragma once
-#include "../../../../io/logger.hpp"
 #include <cstdint>
-#include <map>
 #include <optional>
 #include <vulkan/vulkan.hpp>
 
-#include "config.hpp"
 #include "err.hpp"
 
 namespace En {

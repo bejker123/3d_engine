@@ -1,4 +1,7 @@
 #include "pdevice.hpp"
+#include "../../../../io/logger.hpp"
+#include "config.hpp"
+#include <map>
 
 namespace En {
 namespace Vulkan {
