@@ -3,11 +3,10 @@
 #include <iostream>
 
 #include "vulkan/config.hpp"
-#include "vulkan/pdevice.hpp"
+#include "vulkan/device.hpp"
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
-#include <vulkan/vulkan.hpp>
 
 #define LOGGER_PREFIX "[VULKAN] "
 
