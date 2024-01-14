@@ -1,11 +1,11 @@
 #include "vulkan.hpp"
-#include "../../../io/logger.hpp"
 #include <iostream>
 
 #include "vulkan/config.hpp"
 #include "vulkan/device.hpp"
 
 #define LOGGER_PREFIX "[VULKAN] "
+#include "../../../io/logger.hpp"
 
 namespace En {
 namespace Vulkan {

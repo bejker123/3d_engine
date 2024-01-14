@@ -2,9 +2,11 @@
 #include <map>
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../../../stb/stb_image.h"
-#include "../../io/logger.hpp"
 
+#define DEBUG 0
 #define LOGGER_PREFIX "[TEXTURE] "
+
+#include "../../io/logger.hpp"
 
 namespace En {
 

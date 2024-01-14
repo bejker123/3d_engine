@@ -3,7 +3,6 @@
 #include "rendering/ll/backend/opengl.hpp"
 
 #include "../app.hpp"
-#include "io/logger.hpp"
 #include "rendering/ll/backend/vulkan.hpp"
 #include <iostream>
 #include <ranges>
@@ -19,6 +18,7 @@ std::unique_ptr<App> app;
 namespace rv = std::ranges::views;
 
 #define LOGGER_PREFIX "[ENGINE] "
+#include "io/logger.hpp"
 
 namespace En {
 
@@ -161,16 +161,6 @@ bool Engine::init_opengl() {
     this->terminate_opengl();
     return false;
   }
-  Window vulkan_window;
-  vulkan_window.init(1920, 1080, "Vulkan Window", false, false, false, true);
-  auto ret = Vulkan::init(vulkan_window.raw());
-  vulkan_window.terminate();
-  if (ret.has_value()) {
-    std::cout << "[ENGINE] Failed to init Vulkan with error: " << ret.value()
-              << std::endl;
-  } else {
-    LOG("Vulkan initialised\n");
-  }
 
   LOG("INITIALISING WINDOW\n");
 
@@ -192,6 +182,16 @@ bool Engine::init_opengl() {
   }
 
   LOG("OPENGL INITIALISED\n");
+  Window vulkan_window;
+  vulkan_window.init(1920, 1080, "Vulkan Window", false, false, false, true);
+  auto ret = Vulkan::init(vulkan_window.raw());
+  vulkan_window.terminate();
+  if (ret.has_value()) {
+    std::cout << "[ENGINE] Failed to init Vulkan with error: " << ret.value()
+              << std::endl;
+  } else {
+    LOG("Vulkan initialised\n");
+  }
 
   opengl::debug_info();
   return true;

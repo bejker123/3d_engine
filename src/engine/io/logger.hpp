@@ -1,11 +1,15 @@
 #pragma once
 #include <stdio.h>
 
+#ifndef LOGGER_PREFIX
 #define LOGGER_PREFIX "[LOGGER] "
+#endif
 
-#define DEBUG
+#ifndef DEBUG
+#define DEBUG 1
+#endif
 
-#ifdef DEBUG
+#if DEBUG
 #define LOG                                                                    \
   printf(LOGGER_PREFIX);                                                       \
   printf

@@ -19,8 +19,10 @@ bool Window::init(int width, int height, char *title, bool resizable,
     monitor = glfwGetPrimaryMonitor();
     glfwGetMonitorWorkarea(monitor, 0, 0, &width, &height);
   }
-  if (vulkan)
+  if (vulkan) {
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // For debugging vulkan init only
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+  }
 
   this->window = glfwCreateWindow(width, height, title, monitor, NULL);
 
@@ -86,5 +88,9 @@ void Window::hide_cursor() const {
 void Window::show_cursor() const {
   glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
+
+void Window::hide() const { glfwHideWindow(this->window); }
+
+void Window::show() const { glfwShowWindow(this->window); }
 
 } // namespace En

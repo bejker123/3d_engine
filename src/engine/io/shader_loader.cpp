@@ -1,10 +1,10 @@
 #include "shader_loader.hpp"
-#include "logger.hpp"
 #include <fstream>
 #include <map>
 #include <string>
 
 #define LOGGER_PREFIX "[SHADER_LOADER] "
+#include "logger.hpp"
 
 namespace En {
 std::map<uint32_t, std::tuple<const char *, const char *, const char *>> paths;

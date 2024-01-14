@@ -1,8 +1,8 @@
 #include "shader.hpp"
-#include "../../io/logger.hpp"
 #include <assert.h>
 
 #define LOGGER_PREFIX "[SHADER] "
+#include "../../io/logger.hpp"
 
 namespace En {
 

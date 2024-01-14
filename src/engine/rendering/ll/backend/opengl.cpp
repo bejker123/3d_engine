@@ -1,9 +1,8 @@
 #include "opengl.hpp"
-#include "../../../io/logger.hpp"
-#include "../../../io/logger.hpp"
 #include <GLFW/glfw3.h>
 
 #define LOGGER_PREFIX "[OPENGL] "
+#include "../../../io/logger.hpp"
 
 namespace En {
 

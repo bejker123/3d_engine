@@ -26,6 +26,9 @@ public:
 
   void show_cursor() const;
 
+  void hide() const;
+  void show() const;
+
 private:
   GLFWwindow *window;
 };
