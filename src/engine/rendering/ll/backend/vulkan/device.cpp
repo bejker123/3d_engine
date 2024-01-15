@@ -81,7 +81,14 @@ uint32_t rate_device(VkPhysicalDevice dev, vk::SurfaceKHR surface) {
     score += 1000;
   }
 
-  score += prop.limits.maxImageDimension2D;
+  VkPhysicalDeviceMemoryProperties mem_prop;
+  vkGetPhysicalDeviceMemoryProperties(dev, &mem_prop);
+  score += mem_prop.memoryHeaps[0].size / 1024 / 1024;
+
+  score += prop.limits.maxImageDimension2D / 1024;
+
+  dev_debug_info(dev);
+  LOG("Score: %d\n", score);
 
   return score;
 }
@@ -93,7 +100,7 @@ void dev_debug_info(VkPhysicalDevice &dev) {
   VkPhysicalDeviceMemoryProperties mem_prop;
   vkGetPhysicalDeviceMemoryProperties(dev, &mem_prop);
 
-  LOG("Device picked:\n\t%s %ldGB\n", prop.deviceName,
+  LOG("%s %ldGB\n", prop.deviceName,
       mem_prop.memoryHeaps[0].size / 1024 / 1024 / 1024);
 }
 
@@ -121,6 +128,7 @@ VulkanErr pick_phisical_dev(VkInstance &vk_instance,
 
   if (candidates.rbegin()->first > 0) {
     physical_dev = candidates.rbegin()->second;
+    LOG("Device picked:\n");
     dev_debug_info(physical_dev);
   } else {
     LOG("Failed to find any suitable device.\n");
