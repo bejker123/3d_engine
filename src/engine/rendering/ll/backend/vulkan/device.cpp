@@ -105,7 +105,7 @@ VulkanErr pick_phisical_dev(VkInstance &vk_instance,
   vkEnumeratePhysicalDevices(vk_instance, &devs_count, nullptr);
 
   if (devs_count == 0) {
-    LOG("Failed to find any GPUs with Vulkan support.");
+    LOG("Failed to find any GPUs with Vulkan support.\n");
     return VulkanError::NO_VULKAN_DEVICE;
   }
 
@@ -123,7 +123,7 @@ VulkanErr pick_phisical_dev(VkInstance &vk_instance,
     physical_dev = candidates.rbegin()->second;
     dev_debug_info(physical_dev);
   } else {
-    LOG("Failed to find any suitable device.");
+    LOG("Failed to find any suitable device.\n");
     return VulkanError::NO_SUITABLE_DEVICE;
   }
 
