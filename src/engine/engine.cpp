@@ -331,9 +331,6 @@ int Engine::update() {
 
   app->update(this);
 
-  for (auto &[u, m] : models)
-    m.update();
-
   app->post_update(this);
 
   this->perf.end_update();

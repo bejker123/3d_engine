@@ -4,13 +4,23 @@
 uint64_t counter = 0;
 const double max_timer = 1000000000.0; // 1 s in nanoseconds
 float timer = 0.0;
-constexpr bool collect_data_points = false;
+constexpr bool collect_data_points = true;
 
 Performence::~Performence() {
   for (auto &i : data_points) {
     std::cout << "FPS: " << i.first
               << " timer: " << (double)i.second / max_timer << std::endl;
   }
+  std::sort(data_points.begin(), data_points.end());
+  uint64_t median;
+  if (data_points.size() % 2 == 0) {
+    median = (data_points[data_points.size() / 2].first +
+              data_points[data_points.size() / 2 + 1].first) /
+             2;
+  } else {
+    median = data_points[data_points.size() / 2].first;
+  }
+  std::cout << "Median FPS: " << median << std::endl;
 }
 
 void Performence::begin_update() {

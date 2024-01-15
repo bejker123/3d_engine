@@ -38,13 +38,31 @@ QueueFamilyIndices find_queue_families(VkPhysicalDevice dev,
   return indices;
 }
 
+bool check_dev_ext_support(VkPhysicalDevice dev) {
+  uint32_t ext_count;
+  vkEnumerateDeviceExtensionProperties(dev, nullptr, &ext_count, nullptr);
+  std::vector<VkExtensionProperties> aval_ext(ext_count);
+
+  vkEnumerateDeviceExtensionProperties(dev, nullptr, &ext_count,
+                                       aval_ext.data());
+
+  std::set<std::string> req_ext(device_extensions.begin(),
+                                device_extensions.end());
+
+  for (const auto &ext : aval_ext) {
+    req_ext.erase(ext.extensionName);
+  }
+  return req_ext.empty();
+}
+
 bool is_dev_suitable(VkPhysicalDevice dev, vk::SurfaceKHR surface) {
   VkPhysicalDeviceFeatures features;
   vkGetPhysicalDeviceFeatures(dev, &features);
 
   auto indices = find_queue_families(dev, surface);
 
-  return features.geometryShader && indices.is_complete();
+  return features.geometryShader && indices.is_complete() &&
+         check_dev_ext_support(dev);
 }
 
 uint32_t rate_device(VkPhysicalDevice dev, vk::SurfaceKHR surface) {
@@ -138,8 +156,10 @@ VulkanErr create_logical_device(VkPhysicalDevice &physical_dev,
   createinfo.queueCreateInfoCount =
       static_cast<uint32_t>(queue_createinfos.size());
   createinfo.pQueueCreateInfos = queue_createinfos.data();
-
   createinfo.pEnabledFeatures = &features;
+  createinfo.enabledExtensionCount =
+      static_cast<uint32_t>(device_extensions.size());
+  createinfo.ppEnabledExtensionNames = device_extensions.data();
 
   if (ENABLE_VALIDATION_LAYERS) {
     createinfo.enabledLayerCount =

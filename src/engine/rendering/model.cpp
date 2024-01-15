@@ -21,7 +21,15 @@ void Model::init(pMesh mesh) {
   this->meshes.push_back(mesh);
 }
 
+glm::vec3 last_scale, last_pos, last_rot;
+
 void Model::update() {
+  if (last_pos == pos && last_scale == scale && last_rot == rot) {
+    return;
+  }
+  last_pos = pos;
+  last_scale = scale;
+  last_rot = rot;
   this->mmatrix = glm::mat4(1.f);
   this->mmatrix = glm::translate(this->mmatrix, this->origin);
   this->mmatrix = glm::rotate(this->mmatrix, glm::radians(this->rot.x),
