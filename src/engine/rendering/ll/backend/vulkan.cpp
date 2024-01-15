@@ -17,6 +17,7 @@ VkDebugUtilsMessengerEXT dbg_messenger;
 VkPhysicalDevice physical_dev;
 VkDevice device;
 VkQueue graphics_queue;
+VkQueue present_queue;
 VkSurfaceKHR surface;
 
 bool check_vl_support();
@@ -182,7 +183,8 @@ VulkanErr init(GLFWwindow *window) {
     return ret;
   }
 
-  ret = create_logical_device(physical_dev, device, graphics_queue, surface);
+  ret = create_logical_device(physical_dev, device, graphics_queue,
+                              present_queue, surface);
   if (ret.has_value()) {
     return ret;
   }

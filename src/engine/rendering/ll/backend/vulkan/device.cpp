@@ -1,6 +1,7 @@
 #include "device.hpp"
 #include "config.hpp"
 #include <map>
+#include <set>
 #include <vulkan/vulkan_handles.hpp>
 
 #define LOGGER_PREFIX "[VULKAN] "
@@ -23,7 +24,7 @@ QueueFamilyIndices find_queue_families(VkPhysicalDevice dev,
     if (family.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
       indices.graphics_family = i;
     }
-    VkBool32 present_support;
+    VkBool32 present_support = false;
     vkGetPhysicalDeviceSurfaceSupportKHR(dev, i, surface, &present_support);
     if (present_support) {
       indices.present_family = i;
@@ -113,21 +114,30 @@ VulkanErr pick_phisical_dev(VkInstance &vk_instance,
 
 VulkanErr create_logical_device(VkPhysicalDevice &physical_dev,
                                 VkDevice &device, VkQueue &graphics_queue,
+                                VkQueue &present_queue,
                                 vk::SurfaceKHR surface) {
   QueueFamilyIndices indices = find_queue_families(physical_dev, surface);
-  VkDeviceQueueCreateInfo queue_createinfo{};
-  queue_createinfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-  queue_createinfo.queueFamilyIndex = indices.graphics_family.value();
-  queue_createinfo.queueCount = 1;
+  std::vector<VkDeviceQueueCreateInfo> queue_createinfos;
+  std::set<uint32_t> unique_queue_families = {indices.graphics_family.value(),
+                                              indices.present_family.value()};
 
   float queue_priority = 1.0;
-  queue_createinfo.pQueuePriorities = &queue_priority;
+  for (uint32_t family_idx : unique_queue_families) {
+    VkDeviceQueueCreateInfo createinfo{}; // It's important to add the '{}'.
+    createinfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+    createinfo.queueFamilyIndex = family_idx;
+    createinfo.queueCount = 1;
+    createinfo.pQueuePriorities = &queue_priority;
+
+    queue_createinfos.push_back(createinfo);
+  }
 
   VkPhysicalDeviceFeatures features{};
   VkDeviceCreateInfo createinfo{};
   createinfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-  createinfo.pQueueCreateInfos = &queue_createinfo;
-  createinfo.queueCreateInfoCount = 1;
+  createinfo.queueCreateInfoCount =
+      static_cast<uint32_t>(queue_createinfos.size());
+  createinfo.pQueueCreateInfos = queue_createinfos.data();
 
   createinfo.pEnabledFeatures = &features;
 
@@ -145,6 +155,7 @@ VulkanErr create_logical_device(VkPhysicalDevice &physical_dev,
   }
 
   vkGetDeviceQueue(device, indices.graphics_family.value(), 0, &graphics_queue);
+  vkGetDeviceQueue(device, indices.present_family.value(), 0, &present_queue);
 
   return std::nullopt;
 }

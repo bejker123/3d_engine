@@ -32,7 +32,7 @@ VulkanErr pick_phisical_dev(VkInstance &vk_instance,
 
 VulkanErr create_logical_device(VkPhysicalDevice &physical_dev,
                                 VkDevice &device, VkQueue &graphics_queue,
-                                vk::SurfaceKHR surface);
+                                VkQueue &present_queue, vk::SurfaceKHR surface);
 
 } // namespace Vulkan
 } // namespace En
