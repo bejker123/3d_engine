@@ -4,6 +4,7 @@
 #include <string>
 
 #define LOGGER_PREFIX "[SHADER_LOADER] "
+#define DEBUG 0
 #include "logger.hpp"
 
 namespace En {

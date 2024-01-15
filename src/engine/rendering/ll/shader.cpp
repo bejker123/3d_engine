@@ -2,6 +2,7 @@
 #include <assert.h>
 
 #define LOGGER_PREFIX "[SHADER] "
+#define DEBUG 0
 #include "../../io/logger.hpp"
 
 namespace En {
