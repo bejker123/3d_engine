@@ -1,9 +1,10 @@
 #include "device.hpp"
-#include "../../../../io/logger.hpp"
 #include "config.hpp"
 #include <map>
 #include <vulkan/vulkan_handles.hpp>
 
+#define LOGGER_PREFIX "[VULKAN] "
+#include "../../../../io/logger.hpp"
 namespace En {
 namespace Vulkan {
 QueueFamilyIndices find_queue_families(VkPhysicalDevice dev,
