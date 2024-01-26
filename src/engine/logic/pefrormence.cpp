@@ -7,6 +7,9 @@ float timer = 0.0;
 constexpr bool collect_data_points = false;
 
 Performence::~Performence() {
+  if (data_points.empty()) {
+    return;
+  }
   for (auto &i : data_points) {
     std::cout << "FPS: " << i.first
               << " timer: " << (double)i.second / max_timer << std::endl;
